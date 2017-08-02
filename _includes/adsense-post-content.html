@@ -1,0 +1,23 @@
+{% if page.url contains "/amp/" %}
+	<div>
+		<amp-ad
+		layout="responsive"
+		width="300"
+		height="250"
+		type="adsense"
+		data-ad-client="ca-pub-4196010817129150"
+		data-ad-slot="9331725005">
+		</amp-ad>
+	</div>
+{% else %}
+   <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <ins class="adsbygoogle"
+         style="display:block; text-align:center;"
+         data-ad-format="fluid"
+         data-ad-layout="in-article"
+         data-ad-client="ca-pub-1094744891389501"
+         data-ad-slot="6411936673"></ins>
+    <script>
+         (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+{% endif %}
