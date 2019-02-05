@@ -1,0 +1,584 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.2.2 by Michael Rose
+  Copyright 2017 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE.txt
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin SEO -->
+
+
+
+
+
+
+
+
+
+<title>How to access your PCs using DNS names with DD-WRT - Wiseindy</title>
+
+
+
+
+<meta name="description" content="Pretty sure you must’ve noticed itMost of us must’ve faced this problem, especially in our home networks. You must’ve noticed that when you’re trying reach one machine from another using it’s IP address, it works perfectly. However when you try to reach it using its hostname/DNS name like wiseindy-pc, it is extremely unreliable and rarely works.And if you’ve got the opportunity to work with corporate networks, you’ll notice that this is not the case there. Communicating with machines via hostnames is as reliable as communicating via their individual IP addresses in a corporate environment.Is it because companies have “bigger” and “better” hardware? And your home router sucks? Well, not really.So, what IS the problem?The problem is pretty straightforward actually. The devices on your network don’t really know whom they should ask to resolve the hostname.To translate a hostname to an IP address, the machine will need to know the “Fully Qualified Domain Name” or “FQDN” in short.FQDN for a particular machine looks something like this: hostname.dnz.zone / hostname.domain.com / hostname.domain.whatever. A home environment (in almost all cases) is not a domain environment, i.e., the computers are not connected to a central domain unlike most companies. This  domain.com part in the FQDN called the “DNS Zone”.Let us assume that machine we are trying to connect is called wiseindy-pc and its IP address is 192.168.1.120.So on your home network, you have the hostname part, e.g. wiseindy-pc. But the machine has no idea about the domain.com part (since there IS no domain). Hence it has no way to convert wiseindy-pc to 192.168.1.120.Ok, so that explains why it doesn’t work. But, in some rare cases (probably when the planets align) it actually does work, even on a network without a DNS zone. How is that possible?Well, as it turns out, if a DNS zone is not defined for the network, your device tries ANOTHER way to figure out the IP address before abandoning the resolving process altogether. It tries to find out the hostname -&gt; IP address mapping on its own using a technique called “DNS broadcast”. The problem with this is that not all machines/devices are configured to answer to this DNS broadcasr, or are actually configured to deliberately not answer such a request.To fix this you need to configure a “DNS Suffix” for your network.                   So how do I get this &quot;DNS Suffix&quot; thing?If you open up command prompt and type ipconfig, you’ll notice that the Connection-specific DNS Suffix is blank.It’s extremely simple to do this on a router which has the DD-WRT firmware installed. In case you don’t have a router with DD-WRT, here’s my guide to install DD-WRT on one.Open up a browser and navigate to your router homepage. After logging in, click on the Services tab.	For “Used Domain” select “LAN &amp; WLAN” from the dropdown.	For &quot;LAN domain&quot;, pick whatever you like. It should be of the form domain.com or sub.domain.com, etc.	For my home network, I picked  wise.lan	You can pick whatever you want.	The one exception to that rule, is that if you use .local, while your windows machines will probably do just fine, your Linux machines will adhere to the mDNS (Multicast DNS) standard and will again ignore the DNS server.Scroll down, click Save. Then hit Apply.To get the new settings on your PC, you’ll need to refresh the IP configuration. Open up a Command Prompt window and type the following commands one after the other:ipconfig /releaseipconfig /renewType ipconfig. You should see that a DNS suffix is now defined.Now, since you have a DNS suffix, the resulting FQDN for this machine will be wiseindy-pc.wise.lan. The hostname can now be resolved to its IP address easily.Repeat this ipconfig /release and ipconfig /renew on at least one more machine and try pinging wiseindy-pc using only the hostname. You should see that the client has automatically understood that the full name of the device you’re pinging is wiseindy-pc.wise.lan (hostname.dns.zone), and was able to translate (resolve) the FQDN to an IP.(header image source: goodfon.su)">
+
+
+
+
+<meta name="author" content="wiseindy">
+
+<meta property="og:locale" content="en">
+<meta property="og:site_name" content="Wiseindy">
+<meta property="og:title" content="How to access your PCs using DNS names with DD-WRT">
+
+
+  <link rel="canonical" href="http://localhost:4000/it/how-to-access-your-pcs-using-dns-names-with-dd-wrt/">
+  <meta property="og:url" content="http://localhost:4000/it/how-to-access-your-pcs-using-dns-names-with-dd-wrt/">
+
+
+
+  <meta property="og:description" content="Pretty sure you must’ve noticed itMost of us must’ve faced this problem, especially in our home networks. You must’ve noticed that when you’re trying reach one machine from another using it’s IP address, it works perfectly. However when you try to reach it using its hostname/DNS name like wiseindy-pc, it is extremely unreliable and rarely works.And if you’ve got the opportunity to work with corporate networks, you’ll notice that this is not the case there. Communicating with machines via hostnames is as reliable as communicating via their individual IP addresses in a corporate environment.Is it because companies have “bigger” and “better” hardware? And your home router sucks? Well, not really.So, what IS the problem?The problem is pretty straightforward actually. The devices on your network don’t really know whom they should ask to resolve the hostname.To translate a hostname to an IP address, the machine will need to know the “Fully Qualified Domain Name” or “FQDN” in short.FQDN for a particular machine looks something like this: hostname.dnz.zone / hostname.domain.com / hostname.domain.whatever. A home environment (in almost all cases) is not a domain environment, i.e., the computers are not connected to a central domain unlike most companies. This  domain.com part in the FQDN called the “DNS Zone”.Let us assume that machine we are trying to connect is called wiseindy-pc and its IP address is 192.168.1.120.So on your home network, you have the hostname part, e.g. wiseindy-pc. But the machine has no idea about the domain.com part (since there IS no domain). Hence it has no way to convert wiseindy-pc to 192.168.1.120.Ok, so that explains why it doesn’t work. But, in some rare cases (probably when the planets align) it actually does work, even on a network without a DNS zone. How is that possible?Well, as it turns out, if a DNS zone is not defined for the network, your device tries ANOTHER way to figure out the IP address before abandoning the resolving process altogether. It tries to find out the hostname -&gt; IP address mapping on its own using a technique called “DNS broadcast”. The problem with this is that not all machines/devices are configured to answer to this DNS broadcasr, or are actually configured to deliberately not answer such a request.To fix this you need to configure a “DNS Suffix” for your network.                   So how do I get this &quot;DNS Suffix&quot; thing?If you open up command prompt and type ipconfig, you’ll notice that the Connection-specific DNS Suffix is blank.It’s extremely simple to do this on a router which has the DD-WRT firmware installed. In case you don’t have a router with DD-WRT, here’s my guide to install DD-WRT on one.Open up a browser and navigate to your router homepage. After logging in, click on the Services tab.	For “Used Domain” select “LAN &amp; WLAN” from the dropdown.	For &quot;LAN domain&quot;, pick whatever you like. It should be of the form domain.com or sub.domain.com, etc.	For my home network, I picked  wise.lan	You can pick whatever you want.	The one exception to that rule, is that if you use .local, while your windows machines will probably do just fine, your Linux machines will adhere to the mDNS (Multicast DNS) standard and will again ignore the DNS server.Scroll down, click Save. Then hit Apply.To get the new settings on your PC, you’ll need to refresh the IP configuration. Open up a Command Prompt window and type the following commands one after the other:ipconfig /releaseipconfig /renewType ipconfig. You should see that a DNS suffix is now defined.Now, since you have a DNS suffix, the resulting FQDN for this machine will be wiseindy-pc.wise.lan. The hostname can now be resolved to its IP address easily.Repeat this ipconfig /release and ipconfig /renew on at least one more machine and try pinging wiseindy-pc using only the hostname. You should see that the client has automatically understood that the full name of the device you’re pinging is wiseindy-pc.wise.lan (hostname.dns.zone), and was able to translate (resolve) the FQDN to an IP.(header image source: goodfon.su)">
+
+
+
+
+
+  
+
+  
+
+
+
+  <meta property="og:image" content="http://localhost:4000/wp-content/uploads/2015/07/how-to-access-your-pcs-using-dns-names-with-dd-wrt.jpg">
+
+
+
+  <meta property="og:type" content="article">
+  <meta property="article:published_time" content="2015-07-21T22:53:06-04:00">
+
+
+
+
+
+
+
+
+  <script type="application/ld+json">
+    {
+      "@context" : "http://schema.org",
+      "@type" : "Person",
+      "name" : "Wiseindy",
+      "url" : "http://localhost:4000",
+      "sameAs" : null
+    }
+  </script>
+
+
+
+
+
+
+<!-- end SEO -->
+
+
+<link href="http://localhost:4000/feed.xml" type="application/atom+xml" rel="alternate" title="Wiseindy Feed">
+
+<!-- http://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="http://localhost:4000/assets/css/main.css">
+
+<!--[if lte IE 9]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+<meta http-equiv="cleartype" content="on">
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use http://realfavicongenerator.net/ -->
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#666666">
+<meta name="theme-color" content="#ffffff">
+
+<!-- Adsense -->
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-2192084948183024",
+    enable_page_level_ads: true
+  });
+</script>
+<!-- !Adsense -->
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--post">
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+    <div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        <a class="site-title" href="http://localhost:4000/">Wiseindy</a>
+        <ul class="visible-links">
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/it">IT</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/guides">Guides</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/powershell">Powershell</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/networking">Networking</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/exchange">Exchange</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/doodles">Doodles</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/about">About</a></li>
+          
+        </ul>
+        <button><div class="navicon"></div></button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+    
+  <link rel="amphtml" href="http://localhost:4000/amp/it/how-to-access-your-pcs-using-dns-names-with-dd-wrt">
+
+
+
+  
+
+
+
+
+
+
+
+<div class="page__hero"
+  style=" "
+>
+  
+    <img src="http://localhost:4000/wp-content/uploads/2015/07/how-to-access-your-pcs-using-dns-names-with-dd-wrt.jpg" alt="How to access your PCs using DNS names with DD-WRT" class="page__hero-image">
+  
+  
+</div>
+
+
+
+
+
+<div id="main" role="main">
+  
+
+  <article class="page" itemscope itemtype="http://schema.org/CreativeWork">
+    <meta itemprop="headline" content="How to access your PCs using DNS names with DD-WRT">
+    <meta itemprop="description" content="Pretty sure you must’ve noticed itMost of us must’ve faced this problem, especially in our home networks. You must’ve noticed that when you’re trying reach one machine from another using it’s IP address, it works perfectly. However when you try to reach it using its hostname/DNS name like wiseindy-pc, it is extremely unreliable and rarely works.And if you’ve got the opportunity to work with corporate networks, you’ll notice that this is not the case there. Communicating with machines via hostnames is as reliable as communicating via their individual IP addresses in a corporate environment.Is it because companies have “bigger” and “better” hardware? And your home router sucks? Well, not really.So, what IS the problem?The problem is pretty straightforward actually. The devices on your network don’t really know whom they should ask to resolve the hostname.To translate a hostname to an IP address, the machine will need to know the “Fully Qualified Domain Name” or “FQDN” in short.FQDN for a particular machine looks something like this: hostname.dnz.zone / hostname.domain.com / hostname.domain.whatever. A home environment (in almost all cases) is not a domain environment, i.e., the computers are not connected to a central domain unlike most companies. This  domain.com part in the FQDN called the “DNS Zone”.Let us assume that machine we are trying to connect is called wiseindy-pc and its IP address is 192.168.1.120.So on your home network, you have the hostname part, e.g. wiseindy-pc. But the machine has no idea about the domain.com part (since there IS no domain). Hence it has no way to convert wiseindy-pc to 192.168.1.120.Ok, so that explains why it doesn’t work. But, in some rare cases (probably when the planets align) it actually does work, even on a network without a DNS zone. How is that possible?Well, as it turns out, if a DNS zone is not defined for the network, your device tries ANOTHER way to figure out the IP address before abandoning the resolving process altogether. It tries to find out the hostname -&gt; IP address mapping on its own using a technique called “DNS broadcast”. The problem with this is that not all machines/devices are configured to answer to this DNS broadcasr, or are actually configured to deliberately not answer such a request.To fix this you need to configure a “DNS Suffix” for your network.                   So how do I get this &quot;DNS Suffix&quot; thing?If you open up command prompt and type ipconfig, you’ll notice that the Connection-specific DNS Suffix is blank.It’s extremely simple to do this on a router which has the DD-WRT firmware installed. In case you don’t have a router with DD-WRT, here’s my guide to install DD-WRT on one.Open up a browser and navigate to your router homepage. After logging in, click on the Services tab.	For “Used Domain” select “LAN &amp; WLAN” from the dropdown.	For &quot;LAN domain&quot;, pick whatever you like. It should be of the form domain.com or sub.domain.com, etc.	For my home network, I picked  wise.lan	You can pick whatever you want.	The one exception to that rule, is that if you use .local, while your windows machines will probably do just fine, your Linux machines will adhere to the mDNS (Multicast DNS) standard and will again ignore the DNS server.Scroll down, click Save. Then hit Apply.To get the new settings on your PC, you’ll need to refresh the IP configuration. Open up a Command Prompt window and type the following commands one after the other:ipconfig /releaseipconfig /renewType ipconfig. You should see that a DNS suffix is now defined.Now, since you have a DNS suffix, the resulting FQDN for this machine will be wiseindy-pc.wise.lan. The hostname can now be resolved to its IP address easily.Repeat this ipconfig /release and ipconfig /renew on at least one more machine and try pinging wiseindy-pc using only the hostname. You should see that the client has automatically understood that the full name of the device you’re pinging is wiseindy-pc.wise.lan (hostname.dns.zone), and was able to translate (resolve) the FQDN to an IP.(header image source: goodfon.su)">
+    <meta itemprop="datePublished" content="July 21, 2015">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 class="page__title" itemprop="headline">How to access your PCs using DNS names with DD-WRT
+</h1>
+          
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+		<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-format="fluid"
+     data-ad-layout="in-article"
+     data-ad-client="ca-pub-1094744891389501"
+     data-ad-slot="6411936673"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+        <p>Pretty sure you must’ve noticed it</p>
+
+<p>Most of us must’ve faced this problem, especially in our home networks. You must’ve noticed that when you’re trying reach one machine from another using it’s IP address, it works perfectly. However when you try to reach it using its hostname/DNS name like <code>wiseindy-pc</code>, it is extremely unreliable and rarely works.</p>
+
+<!--more-->
+
+<p>And if you’ve got the opportunity to work with corporate networks, you’ll notice that this is not the case there. Communicating with machines via hostnames is as reliable as communicating via their individual IP addresses in a corporate environment.</p>
+
+<p>Is it because companies have “bigger” and “better” hardware? And your home router sucks? Well, not really.</p>
+<h3>So, what IS the problem?</h3>
+<p>The problem is pretty straightforward actually. The devices on your network don’t really know whom they should ask to resolve the hostname.</p>
+
+<p>To translate a hostname to an IP address, the machine will need to know the “Fully Qualified Domain Name” or “FQDN” in short.</p>
+
+<p>FQDN for a particular machine looks something like this: <code>hostname.dnz.zone</code> / <code>hostname.domain.com</code> / <code>hostname.domain.whatever</code>. A home environment (in almost all cases) is not a domain environment, i.e., the computers are not connected to a central domain unlike most companies. This  <code>domain.com</code> part in the FQDN called the “DNS Zone”.</p>
+
+<p>Let us assume that machine we are trying to connect is called <code>wiseindy-pc</code> and its IP address is <code>192.168.1.120</code>.</p>
+
+<p>So on your home network, you have the <code>hostname</code> part, e.g. <code>wiseindy-pc</code>. But the machine has no idea about the <code>domain.com</code> part (since there IS no domain). Hence it has no way to convert <code>wiseindy-pc</code> to <code>192.168.1.120</code>.</p>
+
+<p>Ok, so that explains why it doesn’t work. But, in some rare cases (probably when the planets align) it actually does work, even on a network without a DNS zone. How is that possible?</p>
+
+<p>Well, as it turns out, if a DNS zone is not defined for the network, your device tries ANOTHER way to figure out the IP address before abandoning the resolving process altogether. It tries to find out the hostname -&gt; IP address mapping on its own using a technique called “DNS broadcast”. The problem with this is that not all machines/devices are configured to answer to this DNS broadcasr, or are actually configured to deliberately not answer such a request.</p>
+
+<p>To fix this you need to configure a “DNS Suffix” for your network.</p>
+
+<div class="row">
+  <div class="col-12">
+    
+   <script async="" src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-format="fluid" data-ad-layout="in-article" data-ad-client="ca-pub-1094744891389501" data-ad-slot="6411936673"></ins>
+    <script>
+         (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+
+
+  </div>
+</div>
+
+<h3>So how do I get this "DNS Suffix" thing?</h3>
+<p>If you open up command prompt and type <code>ipconfig</code>, you’ll notice that the <strong>Connection-specific DNS Suffix</strong> is blank.</p>
+
+<p><a target="_blank" href="https://inderjotsingh.com/wp-content/uploads/2015/07/how-to-access-your-pcs-using-dns-names-with-dd-wrt-03.png"><img class="alignnone size-full wp-image-926" src="https://inderjotsingh.com/wp-content/uploads/2015/07/how-to-access-your-pcs-using-dns-names-with-dd-wrt-03.png" alt="How to access your PCs using DNS names with DD-WRT" width="540" height="94" /></a></p>
+
+<p>It’s extremely simple to do this on a router which has the <a target="_blank" href="https://en.wikipedia.org/wiki/DD-WRT">DD-WRT</a> firmware installed. In case you don’t have a router with DD-WRT, <a target="_blank" href="https://inderjotsingh.com/it/installing-dd-wrt-on-tp-link-tl-wdr3600-n600/">here’s my guide</a> to install DD-WRT on one.</p>
+
+<p>Open up a browser and navigate to your router homepage. After logging in, click on the <strong>Services</strong> tab.</p>
+
+<p><a target="_blank" href="https://inderjotsingh.com/wp-content/uploads/2015/07/how-to-access-your-pcs-using-dns-names-with-dd-wrt-001.png"><img class="alignnone size-full wp-image-924" src="https://inderjotsingh.com/wp-content/uploads/2015/07/how-to-access-your-pcs-using-dns-names-with-dd-wrt-001.png" alt="How to access your PCs using DNS names with DD-WRT" /></a></p>
+<ul>
+	<li>For “Used Domain” select “LAN &amp; WLAN” from the dropdown.</li>
+	<li>For "LAN domain", pick whatever you like. It should be of the form <code>domain.com</code> or <code>sub.domain.com</code>, etc.
+<ul>
+	<li>For my home network, I picked  <code>wise.lan</code></li>
+	<li>You can pick whatever you want.
+<ul>
+	<li>The one exception to that rule, is that if you use <code>.local</code>, while your windows machines will probably do just fine, your Linux machines will adhere to the mDNS (<a target="_blank" href="http://tools.ietf.org/html/draft-lynn-dnsext-site-mdns-01">Multicast DNS</a>) standard and will again ignore the DNS server.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><img class="alignnone size-full wp-image-925" src="https://inderjotsingh.com/wp-content/uploads/2015/07/how-to-access-your-pcs-using-dns-names-with-dd-wrt-02.png" alt="How to access your PCs using DNS names with DD-WRT" /></p>
+
+<p>Scroll down, click <strong>Save</strong>. Then hit <strong>Apply</strong>.</p>
+
+<p>To get the new settings on your PC, you’ll need to refresh the IP configuration. Open up a Command Prompt window and type the following commands one after the other:</p>
+
+<p><code>ipconfig /release</code>
+<code>ipconfig /renew</code></p>
+
+<p><a target="_blank" href="https://inderjotsingh.com/wp-content/uploads/2015/07/how-to-access-your-pcs-using-dns-names-with-dd-wrt-05.png"><img class="alignnone size-full wp-image-927" src="https://inderjotsingh.com/wp-content/uploads/2015/07/how-to-access-your-pcs-using-dns-names-with-dd-wrt-05.png" alt="How to access your PCs using DNS names with DD-WRT" width="305" height="39" /></a></p>
+
+<p><a target="_blank" href="https://inderjotsingh.com/wp-content/uploads/2015/07/how-to-access-your-pcs-using-dns-names-with-dd-wrt-06.png"><img class="alignnone size-full wp-image-928" src="https://inderjotsingh.com/wp-content/uploads/2015/07/how-to-access-your-pcs-using-dns-names-with-dd-wrt-06.png" alt="How to access your PCs using DNS names with DD-WRT" width="289" height="39" /></a></p>
+
+<p>Type <code>ipconfig</code>. You should see that a DNS suffix is now defined.</p>
+
+<p><a target="_blank" href="https://inderjotsingh.com/wp-content/uploads/2015/07/how-to-access-your-pcs-using-dns-names-with-dd-wrt-4.png"><img class="alignnone size-full wp-image-929" src="https://inderjotsingh.com/wp-content/uploads/2015/07/how-to-access-your-pcs-using-dns-names-with-dd-wrt-4.png" alt="How to access your PCs using DNS names with DD-WRT" width="540" height="94" /></a></p>
+
+<p>Now, since you have a DNS suffix, the resulting FQDN for this machine will be <code>wiseindy-pc.wise.lan</code>. The hostname can now be resolved to its IP address easily.</p>
+
+<p>Repeat this <code>ipconfig /release</code> and <code>ipconfig /renew</code> on at least one more machine and try pinging <code>wiseindy-pc</code> using only the hostname. You should see that the client has automatically understood that the full name of the device you’re pinging is <code>wiseindy-pc.wise.lan</code> (<code>hostname.dns.zone</code>), and was able to translate (resolve) the FQDN to an IP.</p>
+
+<p>(header image source: <a target="_blank" href="http://www.goodfon.su/wallpaper/dns-d-n-s-oskolki-tuman.html">goodfon.su</a>)</p>
+
+		<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-format="fluid"
+     data-ad-layout="in-article"
+     data-ad-client="ca-pub-1094744891389501"
+     data-ad-slot="6411936673"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fa fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="http://localhost:4000/tags/#cmd" class="page__taxonomy-item" rel="tag">cmd</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#connection-specific-dns-suffix" class="page__taxonomy-item" rel="tag">connection-specific DNS Suffix</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#dd-wrt" class="page__taxonomy-item" rel="tag">dd-wrt</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#ddwrt" class="page__taxonomy-item" rel="tag">ddwrt</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#dhcp" class="page__taxonomy-item" rel="tag">dhcp</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#dns-resolution" class="page__taxonomy-item" rel="tag">DNS resolution</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#dns-suffix" class="page__taxonomy-item" rel="tag">dns suffix</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#dns" class="page__taxonomy-item" rel="tag">dns</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#domain" class="page__taxonomy-item" rel="tag">domain</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#fqdn" class="page__taxonomy-item" rel="tag">fqdn</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#guides" class="page__taxonomy-item" rel="tag">Guides</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#hostname" class="page__taxonomy-item" rel="tag">hostname</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#ip-address" class="page__taxonomy-item" rel="tag">ip address</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#ip" class="page__taxonomy-item" rel="tag">ip</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#ipconfig" class="page__taxonomy-item" rel="tag">ipconfig</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#ipv4" class="page__taxonomy-item" rel="tag">ipv4</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#ipv6" class="page__taxonomy-item" rel="tag">ipv6</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#lan-domain" class="page__taxonomy-item" rel="tag">LAN domain</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#local" class="page__taxonomy-item" rel="tag">local</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#networking" class="page__taxonomy-item" rel="tag">networking</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#networking" class="page__taxonomy-item" rel="tag">networking</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#release" class="page__taxonomy-item" rel="tag">release</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#renew" class="page__taxonomy-item" rel="tag">renew</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#resolve" class="page__taxonomy-item" rel="tag">resolve</a>
+    
+    </span>
+  </p>
+
+
+
+
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fa fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="http://localhost:4000/categories/#it" class="page__taxonomy-item" rel="tag">IT</a>
+    
+    </span>
+  </p>
+
+
+        
+          <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Updated:</strong> <time datetime="2015-07-21T22:53:06-04:00">July 21, 2015</time></p>
+        
+      </footer>
+
+      
+
+      
+  <nav class="pagination">
+    
+      <a href="http://localhost:4000/it/installing-dd-wrt-on-tp-link-tl-wdr3600-n600/" class="pagination--pager" title="Installing DD-WRT on TP-Link TL-WDR3600 N600
+">Previous</a>
+    
+    
+      <a href="http://localhost:4000/it/exporting-a-users-mailbox-to-pst-in-exchange-2010/" class="pagination--pager" title="How to export a user’s mailbox to .pst in Exchange 2010
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+      <div class="page__comments">
+  
+  
+    <h4 class="page__comments-title">Leave a Comment</h4>
+    <section id="disqus_thread"></section>
+  
+</div>
+
+    
+  </article>
+
+  
+  
+</div>
+
+
+    <div class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Follow:</strong></li>
+    
+    
+    
+    
+      <li><a href="http://github.com/wiseindy"><i class="fa fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+    
+    
+    <li><a href="http://localhost:4000/feed.xml"><i class="fa fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2019 Wiseindy. Powered by <a href="http://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+      </footer>
+    </div>
+
+    <script src="http://localhost:4000/assets/js/main.min.js"></script>
+
+
+
+
+  <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-41402704-6']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+
+
+
+
+  
+  <script type="text/javascript">
+  	/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+  	var disqus_shortname = 'wiseindy';
+
+  	/* * * DON'T EDIT BELOW THIS LINE * * */
+  	(function() {
+  		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  	})();
+
+  	/* * * DON'T EDIT BELOW THIS LINE * * */
+  	(function () {
+  		var s = document.createElement('script'); s.async = true;
+  		s.type = 'text/javascript';
+  		s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+  		(document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+  	}());
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+
+
+
+
+  </body>
+</html>

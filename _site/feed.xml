@@ -1,0 +1,1489 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.4.3">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2019-02-05T17:35:24-05:00</updated><id>http://localhost:4000/</id><title type="html">Wiseindy</title><subtitle>Sysadmin by day, developer by night.</subtitle><author><name>Wiseindy</name><email>wiseindy (at) live (dot) com</email><uri>https://inderjotsingh.com</uri></author><entry><title type="html">How to install OpenVPN server on Ubuntu 14.04 - A Step-by-Step Guide</title><link href="http://localhost:4000/it/install-openvpn-ubuntu-1404/" rel="alternate" type="text/html" title="How to install OpenVPN server on Ubuntu 14.04 - A Step-by-Step Guide" /><published>2017-04-27T08:00:00-04:00</published><updated>2017-04-27T08:00:00-04:00</updated><id>http://localhost:4000/it/install-openvpn-ubuntu-1404</id><content type="html" xml:base="http://localhost:4000/it/install-openvpn-ubuntu-1404/">&lt;p&gt;This is a detailed &amp;amp; step-by-step guide that will show you how to install and configure OpenVPN on Ubuntu 14.04. You can use OpenVPN to access the Internet safely and securely while on the move. To learn more about OpenVPN, you can check out the &lt;a href=&quot;https://en.wikipedia.org/wiki/OpenVPN&quot;&gt;Wikipedia link&lt;/a&gt; or read about it on the &lt;a href=&quot;https://openvpn.net/&quot;&gt;official site&lt;/a&gt;&lt;/p&gt;
+
+&lt;!--more--&gt;
+&lt;h2 id=&quot;what-you-need&quot;&gt;What you need:&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;An Ubuntu 14.04 system.&lt;/li&gt;
+  &lt;li&gt;Root access&lt;/li&gt;
+  &lt;li&gt;And as always, an internet connection&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;This guide is split into 4 main sections.
+Don’t worry if the titles look intimidating. If you follow the instructions, it should go smoothly and you should have a functioning OpenVPN server to which you can connect to from anywhere and using any device.&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;a href=&quot;#part-1&quot;&gt;Installation and configuration of OpenVPN server&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#part-2&quot;&gt;Creating a Certificate Authority and Server-Side Certificate and Key&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#part-3&quot;&gt;Generate Certificates and Keys for your devices&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#part-4&quot;&gt;Create a Unified OpenVPN Profile for each of your devices&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h1 id=&quot;part-1&quot;&gt;Part 1&lt;/h1&gt;
+
+&lt;h2 id=&quot;installation-and-configuration-of-openvpn-server&quot;&gt;Installation and configuration of OpenVPN server&lt;/h2&gt;
+
+&lt;h3 id=&quot;step-11&quot;&gt;Step 1.1:&lt;/h3&gt;
+
+&lt;p&gt;First, update your package lists and then install the &lt;code class=&quot;highlighter-rouge&quot;&gt;openvpn&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;easy-rsa&lt;/code&gt; package.&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sudo apt-get update
+sudo apt-get install openvpn easy-rsa
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;step-12&quot;&gt;Step 1.2:&lt;/h3&gt;
+
+&lt;p&gt;From now onwards, all the steps below have to be run as &lt;code class=&quot;highlighter-rouge&quot;&gt;root&lt;/code&gt;. So, go ahead and login as root.&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;su
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;step-13&quot;&gt;Step 1.3:&lt;/h3&gt;
+
+&lt;p&gt;Lets extract the sample VPN server configuration file to this location: &lt;code class=&quot;highlighter-rouge&quot;&gt;/etc/openvpn&lt;/code&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;gunzip -c /usr/share/doc/openvpn/examples/sample-config-files/server.conf.gz &amp;gt; /etc/openvpn/server.conf
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;&lt;em&gt;Note: &lt;code class=&quot;highlighter-rouge&quot;&gt;gunzip&lt;/code&gt; is a utility that uncompresses a &lt;code class=&quot;highlighter-rouge&quot;&gt;gzip&lt;/code&gt; file. &lt;code class=&quot;highlighter-rouge&quot;&gt;gz&lt;/code&gt; or &lt;code class=&quot;highlighter-rouge&quot;&gt;.Z&lt;/code&gt; is the extension for &lt;code class=&quot;highlighter-rouge&quot;&gt;gzip&lt;/code&gt; files.&lt;/em&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;step-14&quot;&gt;Step 1.4:&lt;/h3&gt;
+
+&lt;p&gt;Still as root, open this file.&lt;/p&gt;
+
+&lt;p&gt;I prefer &lt;code class=&quot;highlighter-rouge&quot;&gt;vim&lt;/code&gt; to open files on ubuntu. If you prefer &lt;code class=&quot;highlighter-rouge&quot;&gt;nano&lt;/code&gt; instead, you can use that too.&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;vi /etc/openvpn/server.conf
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;step-15&quot;&gt;Step 1.5:&lt;/h3&gt;
+
+&lt;p&gt;Now, we have to modify a few lines in this file.&lt;/p&gt;
+
+&lt;p&gt;Search for a section that looks like this&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# Diffie hellman parameters.&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# Generate your own with:&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#   openssl dhparam -out dh1024.pem 1024&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# Substitute 2048 for 1024 if you are using&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# 2048 bit keys.&lt;/span&gt;
+dh dh1024.pem
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Change &lt;code class=&quot;highlighter-rouge&quot;&gt;dh1024.pem&lt;/code&gt; to &lt;code class=&quot;highlighter-rouge&quot;&gt;dh2048.pem&lt;/code&gt;. This doubles the RSA key length when we generate the server and client keys later in the guide.&lt;/p&gt;
+
+&lt;h3 id=&quot;step-16&quot;&gt;Step 1.6:&lt;/h3&gt;
+
+&lt;p&gt;Find and uncomment the line below. To uncomment, simply remove the semicolon &lt;code class=&quot;highlighter-rouge&quot;&gt;;&lt;/code&gt; in front of the line.&lt;/p&gt;
+
+&lt;p&gt;Before:&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# If enabled, this directive will configure&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# all clients to redirect their default&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# network gateway through the VPN, causing&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# all IP traffic such as web browsing and&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# and DNS lookups to go through the VPN&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# (The OpenVPN server machine may need to NAT&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# or bridge the TUN/TAP interface to the internet&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# in order for this to work properly).&lt;/span&gt;
+;push &lt;span class=&quot;s2&quot;&gt;&quot;redirect-gateway def1 bypass-dhcp&quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;After:&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# If enabled, this directive will configure&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# all clients to redirect their default&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# network gateway through the VPN, causing&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# all IP traffic such as web browsing and&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# and DNS lookups to go through the VPN&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# (The OpenVPN server machine may need to NAT&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# or bridge the TUN/TAP interface to the internet&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# in order for this to work properly).&lt;/span&gt;
+push &lt;span class=&quot;s2&quot;&gt;&quot;redirect-gateway def1 bypass-dhcp&quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;This makes sure that the OpenVPN server will pass the client device’s web traffic to its destination.&lt;/p&gt;
+
+&lt;h3 id=&quot;step-17&quot;&gt;Step 1.7:&lt;/h3&gt;
+
+&lt;p&gt;Still in the same file, find and uncomment the following two lines. To uncomment, simply remove the semicolon &lt;code class=&quot;highlighter-rouge&quot;&gt;;&lt;/code&gt; in front of the two lines.&lt;/p&gt;
+
+&lt;p&gt;Before:&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# Certain Windows-specific network settings&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# can be pushed to clients, such as DNS&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# or WINS server addresses.  CAVEAT:&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# http://openvpn.net/faq.html#dhcpcaveats&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# The addresses below refer to the public&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# DNS servers provided by opendns.com.&lt;/span&gt;
+;push &lt;span class=&quot;s2&quot;&gt;&quot;dhcp-option DNS 208.67.222.222&quot;&lt;/span&gt;
+;push &lt;span class=&quot;s2&quot;&gt;&quot;dhcp-option DNS 208.67.220.220&quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;After:&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# Certain Windows-specific network settings&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# can be pushed to clients, such as DNS&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# or WINS server addresses.  CAVEAT:&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# http://openvpn.net/faq.html#dhcpcaveats&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# The addresses below refer to the public&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# DNS servers provided by opendns.com.&lt;/span&gt;
+push &lt;span class=&quot;s2&quot;&gt;&quot;dhcp-option DNS 208.67.222.222&quot;&lt;/span&gt;
+push &lt;span class=&quot;s2&quot;&gt;&quot;dhcp-option DNS 208.67.220.220&quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;The two IP addresses above belong to OpenDNS and will be used to lookup DNS request where possible. You can use any DNS service of your choice. Here we have used OpenDNS, and hence their IP addresses are listed in the file.&lt;/p&gt;
+
+&lt;h3 id=&quot;step-18&quot;&gt;Step 1.8:&lt;/h3&gt;
+
+&lt;p&gt;This is the last thing to change in the file. Look for this section below and uncomment the two lines by removing the semicolons &lt;code class=&quot;highlighter-rouge&quot;&gt;;&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Before:&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# You can uncomment this out on&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# non-Windows systems.&lt;/span&gt;
+;user nobody
+;group nogroup
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;After:&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# You can uncomment this out on&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# non-Windows systems.&lt;/span&gt;
+user nobody
+group nogroup
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Save and close the file.&lt;/p&gt;
+
+&lt;h3 id=&quot;step-19&quot;&gt;Step 1.9:&lt;/h3&gt;
+
+&lt;h4 id=&quot;packet-forwarding&quot;&gt;Packet Forwarding&lt;/h4&gt;
+
+&lt;p&gt;We need to now enable an option that allows the server to forward traffic from client devices out to the Internet. If this is not done, the client traffic will stop at the server. To enable packet forwarding, run this command.&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;echo &lt;/span&gt;1 &amp;gt; /proc/sys/net/ipv4/ip_forward
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;This setting is not yet permanent and will not survive a reboot. To make it permanent, we need to edit the &lt;code class=&quot;highlighter-rouge&quot;&gt;sysctl.conf&lt;/code&gt; file.&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;vi /etc/sysctl.conf
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;In this file, find and uncomment the following line. To uncomment, remove the &lt;code class=&quot;highlighter-rouge&quot;&gt;#&lt;/code&gt; in front of the line.&lt;/p&gt;
+
+&lt;p&gt;Before:&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# Uncomment the next line to enable packet forwarding for IPv4&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#net.ipv4.ip_forward=1&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;After:&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# Uncomment the next line to enable packet forwarding for IPv4&lt;/span&gt;
+net.ipv4.ip_forward&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;1
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Save the file and exit.&lt;/p&gt;
+
+&lt;h3 id=&quot;step-110&quot;&gt;Step 1.10:&lt;/h3&gt;
+
+&lt;h4 id=&quot;set-up-firewall-rules-in-the-uncomplicated-firewall-ufw&quot;&gt;Set up firewall rules in the Uncomplicated Firewall (ufw)&lt;/h4&gt;
+
+&lt;p&gt;We will be using OpenVPN over UDP, so the firewall must allow UDP traffic over port &lt;strong&gt;1194&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;Still as root, enter the following command:&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ufw allow 1194/udp
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Open the firewall’s (ufw) primary configuration file. We habe to set the firewall forwarding policy.&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;vi /etc/default/ufw
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Search for the string &lt;code class=&quot;highlighter-rouge&quot;&gt;DEFAULT_FORWARD_POLICY=&quot;DROP&quot;&lt;/code&gt; in this file. Change the &lt;code class=&quot;highlighter-rouge&quot;&gt;DROP&lt;/code&gt; to &lt;code class=&quot;highlighter-rouge&quot;&gt;ACCEPT&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Before:&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;DEFAULT_FORWARD_POLICY&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;DROP&quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;After:&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;DEFAULT_FORWARD_POLICY&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;ACCEPT&quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Save the file and exit.&lt;/p&gt;
+
+&lt;h3 id=&quot;step-111&quot;&gt;Step 1.11:&lt;/h3&gt;
+
+&lt;p&gt;There’s one more step before we can move on to the next section.&lt;/p&gt;
+
+&lt;p&gt;We need to add add additional firewall rules.&lt;/p&gt;
+
+&lt;p&gt;Open this file&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;vi /etc/ufw/before.rules
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;We will be adding rules for NAT (network address translation) and IP masquerading of connected devices.&lt;/p&gt;
+
+&lt;p&gt;Modify this file to look like this.&lt;/p&gt;
+
+&lt;p&gt;Before:&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;#&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# rules.before&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# Rules that should be run before the ufw command line added rules. Custom&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# rules should be added to one of these chains:&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#   ufw-before-input&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#   ufw-before-output&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#   ufw-before-forward&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;# Don't delete these required lines, otherwise there will be errors&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;*&lt;/span&gt;filter
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;After:&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;#&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# rules.before&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# Rules that should be run before the ufw command line added rules. Custom&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# rules should be added to one of these chains:&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#   ufw-before-input&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#   ufw-before-output&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#   ufw-before-forward&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;#################################&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# START OPENVPN RULES&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# NAT table rules&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;*&lt;/span&gt;nat
+:POSTROUTING ACCEPT &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;0:0] 
+&lt;span class=&quot;c&quot;&gt;# Allow traffic from OpenVPN client to eth0&lt;/span&gt;
+-A POSTROUTING -s 10.8.0.0/8 -o eth0 -j MASQUERADE
+COMMIT
+&lt;span class=&quot;c&quot;&gt;# END OPENVPN RULES&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#################################&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;# Don't delete these required lines, otherwise there will be errors&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;*&lt;/span&gt;filter
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Once you’ve added the section, enable the firewall (ufw).&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ufw &lt;span class=&quot;nb&quot;&gt;enable&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;row&quot;&gt;
+  &lt;div class=&quot;col-12&quot;&gt;
+    
+   &lt;script async=&quot;&quot; src=&quot;//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js&quot;&gt;&lt;/script&gt;
+    &lt;ins class=&quot;adsbygoogle&quot; style=&quot;display:block; text-align:center;&quot; data-ad-format=&quot;fluid&quot; data-ad-layout=&quot;in-article&quot; data-ad-client=&quot;ca-pub-1094744891389501&quot; data-ad-slot=&quot;6411936673&quot;&gt;&lt;/ins&gt;
+    &lt;script&gt;
+         (adsbygoogle = window.adsbygoogle || []).push({});
+    &lt;/script&gt;
+
+
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;h1 id=&quot;part-2&quot;&gt;Part 2&lt;/h1&gt;
+
+&lt;h2 id=&quot;creating-a-certificate-authority-and-server-side-certificate-and-key&quot;&gt;Creating a Certificate Authority and Server-Side Certificate and Key&lt;/h2&gt;
+
+&lt;p&gt;Okay, so we have installed and configured OpenVPN and the firewall settings in the above section. Now, let’s go ahead and create certificates and keys for our new OpenVPN server.&lt;/p&gt;
+
+&lt;h4 id=&quot;creating-a-certificate-authority-ca&quot;&gt;Creating a certificate authority (CA)&lt;/h4&gt;
+
+&lt;h3 id=&quot;step-21&quot;&gt;Step 2.1:&lt;/h3&gt;
+
+&lt;p&gt;Make sure you’re still logged in as root.&lt;/p&gt;
+
+&lt;p&gt;Copy the Easy-RSA generation scripts to &lt;code class=&quot;highlighter-rouge&quot;&gt;/etc/openvpn&lt;/code&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;cp -r /usr/share/easy-rsa/ /etc/openvpn
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;step-22&quot;&gt;Step 2.2:&lt;/h3&gt;
+
+&lt;p&gt;Now, create a directory to store our keys.&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;mkdir /etc/openvpn/easy-rsa/keys
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;step-23&quot;&gt;Step 2.3:&lt;/h3&gt;
+
+&lt;p&gt;Now we will edit the &lt;code class=&quot;highlighter-rouge&quot;&gt;vars&lt;/code&gt; file and add in some default values for a person or a business. The information that is entered into this file will be copied to the certificates and keys and will help us in identifying them later.&lt;/p&gt;
+
+&lt;p&gt;You can put in any values you like. Here is an example.&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;KEY_COUNTRY&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;CA&quot;&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;KEY_PROVINCE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;ON&quot;&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;KEY_CITY&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Toronto&quot;&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;KEY_ORG&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Wiseindy&quot;&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;KEY_EMAIL&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;wiseindy@example.com&quot;&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;KEY_OU&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;WiseOU&quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;There is one more line to edit in this file before you close it. We need to set the default filename for the server key and certificate. In this tutorial we’ve used the name &lt;code class=&quot;highlighter-rouge&quot;&gt;server&lt;/code&gt; for simplicity. If you’re using a different name, please make sure you replace &lt;code class=&quot;highlighter-rouge&quot;&gt;server&lt;/code&gt; with your custom name in the commands.&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;KEY_NAME&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;server&quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Save and close the file.&lt;/p&gt;
+
+&lt;h3 id=&quot;step-24&quot;&gt;Step 2.4:&lt;/h3&gt;
+
+&lt;p&gt;The next step is to generate the Diffie-Hellman parameters.&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;openssl dhparam -out /etc/openvpn/dh2048.pem 2048
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;step-25&quot;&gt;Step 2.5:&lt;/h3&gt;
+
+&lt;p&gt;Now, navigate to the &lt;code class=&quot;highlighter-rouge&quot;&gt;easy-rsa&lt;/code&gt; directory.&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;cd&lt;/span&gt; /etc/openvpn/easy-rsa
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;step-26&quot;&gt;Step 2.6:&lt;/h3&gt;
+
+&lt;p&gt;Once you’re in the &lt;code class=&quot;highlighter-rouge&quot;&gt;easy-rsa&lt;/code&gt; directory, run the following command to initialize the PKI (Public Key Infrastructure).&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;. ./vars
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Note the &lt;code class=&quot;highlighter-rouge&quot;&gt;.&lt;/code&gt; (dot) and ` ` (space) in front of &lt;code class=&quot;highlighter-rouge&quot;&gt;./vars&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;The above command will output the following:&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;NOTE: If you run ./clean-all, I will be doing a rm -rf on /etc/openvpn/easy-rsa/keys
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;You can ignore this warning message since we haven’t yet generated anything.&lt;/p&gt;
+
+&lt;h3 id=&quot;step-27&quot;&gt;Step 2.7:&lt;/h3&gt;
+
+&lt;p&gt;Let’s clear the working directory of any example keys and start fresh.&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;./clean-all
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;step-28&quot;&gt;Step 2.8:&lt;/h3&gt;
+
+&lt;p&gt;We are all set to create our certificate authority now. When you run the following command, it will ask you to confirm the values you had entered in the &lt;code class=&quot;highlighter-rouge&quot;&gt;vars&lt;/code&gt; file in step 2.6. Hit enter to confirm the values.&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;./build-ca
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h4 id=&quot;generate-a-certificate-and-key-for-the-server&quot;&gt;Generate a Certificate and Key for the Server&lt;/h4&gt;
+
+&lt;h3 id=&quot;step-29&quot;&gt;Step 2.9:&lt;/h3&gt;
+
+&lt;p&gt;Well, we now have a certificate authority (CA) set up. Let’s build our server key now.&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;./build-key-server server
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;&lt;em&gt;Note: Note that I’ve used the name &lt;strong&gt;server&lt;/strong&gt; in the above command. This is because I’ve set &lt;code class=&quot;highlighter-rouge&quot;&gt;export KEY_NAME=&quot;server&quot;&lt;/code&gt; in the &lt;code class=&quot;highlighter-rouge&quot;&gt;vars&lt;/code&gt; file (step 2.6). If you’ve used a different name, make sure you modify the command accordingly&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;When you run this command, you’ll see a similar output as the previous step. You can hit enter to confirm them. However, this time you will see two additional prompts.&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Please enter the following &lt;span class=&quot;s1&quot;&gt;'extra'&lt;/span&gt; attributes
+to be sent with your certificate request
+A challenge password &lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt;:
+An optional company name &lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt;:
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Both of the should be left blank. Hit Enter to continue.&lt;/p&gt;
+
+&lt;p&gt;When it prompts you to sign the certificate and commit, type &lt;code class=&quot;highlighter-rouge&quot;&gt;y&lt;/code&gt; for both the prompts and hit enter.&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Sign the certificate? &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;y/n]  y
+1 out of 1 certificate requests certified, commit? &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;y/n]  y
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Now you should see the following output. This means that all is good so far.&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Write out database with 1 new entries
+Data Base Updated
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;step-210&quot;&gt;Step 2.10&lt;/h3&gt;
+
+&lt;h4 id=&quot;move-the-server-certificates-and-keys&quot;&gt;Move the Server Certificates and Keys&lt;/h4&gt;
+
+&lt;p&gt;Well, we’ve now generated the server CA, keys and certificate. Let’s copy these over to the correct location &lt;code class=&quot;highlighter-rouge&quot;&gt;/etc/openvpn/&lt;/code&gt;.&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;cp /etc/openvpn/easy-rsa/keys/&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;server.crt,server.key,ca.crt&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; /etc/openvpn
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;step-211&quot;&gt;Step 2.11&lt;/h3&gt;
+
+&lt;p&gt;Well, guess what? Our OpenVPN server is ready now. Let’s start it.&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;service openvpn start
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h1 id=&quot;part-3&quot;&gt;Part 3&lt;/h1&gt;
+
+&lt;h2 id=&quot;generate-certificates-and-keys-for-your-devices&quot;&gt;Generate Certificates and Keys for your devices&lt;/h2&gt;
+
+&lt;p&gt;In the previous section, we created the key and certificate for our server. We are going to do that for our devices now.&lt;/p&gt;
+
+&lt;p&gt;We will build one for a client device called &lt;code class=&quot;highlighter-rouge&quot;&gt;myphone&lt;/code&gt;. You can name your client device anything. Just make sure to substitute the name in the commands that follow.&lt;/p&gt;
+
+&lt;h3 id=&quot;step-31&quot;&gt;Step 3.1:&lt;/h3&gt;
+
+&lt;p&gt;You should still be root and still working from this directory &lt;code class=&quot;highlighter-rouge&quot;&gt;/etc/openvpn/easy-rsa&lt;/code&gt;.&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;./build-key myphone
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Like in the previous steps, you’ll be asked to confirm the Distinguised Name variables. Hit enter to accept the defaults.&lt;/p&gt;
+
+&lt;h3 id=&quot;step-32&quot;&gt;Step 3.2:&lt;/h3&gt;
+
+&lt;p&gt;Now copy the sample client configuration file to the &lt;code class=&quot;highlighter-rouge&quot;&gt;easy-rsa/keys&lt;/code&gt; directory. This file will be used as a template. We will be editing this template file for each of our devices.&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;cp /usr/share/doc/openvpn/examples/sample-config-files/client.conf /etc/openvpn/easy-rsa/keys/myphone.ovpn
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;You can repeat this section (steps 3.1 and 3.2) for each client device. Just make sure you use a different name for each of your devices (in this case we’ve used &lt;code class=&quot;highlighter-rouge&quot;&gt;myphone&lt;/code&gt;)&lt;/p&gt;
+
+&lt;h1 id=&quot;part-4&quot;&gt;Part 4&lt;/h1&gt;
+
+&lt;h2 id=&quot;create-a-unified-openvpn-profile-for-each-of-your-devices&quot;&gt;Create a Unified OpenVPN Profile for each of your devices&lt;/h2&gt;
+
+&lt;p&gt;Now that you have created keys and certificates for your device &lt;code class=&quot;highlighter-rouge&quot;&gt;myphone&lt;/code&gt;, let’s create one unified &lt;code class=&quot;highlighter-rouge&quot;&gt;.ovpn&lt;/code&gt; file which will contain all this information.&lt;/p&gt;
+
+&lt;h3 id=&quot;step-41&quot;&gt;Step 4.1:&lt;/h3&gt;
+
+&lt;p&gt;From the &lt;code class=&quot;highlighter-rouge&quot;&gt;/etc/openvpn/easy-rsa&lt;/code&gt; directory, copy the following files to your computer (the one you’re reading this article on). We will be editing these in a text editor (Notepad, TextEdit, etc.).&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;myphone.crt
+myphone.key
+myphone.ovpn
+ca.crt
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;step-42&quot;&gt;Step 4.2&lt;/h3&gt;
+
+&lt;p&gt;Open the &lt;code class=&quot;highlighter-rouge&quot;&gt;myphone.ovpn&lt;/code&gt; file in a text editor like Notepad (Windows) or TextEdit (macOS) or whatever you prefere, really.&lt;/p&gt;
+
+&lt;p&gt;Add your server’s IP address to the this section in the beginning of the file. Replace &lt;code class=&quot;highlighter-rouge&quot;&gt;my-server-1&lt;/code&gt; with your server’s IP address.&lt;/p&gt;
+
+&lt;p&gt;Before:&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# The hostname/IP and port of the server.&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# You can have multiple remote entries&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# to load balance between the servers.&lt;/span&gt;
+remote my-server-1 1194
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;After:&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# The hostname/IP and port of the server.&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# You can have multiple remote entries&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# to load balance between the servers.&lt;/span&gt;
+remote 142.189.11.1 1194
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;step-43&quot;&gt;Step 4.3&lt;/h3&gt;
+
+&lt;p&gt;In the same file, scroll down and uncomment this section (This doesn’t apply to Windows, so you can skip it if you’re going to use thie VPN profile on a Windows machine).&lt;/p&gt;
+
+&lt;p&gt;Before:&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# Downgrade privileges after initialization (non-Windows only)&lt;/span&gt;
+;user nobody
+;group nogroup
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;After:&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# Downgrade privileges after initialization (non-Windows only)&lt;/span&gt;
+user nobody
+group nogroup
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;step-44&quot;&gt;Step 4.4:&lt;/h3&gt;
+
+&lt;p&gt;Scroll further down and this time you’ll &lt;strong&gt;comment&lt;/strong&gt; a few lines instead of uncommenting. We do this because we are directly including the &lt;code class=&quot;highlighter-rouge&quot;&gt;.crt&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;.key&lt;/code&gt; files within this &lt;code class=&quot;highlighter-rouge&quot;&gt;.ovpn&lt;/code&gt; file.&lt;/p&gt;
+
+&lt;p&gt;Before:&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# SSL/TLS parms.&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# . . .&lt;/span&gt;
+ca ca.crt
+cert client.crt
+key client.key
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;After:&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# SSL/TLS parms.&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# . . .&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#ca ca.crt&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#cert client.crt&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#key client.key&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;step-45&quot;&gt;Step 4.5:&lt;/h3&gt;
+
+&lt;p&gt;At the end of the file, add this text to block outside DNS&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# Prevent DNS leak&lt;/span&gt;
+block-outside-dns
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;step-46&quot;&gt;Step 4.6:&lt;/h3&gt;
+
+&lt;p&gt;Now, at the end of the file, we will be copying and pasting the contents of &lt;code class=&quot;highlighter-rouge&quot;&gt;ca.crt&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;myphone.crt&lt;/code&gt;, and &lt;code class=&quot;highlighter-rouge&quot;&gt;myphone.key&lt;/code&gt; files.&lt;/p&gt;
+
+&lt;p&gt;Open the &lt;code class=&quot;highlighter-rouge&quot;&gt;.crt&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;.key&lt;/code&gt; files in a text editor and copy-paste the content as shown below&lt;/p&gt;
+
+&lt;p&gt;This is how we will be doing it.&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;lt;ca&amp;gt;
+  &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;insert ca.crt here&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+&amp;lt;/ca&amp;gt;
+
+&amp;lt;cert&amp;gt;
+  &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;insert myphone.crt here&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+&amp;lt;/cert&amp;gt;
+
+&amp;lt;key&amp;gt;
+  &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;insert myphone.key here&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+&amp;lt;/key&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Once you’re done copy-pasting the content, the end of your &lt;code class=&quot;highlighter-rouge&quot;&gt;.ovpn&lt;/code&gt; file should look like this:&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;lt;ca&amp;gt;
+-----BEGIN CERTIFICATE-----
+. . .
+-----END CERTIFICATE-----
+&amp;lt;/ca&amp;gt;
+  
+&amp;lt;cert&amp;gt;
+Certificate:
+. . .
+-----END CERTIFICATE-----
+. . .
+-----END CERTIFICATE-----
+&amp;lt;/cert&amp;gt;
+  
+&amp;lt;key&amp;gt;
+-----BEGIN PRIVATE KEY-----
+. . .
+-----END PRIVATE KEY-----
+&amp;lt;/key&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Save the changes and close the file.&lt;/p&gt;
+
+&lt;h3 id=&quot;step-47&quot;&gt;Step 4.7:&lt;/h3&gt;
+
+&lt;h4 id=&quot;windows&quot;&gt;Windows&lt;/h4&gt;
+&lt;p&gt;If you’re using Windows, install the official &lt;a href=&quot;https://openvpn.net/index.php/open-source/downloads.html&quot;&gt;OpenVPN client from here&lt;/a&gt;.
+After installation, paste your &lt;code class=&quot;highlighter-rouge&quot;&gt;myphone.ovpn&lt;/code&gt; file here &lt;code class=&quot;highlighter-rouge&quot;&gt;C:\Program Files\OpenVPN\config\&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;To connect to your VPN server, right-click the OpenVPN client in the taskbar and click &lt;strong&gt;Connect&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/images/posts/2017-04-27-install-openvpn-ubuntu-1404-001.png&quot; alt=&quot;Connect to OpenVPN&quot; title=&quot;Connect to OpenVPN&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;To verify if you’re connected, go to &lt;a href=&quot;https://google.com&quot;&gt;Google&lt;/a&gt; and type &lt;code class=&quot;highlighter-rouge&quot;&gt;What is my IP&lt;/code&gt;. If it returns the IP address of your OpenVPN server, all is well and your VPN is working as expected.&lt;/p&gt;
+
+&lt;h4 id=&quot;macos&quot;&gt;macOS&lt;/h4&gt;
+&lt;p&gt;For macOS, install &lt;a href=&quot;https://tunnelblick.net/downloads.html&quot;&gt;Tunnelblick&lt;/a&gt; and import your &lt;code class=&quot;highlighter-rouge&quot;&gt;.ovpn&lt;/code&gt; profile.
+&lt;strong&gt;Note:&lt;/strong&gt; If you get an error and Tunnelblick is unable to connect, remove the following text from your &lt;code class=&quot;highlighter-rouge&quot;&gt;.ovpn&lt;/code&gt; profile.&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# Prevent DNS leak&lt;/span&gt;
+block-outside-dns
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h4 id=&quot;android&quot;&gt;Android&lt;/h4&gt;
+&lt;p&gt;For Android, download the &lt;a href=&quot;https://play.google.com/store/apps/details?id=net.openvpn.openvpn&amp;amp;hl=en&quot;&gt;OpenVPN Connect app from the Google Play Store&lt;/a&gt;. Import your &lt;code class=&quot;highlighter-rouge&quot;&gt;.ovpn&lt;/code&gt; profile and you’re all set!&lt;/p&gt;
+
+&lt;h4 id=&quot;ios&quot;&gt;iOS&lt;/h4&gt;
+&lt;p&gt;For iPhone and iPad, download the &lt;a href=&quot;https://itunes.apple.com/us/app/openvpn-connect/id590379981?mt=8&quot;&gt;OpenVPN Connect app from the Apple App Store&lt;/a&gt;. Import your &lt;code class=&quot;highlighter-rouge&quot;&gt;.ovpn&lt;/code&gt; profile and you’re all set!&lt;/p&gt;
+
+&lt;p&gt;Guess what? You’re done.&lt;/p&gt;
+
+&lt;p&gt;I recommened you create separate &lt;code class=&quot;highlighter-rouge&quot;&gt;.ovpn&lt;/code&gt; files for each of your devices instead of using the same key &amp;amp; certificate for everything.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;To create &lt;code class=&quot;highlighter-rouge&quot;&gt;.ovpn&lt;/code&gt; profiles for more devices, &lt;a href=&quot;#part-3&quot;&gt;repeat steps from part 3 onwards&lt;/a&gt;.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;(header image source: &lt;a href=&quot;https://commons.wikimedia.org/wiki/File:Old_key_in_door_lock.jpg&quot;&gt;commons.wikimedia.org&lt;/a&gt;)&lt;/p&gt;</content><author><name>wiseindy</name></author><category term="openvpn" /><category term="ubuntu 14.04" /><category term="ubuntu" /><category term="guide" /><category term="linux" /><category term="vpn" /><category term="pia" /><category term="vps" /><category term="guides" /><summary type="html">This is a detailed &amp;amp; step-by-step guide that will show you how to install and configure OpenVPN on Ubuntu 14.04. You can use OpenVPN to access the Internet safely and securely while on the move. To learn more about OpenVPN, you can check out the Wikipedia link or read about it on the official site What you need: An Ubuntu 14.04 system. Root access And as always, an internet connection This guide is split into 4 main sections. Don’t worry if the titles look intimidating. If you follow the instructions, it should go smoothly and you should have a functioning OpenVPN server to which you can connect to from anywhere and using any device. Installation and configuration of OpenVPN server Creating a Certificate Authority and Server-Side Certificate and Key Generate Certificates and Keys for your devices Create a Unified OpenVPN Profile for each of your devices Part 1 Installation and configuration of OpenVPN server Step 1.1: First, update your package lists and then install the openvpn and easy-rsa package. sudo apt-get update sudo apt-get install openvpn easy-rsa Step 1.2: From now onwards, all the steps below have to be run as root. So, go ahead and login as root. su Step 1.3: Lets extract the sample VPN server configuration file to this location: /etc/openvpn gunzip -c /usr/share/doc/openvpn/examples/sample-config-files/server.conf.gz &amp;gt; /etc/openvpn/server.conf Note: gunzip is a utility that uncompresses a gzip file. gz or .Z is the extension for gzip files. Step 1.4: Still as root, open this file. I prefer vim to open files on ubuntu. If you prefer nano instead, you can use that too. vi /etc/openvpn/server.conf Step 1.5: Now, we have to modify a few lines in this file. Search for a section that looks like this # Diffie hellman parameters. # Generate your own with: # openssl dhparam -out dh1024.pem 1024 # Substitute 2048 for 1024 if you are using # 2048 bit keys. dh dh1024.pem Change dh1024.pem to dh2048.pem. This doubles the RSA key length when we generate the server and client keys later in the guide. Step 1.6: Find and uncomment the line below. To uncomment, simply remove the semicolon ; in front of the line. Before: # If enabled, this directive will configure # all clients to redirect their default # network gateway through the VPN, causing # all IP traffic such as web browsing and # and DNS lookups to go through the VPN # (The OpenVPN server machine may need to NAT # or bridge the TUN/TAP interface to the internet # in order for this to work properly). ;push &quot;redirect-gateway def1 bypass-dhcp&quot; After: # If enabled, this directive will configure # all clients to redirect their default # network gateway through the VPN, causing # all IP traffic such as web browsing and # and DNS lookups to go through the VPN # (The OpenVPN server machine may need to NAT # or bridge the TUN/TAP interface to the internet # in order for this to work properly). push &quot;redirect-gateway def1 bypass-dhcp&quot; This makes sure that the OpenVPN server will pass the client device’s web traffic to its destination. Step 1.7: Still in the same file, find and uncomment the following two lines. To uncomment, simply remove the semicolon ; in front of the two lines. Before: # Certain Windows-specific network settings # can be pushed to clients, such as DNS # or WINS server addresses. CAVEAT: # http://openvpn.net/faq.html#dhcpcaveats # The addresses below refer to the public # DNS servers provided by opendns.com. ;push &quot;dhcp-option DNS 208.67.222.222&quot; ;push &quot;dhcp-option DNS 208.67.220.220&quot; After: # Certain Windows-specific network settings # can be pushed to clients, such as DNS # or WINS server addresses. CAVEAT: # http://openvpn.net/faq.html#dhcpcaveats # The addresses below refer to the public # DNS servers provided by opendns.com. push &quot;dhcp-option DNS 208.67.222.222&quot; push &quot;dhcp-option DNS 208.67.220.220&quot; The two IP addresses above belong to OpenDNS and will be used to lookup DNS request where possible. You can use any DNS service of your choice. Here we have used OpenDNS, and hence their IP addresses are listed in the file. Step 1.8: This is the last thing to change in the file. Look for this section below and uncomment the two lines by removing the semicolons ; Before: # You can uncomment this out on # non-Windows systems. ;user nobody ;group nogroup After: # You can uncomment this out on # non-Windows systems. user nobody group nogroup Save and close the file. Step 1.9: Packet Forwarding We need to now enable an option that allows the server to forward traffic from client devices out to the Internet. If this is not done, the client traffic will stop at the server. To enable packet forwarding, run this command. echo 1 &amp;gt; /proc/sys/net/ipv4/ip_forward This setting is not yet permanent and will not survive a reboot. To make it permanent, we need to edit the sysctl.conf file. vi /etc/sysctl.conf In this file, find and uncomment the following line. To uncomment, remove the # in front of the line. Before: # Uncomment the next line to enable packet forwarding for IPv4 #net.ipv4.ip_forward=1 After: # Uncomment the next line to enable packet forwarding for IPv4 net.ipv4.ip_forward=1 Save the file and exit. Step 1.10: Set up firewall rules in the Uncomplicated Firewall (ufw) We will be using OpenVPN over UDP, so the firewall must allow UDP traffic over port 1194. Still as root, enter the following command: ufw allow 1194/udp Open the firewall’s (ufw) primary configuration file. We habe to set the firewall forwarding policy. vi /etc/default/ufw Search for the string DEFAULT_FORWARD_POLICY=&quot;DROP&quot; in this file. Change the DROP to ACCEPT. Before: DEFAULT_FORWARD_POLICY=&quot;DROP&quot; After: DEFAULT_FORWARD_POLICY=&quot;ACCEPT&quot; Save the file and exit. Step 1.11: There’s one more step before we can move on to the next section. We need to add add additional firewall rules. Open this file vi /etc/ufw/before.rules We will be adding rules for NAT (network address translation) and IP masquerading of connected devices. Modify this file to look like this. Before: # # rules.before # # Rules that should be run before the ufw command line added rules. Custom # rules should be added to one of these chains: # ufw-before-input # ufw-before-output # ufw-before-forward # # Don't delete these required lines, otherwise there will be errors *filter After: # # rules.before # # Rules that should be run before the ufw command line added rules. Custom # rules should be added to one of these chains: # ufw-before-input # ufw-before-output # ufw-before-forward # ################################# # START OPENVPN RULES # NAT table rules *nat :POSTROUTING ACCEPT [0:0] # Allow traffic from OpenVPN client to eth0 -A POSTROUTING -s 10.8.0.0/8 -o eth0 -j MASQUERADE COMMIT # END OPENVPN RULES ################################# # Don't delete these required lines, otherwise there will be errors *filter Once you’ve added the section, enable the firewall (ufw). ufw enable Part 2 Creating a Certificate Authority and Server-Side Certificate and Key Okay, so we have installed and configured OpenVPN and the firewall settings in the above section. Now, let’s go ahead and create certificates and keys for our new OpenVPN server. Creating a certificate authority (CA) Step 2.1: Make sure you’re still logged in as root. Copy the Easy-RSA generation scripts to /etc/openvpn cp -r /usr/share/easy-rsa/ /etc/openvpn Step 2.2: Now, create a directory to store our keys. mkdir /etc/openvpn/easy-rsa/keys Step 2.3: Now we will edit the vars file and add in some default values for a person or a business. The information that is entered into this file will be copied to the certificates and keys and will help us in identifying them later. You can put in any values you like. Here is an example. export KEY_COUNTRY=&quot;CA&quot; export KEY_PROVINCE=&quot;ON&quot; export KEY_CITY=&quot;Toronto&quot; export KEY_ORG=&quot;Wiseindy&quot; export KEY_EMAIL=&quot;wiseindy@example.com&quot; export KEY_OU=&quot;WiseOU&quot; There is one more line to edit in this file before you close it. We need to set the default filename for the server key and certificate. In this tutorial we’ve used the name server for simplicity. If you’re using a different name, please make sure you replace server with your custom name in the commands. export KEY_NAME=&quot;server&quot; Save and close the file. Step 2.4: The next step is to generate the Diffie-Hellman parameters. openssl dhparam -out /etc/openvpn/dh2048.pem 2048 Step 2.5: Now, navigate to the easy-rsa directory. cd /etc/openvpn/easy-rsa Step 2.6: Once you’re in the easy-rsa directory, run the following command to initialize the PKI (Public Key Infrastructure). . ./vars Note the . (dot) and ` ` (space) in front of ./vars. The above command will output the following: NOTE: If you run ./clean-all, I will be doing a rm -rf on /etc/openvpn/easy-rsa/keys You can ignore this warning message since we haven’t yet generated anything. Step 2.7: Let’s clear the working directory of any example keys and start fresh. ./clean-all Step 2.8: We are all set to create our certificate authority now. When you run the following command, it will ask you to confirm the values you had entered in the vars file in step 2.6. Hit enter to confirm the values. ./build-ca Generate a Certificate and Key for the Server Step 2.9: Well, we now have a certificate authority (CA) set up. Let’s build our server key now. ./build-key-server server Note: Note that I’ve used the name server in the above command. This is because I’ve set export KEY_NAME=&quot;server&quot; in the vars file (step 2.6). If you’ve used a different name, make sure you modify the command accordingly When you run this command, you’ll see a similar output as the previous step. You can hit enter to confirm them. However, this time you will see two additional prompts. Please enter the following 'extra' attributes to be sent with your certificate request A challenge password []: An optional company name []: Both of the should be left blank. Hit Enter to continue. When it prompts you to sign the certificate and commit, type y for both the prompts and hit enter. Sign the certificate? [y/n] y 1 out of 1 certificate requests certified, commit? [y/n] y Now you should see the following output. This means that all is good so far. Write out database with 1 new entries Data Base Updated Step 2.10 Move the Server Certificates and Keys Well, we’ve now generated the server CA, keys and certificate. Let’s copy these over to the correct location /etc/openvpn/. cp /etc/openvpn/easy-rsa/keys/{server.crt,server.key,ca.crt} /etc/openvpn Step 2.11 Well, guess what? Our OpenVPN server is ready now. Let’s start it. service openvpn start Part 3 Generate Certificates and Keys for your devices In the previous section, we created the key and certificate for our server. We are going to do that for our devices now. We will build one for a client device called myphone. You can name your client device anything. Just make sure to substitute the name in the commands that follow. Step 3.1: You should still be root and still working from this directory /etc/openvpn/easy-rsa. ./build-key myphone Like in the previous steps, you’ll be asked to confirm the Distinguised Name variables. Hit enter to accept the defaults. Step 3.2: Now copy the sample client configuration file to the easy-rsa/keys directory. This file will be used as a template. We will be editing this template file for each of our devices. cp /usr/share/doc/openvpn/examples/sample-config-files/client.conf /etc/openvpn/easy-rsa/keys/myphone.ovpn You can repeat this section (steps 3.1 and 3.2) for each client device. Just make sure you use a different name for each of your devices (in this case we’ve used myphone) Part 4 Create a Unified OpenVPN Profile for each of your devices Now that you have created keys and certificates for your device myphone, let’s create one unified .ovpn file which will contain all this information. Step 4.1: From the /etc/openvpn/easy-rsa directory, copy the following files to your computer (the one you’re reading this article on). We will be editing these in a text editor (Notepad, TextEdit, etc.). myphone.crt myphone.key myphone.ovpn ca.crt Step 4.2 Open the myphone.ovpn file in a text editor like Notepad (Windows) or TextEdit (macOS) or whatever you prefere, really. Add your server’s IP address to the this section in the beginning of the file. Replace my-server-1 with your server’s IP address. Before: # The hostname/IP and port of the server. # You can have multiple remote entries # to load balance between the servers. remote my-server-1 1194 After: # The hostname/IP and port of the server. # You can have multiple remote entries # to load balance between the servers. remote 142.189.11.1 1194 Step 4.3 In the same file, scroll down and uncomment this section (This doesn’t apply to Windows, so you can skip it if you’re going to use thie VPN profile on a Windows machine). Before: # Downgrade privileges after initialization (non-Windows only) ;user nobody ;group nogroup After: # Downgrade privileges after initialization (non-Windows only) user nobody group nogroup Step 4.4: Scroll further down and this time you’ll comment a few lines instead of uncommenting. We do this because we are directly including the .crt and .key files within this .ovpn file. Before: # SSL/TLS parms. # . . . ca ca.crt cert client.crt key client.key After: # SSL/TLS parms. # . . . #ca ca.crt #cert client.crt #key client.key Step 4.5: At the end of the file, add this text to block outside DNS # Prevent DNS leak block-outside-dns Step 4.6: Now, at the end of the file, we will be copying and pasting the contents of ca.crt, myphone.crt, and myphone.key files. Open the .crt and .key files in a text editor and copy-paste the content as shown below This is how we will be doing it. &amp;lt;ca&amp;gt; (insert ca.crt here) &amp;lt;/ca&amp;gt; &amp;lt;cert&amp;gt; (insert myphone.crt here) &amp;lt;/cert&amp;gt; &amp;lt;key&amp;gt; (insert myphone.key here) &amp;lt;/key&amp;gt; Once you’re done copy-pasting the content, the end of your .ovpn file should look like this: &amp;lt;ca&amp;gt; -----BEGIN CERTIFICATE----- . . . -----END CERTIFICATE----- &amp;lt;/ca&amp;gt; &amp;lt;cert&amp;gt; Certificate: . . . -----END CERTIFICATE----- . . . -----END CERTIFICATE----- &amp;lt;/cert&amp;gt; &amp;lt;key&amp;gt; -----BEGIN PRIVATE KEY----- . . . -----END PRIVATE KEY----- &amp;lt;/key&amp;gt; Save the changes and close the file. Step 4.7: Windows If you’re using Windows, install the official OpenVPN client from here. After installation, paste your myphone.ovpn file here C:\Program Files\OpenVPN\config\. To connect to your VPN server, right-click the OpenVPN client in the taskbar and click Connect. To verify if you’re connected, go to Google and type What is my IP. If it returns the IP address of your OpenVPN server, all is well and your VPN is working as expected. macOS For macOS, install Tunnelblick and import your .ovpn profile. Note: If you get an error and Tunnelblick is unable to connect, remove the following text from your .ovpn profile. # Prevent DNS leak block-outside-dns Android For Android, download the OpenVPN Connect app from the Google Play Store. Import your .ovpn profile and you’re all set! iOS For iPhone and iPad, download the OpenVPN Connect app from the Apple App Store. Import your .ovpn profile and you’re all set! Guess what? You’re done. I recommened you create separate .ovpn files for each of your devices instead of using the same key &amp;amp; certificate for everything. To create .ovpn profiles for more devices, repeat steps from part 3 onwards. (header image source: commons.wikimedia.org)</summary></entry><entry><title type="html">How to install Jekyll on Ubuntu 16.04 or Windows 10 - A Step-by-Step Guide</title><link href="http://localhost:4000/it/install-jekyll-on-ubuntu-16.04-windows-10/" rel="alternate" type="text/html" title="How to install Jekyll on Ubuntu 16.04 or Windows 10 - A Step-by-Step Guide" /><published>2017-04-26T07:00:00-04:00</published><updated>2017-04-26T07:00:00-04:00</updated><id>http://localhost:4000/it/install-jekyll-on-ubuntu-16.04-windows-10</id><content type="html" xml:base="http://localhost:4000/it/install-jekyll-on-ubuntu-16.04-windows-10/">&lt;p&gt;This guide will show you step by step how to install Jekyll 3.4.3 on a machine running Ubuntu or Windows 10.
+&lt;a href=&quot;https://jekyllrb.com/docs/installation/&quot;&gt;Jekyll’s official guide&lt;/a&gt; is good, but it’s very basic and doesn’t explain how to install Ruby, RubyGems and other dependencies.&lt;/p&gt;
+
+&lt;!--more--&gt;
+&lt;h2 id=&quot;what-you-need&quot;&gt;What you need:&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;An Ubuntu 16.04 or Windows 10 system. This guide should also work for older Ubuntu 14.04&lt;/li&gt;
+  &lt;li&gt;And as always, an internet connection&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;step-1&quot;&gt;Step 1:&lt;/h2&gt;
+
+&lt;p&gt;Skip to step 2 if you’re installing Jekyll on Ubuntu.&lt;/p&gt;
+
+&lt;p&gt;To install Jekyll on Windows 10, we need to first enable &lt;strong&gt;Windows Subsystem on Linux&lt;/strong&gt;. &lt;a href=&quot;/it/enabling-linux-bash-shell-in-windows-10/&quot;&gt;Here is a detailed guide that will show you how to do this step-by-step.&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;step-2&quot;&gt;Step 2:&lt;/h2&gt;
+
+&lt;p&gt;We will now install &lt;strong&gt;ruby2.3&lt;/strong&gt;. To do so, we have to first add the brightbox repository. When asked whether you want to confirm adding the repository, hit ENTER to proceed.&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sudo apt-add-repository ppa:brightbox/ruby-ng
+sudo apt-get update
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Install &lt;strong&gt;ruby2.3&lt;/strong&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sudo apt-get install ruby2.3 ruby2.3-dev
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Now you should have &lt;strong&gt;Ruby&lt;/strong&gt; and &lt;strong&gt;RubyGems&lt;/strong&gt; installed which are the prerequisite for installing Jekyll.&lt;/p&gt;
+
+&lt;div class=&quot;row&quot;&gt;
+  &lt;div class=&quot;col-12&quot;&gt;
+    
+   &lt;script async=&quot;&quot; src=&quot;//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js&quot;&gt;&lt;/script&gt;
+    &lt;ins class=&quot;adsbygoogle&quot; style=&quot;display:block; text-align:center;&quot; data-ad-format=&quot;fluid&quot; data-ad-layout=&quot;in-article&quot; data-ad-client=&quot;ca-pub-1094744891389501&quot; data-ad-slot=&quot;6411936673&quot;&gt;&lt;/ins&gt;
+    &lt;script&gt;
+         (adsbygoogle = window.adsbygoogle || []).push({});
+    &lt;/script&gt;
+
+
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&quot;step-3&quot;&gt;Step 3:&lt;/h2&gt;
+
+&lt;p&gt;Install &lt;a href=&quot;https://gcc.gnu.org/install/&quot;&gt;GCC&lt;/a&gt; and &lt;a href=&quot;https://www.gnu.org/software/make/&quot;&gt;Make&lt;/a&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sudo apt-get install gcc make -y
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&quot;step-4&quot;&gt;Step 4:&lt;/h2&gt;
+
+&lt;p&gt;Install Jekyll and Bundler gems&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sudo gem install jekyll
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Guess what? That’s it. You have Jekyll 3.4.3 installed.&lt;/p&gt;
+
+&lt;h2 id=&quot;further-information&quot;&gt;Further information:&lt;/h2&gt;
+
+&lt;p&gt;Here are some commands from &lt;a href=&quot;https://jekyllrb.com/docs/quickstart/&quot;&gt;jekyllrb.com&lt;/a&gt; that should get you up and running with a new blog.&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# Create a new Jekyll site at ./wiseblog&lt;/span&gt;
+jekyll new wiseblog
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;To build this site:&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# Change into your new directory&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;cd &lt;/span&gt;wiseblog
+
+&lt;span class=&quot;c&quot;&gt;# Build the site and preview it&lt;/span&gt;
+bundle &lt;span class=&quot;nb&quot;&gt;exec &lt;/span&gt;jekyll serve
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;Note:&lt;/strong&gt; If you’re running Windows, you may get an error when you try to run &lt;code class=&quot;highlighter-rouge&quot;&gt;bundle exec jekyll serve&lt;/code&gt;. In this case, simply run it with the &lt;code class=&quot;highlighter-rouge&quot;&gt;--force_polling&lt;/code&gt; option as follows:&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;bundle &lt;span class=&quot;nb&quot;&gt;exec &lt;/span&gt;jekyll serve --force_polling
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Now you can preview your website on &lt;code class=&quot;highlighter-rouge&quot;&gt;http://localhost:4000&lt;/code&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;notes&quot;&gt;Notes:&lt;/h2&gt;
+
+&lt;p&gt;(You can skip this part. This is only for my reference and for anyone who faces a similar issue)&lt;/p&gt;
+
+&lt;p&gt;I had to install &lt;a href=&quot;https://github.com/sparklemotion/nokogiri&quot;&gt;Nokogiri&lt;/a&gt; for my site and was having issues. This is how I solved it.&lt;/p&gt;
+
+&lt;p&gt;Below are the installation instructions on &lt;a href=&quot;http://www.nokogiri.org/tutorials/installing_nokogiri.html&quot;&gt;nokogiri.org&lt;/a&gt;:&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sudo apt-get install build-essential patch
+sudo apt-get install ruby-dev zlib1g-dev liblzma-dev
+sudo gem install nokogiri
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;(header image source: &lt;a href=&quot;https://jekyllrb.com&quot;&gt;jekyllrb.com&lt;/a&gt;)&lt;/p&gt;</content><author><name>wiseindy</name></author><category term="jekyll" /><category term="jekyllrb" /><category term="ruby" /><category term="ruby2.3" /><category term="ubuntu 16.04" /><category term="ubuntu 14.04" /><category term="ubuntu" /><category term="guide" /><category term="linux" /><category term="ubuntu" /><category term="static" /><category term="static site generator" /><category term="Guides" /><summary type="html">This guide will show you step by step how to install Jekyll 3.4.3 on a machine running Ubuntu or Windows 10. Jekyll’s official guide is good, but it’s very basic and doesn’t explain how to install Ruby, RubyGems and other dependencies. What you need: An Ubuntu 16.04 or Windows 10 system. This guide should also work for older Ubuntu 14.04 And as always, an internet connection Step 1: Skip to step 2 if you’re installing Jekyll on Ubuntu. To install Jekyll on Windows 10, we need to first enable Windows Subsystem on Linux. Here is a detailed guide that will show you how to do this step-by-step. Step 2: We will now install ruby2.3. To do so, we have to first add the brightbox repository. When asked whether you want to confirm adding the repository, hit ENTER to proceed. sudo apt-add-repository ppa:brightbox/ruby-ng sudo apt-get update Install ruby2.3 sudo apt-get install ruby2.3 ruby2.3-dev Now you should have Ruby and RubyGems installed which are the prerequisite for installing Jekyll. Step 3: Install GCC and Make sudo apt-get install gcc make -y Step 4: Install Jekyll and Bundler gems sudo gem install jekyll Guess what? That’s it. You have Jekyll 3.4.3 installed. Further information: Here are some commands from jekyllrb.com that should get you up and running with a new blog. # Create a new Jekyll site at ./wiseblog jekyll new wiseblog To build this site: # Change into your new directory cd wiseblog # Build the site and preview it bundle exec jekyll serve Note: If you’re running Windows, you may get an error when you try to run bundle exec jekyll serve. In this case, simply run it with the --force_polling option as follows: bundle exec jekyll serve --force_polling Now you can preview your website on http://localhost:4000 Notes: (You can skip this part. This is only for my reference and for anyone who faces a similar issue) I had to install Nokogiri for my site and was having issues. This is how I solved it. Below are the installation instructions on nokogiri.org: sudo apt-get install build-essential patch sudo apt-get install ruby-dev zlib1g-dev liblzma-dev sudo gem install nokogiri (header image source: jekyllrb.com)</summary></entry><entry><title type="html">How to fix error 0x80004005 - Cannot enable developer mode in Windows 10</title><link href="http://localhost:4000/it/windows-10-developer-mode-fix-error-0x80004005/" rel="alternate" type="text/html" title="How to fix error 0x80004005 - Cannot enable developer mode in Windows 10" /><published>2017-04-26T06:00:00-04:00</published><updated>2017-04-26T06:00:00-04:00</updated><id>http://localhost:4000/it/windows-10-developer-mode-fix-error-0x80004005</id><content type="html" xml:base="http://localhost:4000/it/windows-10-developer-mode-fix-error-0x80004005/">&lt;p&gt;“Developer mode package failed to install. Error code 0x80004005”. A few people, including me, faced issues when trying to enable developer mode in Windows 10. This guide will show you how to fix it.&lt;/p&gt;
+
+&lt;!--more--&gt;
+&lt;h2 id=&quot;why-this-happens&quot;&gt;Why this happens?&lt;/h2&gt;
+
+&lt;p&gt;After quite some digging and research online, I found that this problem is related to WSUS (Windows Server Update Services). If you’re in an environment where your PC gets updates from WSUS, you can face this problem. Luckily, it’s a straightforward fix.&lt;/p&gt;
+
+&lt;h2 id=&quot;step-1&quot;&gt;Step 1:&lt;/h2&gt;
+
+&lt;p&gt;Click &lt;strong&gt;Start&lt;/strong&gt; and type &lt;code class=&quot;highlighter-rouge&quot;&gt;regedit&lt;/code&gt;. Open it.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/images/posts/2017-04-26-windows-10-developer-mode-fix-error-0x80004005-001.png&quot; alt=&quot;Click start and search for regedit&quot; title=&quot;Click start and search for regedit&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Navigate to &lt;code class=&quot;highlighter-rouge&quot;&gt;HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU&lt;/code&gt; in &lt;strong&gt;regedit&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/images/posts/2017-04-26-windows-10-developer-mode-fix-error-0x80004005-002.png&quot; alt=&quot;Navigate to key in regedit&quot; title=&quot;Navigate to key in regedit&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Double click &lt;strong&gt;UseWUServer&lt;/strong&gt; and set the value to &lt;strong&gt;0&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/images/posts/2017-04-26-windows-10-developer-mode-fix-error-0x80004005-003.png&quot; alt=&quot;Set UseWUServer to 0&quot; title=&quot;Set UseWUServer to 0&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;step-2&quot;&gt;Step 2:&lt;/h2&gt;
+
+&lt;p&gt;Restart your PC. Now try to enable developer mode again. This time you will not see the error 0x80004005 and it should be enabled successfully.&lt;/p&gt;
+
+&lt;p&gt;(header image source: &lt;a href=&quot;http://sf.co.ua/id169202&quot;&gt;sf.co.ua&lt;/a&gt;)&lt;/p&gt;</content><author><name>wiseindy</name></author><category term="windows 10" /><category term="developer" /><category term="developer mode" /><category term="shell" /><category term="bash shell" /><category term="subsystem" /><category term="guide" /><category term="linux" /><category term="ubuntu" /><category term="UseWUServer" /><category term="regedit" /><category term="error 0x80004005" /><category term="2147500037" /><category term="Guides" /><summary type="html">“Developer mode package failed to install. Error code 0x80004005”. A few people, including me, faced issues when trying to enable developer mode in Windows 10. This guide will show you how to fix it. Why this happens? After quite some digging and research online, I found that this problem is related to WSUS (Windows Server Update Services). If you’re in an environment where your PC gets updates from WSUS, you can face this problem. Luckily, it’s a straightforward fix. Step 1: Click Start and type regedit. Open it. Navigate to HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU in regedit Double click UseWUServer and set the value to 0 Step 2: Restart your PC. Now try to enable developer mode again. This time you will not see the error 0x80004005 and it should be enabled successfully. (header image source: sf.co.ua)</summary></entry><entry><title type="html">Enabling Linux Bash Shell in Windows 10</title><link href="http://localhost:4000/it/enabling-linux-bash-shell-in-windows-10/" rel="alternate" type="text/html" title="Enabling Linux Bash Shell in Windows 10" /><published>2017-04-26T01:43:44-04:00</published><updated>2017-04-26T01:43:44-04:00</updated><id>http://localhost:4000/it/enabling-linux-bash-shell-in-windows-10</id><content type="html" xml:base="http://localhost:4000/it/enabling-linux-bash-shell-in-windows-10/">&lt;p&gt;Windows 10 (the new Anniversary update, specifically) has a new feature called “Windows Subsystem for Linux”. It’s basically a full-fledged Ubuntu based bash shell running directly under Windows. Pretty cool, eh? This guide will show you how exactly to enable it.&lt;/p&gt;
+
+&lt;!--more--&gt;
+&lt;h2 id=&quot;what-you-need&quot;&gt;What you need:&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;A PC running 64-bit of Windows 10 Anniversary Update build 14393 or later (Step 1 shows you how to check your Windows 10 version).&lt;/li&gt;
+  &lt;li&gt;And as always, an internet connection.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;step-1&quot;&gt;Step 1:&lt;/h2&gt;
+
+&lt;p&gt;First, let’s find out whether your Windows 10 is build 14393 or later.&lt;/p&gt;
+
+&lt;p&gt;To do this, simply open &lt;strong&gt;Settings&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/images/posts/2017-04-26-enabling-linux-bash-shell-in-windows-10-001.png&quot; alt=&quot;Search for Settings in the Start menu&quot; title=&quot;Search for Settings in the Start menu&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Click on &lt;strong&gt;System&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/images/posts/2017-04-26-enabling-linux-bash-shell-in-windows-10-002.png&quot; alt=&quot;Select System&quot; title=&quot;Select System&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Scroll to the end and click on &lt;strong&gt;About&lt;/strong&gt;.
+Here you’ll see your &lt;strong&gt;OS Build&lt;/strong&gt; number. This should be equal to or higher than &lt;strong&gt;14393&lt;/strong&gt;. Also, verify if your Windows 10 installation is 64 bit.&lt;/p&gt;
+
+&lt;p&gt;If your build number is less than &lt;strong&gt;14393&lt;/strong&gt;, check for updates.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/images/posts/2017-04-26-enabling-linux-bash-shell-in-windows-10-003.png&quot; alt=&quot;Click on About&quot; title=&quot;Click on About&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;step-2&quot;&gt;Step 2:&lt;/h2&gt;
+
+&lt;p&gt;The next step is to enable &lt;strong&gt;Developer Mode&lt;/strong&gt; in Windows 10.&lt;/p&gt;
+
+&lt;p&gt;Open &lt;strong&gt;Settings&lt;/strong&gt; again. Select &lt;strong&gt;Update &amp;amp; security&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/images/posts/2017-04-26-enabling-linux-bash-shell-in-windows-10-004.png&quot; alt=&quot;Select Update &amp;amp; security in Settings&quot; title=&quot;Select Update &amp;amp; security in Settings&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Click on &lt;strong&gt;For developers&lt;/strong&gt; and enable &lt;strong&gt;Developer mode&lt;/strong&gt;. If it asks you to restart the PC, go ahead and restart.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/images/posts/2017-04-26-enabling-linux-bash-shell-in-windows-10-005.png&quot; alt=&quot;Enable developer mode in Windows 10&quot; title=&quot;Select For developers and enable developer mode&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Note:&lt;/strong&gt; &lt;a href=&quot;/it/windows-10-developer-mode-fix-error-0x80004005/&quot;&gt;If you get an error message &lt;strong&gt;Developer mode package failed to install. Error code 0x80004005&lt;/strong&gt; while trying to enable developer mode, please click here to see how to fix it&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;step-3&quot;&gt;Step 3:&lt;/h2&gt;
+
+&lt;p&gt;Now, let’s enable &lt;strong&gt;Windows Subsystem for Linux&lt;/strong&gt;. Click the &lt;strong&gt;Start&lt;/strong&gt; button and search for &lt;strong&gt;Turn Windows features on or off&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/images/posts/2017-04-26-enabling-linux-bash-shell-in-windows-10-006.png&quot; alt=&quot;Search for Turn Windows features on or off&quot; title=&quot;Search for Turn Windows features on or off&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Check &lt;strong&gt;Windows Subsystem for Linux (Beta)&lt;/strong&gt; to enable it and click &lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/images/posts/2017-04-26-enabling-linux-bash-shell-in-windows-10-007.png&quot; alt=&quot;Enable Windows Subsystem for Linux (Beta)&quot; title=&quot;Enable Windows Subsystem for Linux (Beta)&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Restart your PC when it prompts you to.&lt;/p&gt;
+
+&lt;div class=&quot;row&quot;&gt;
+  &lt;div class=&quot;col-12&quot;&gt;
+    
+   &lt;script async=&quot;&quot; src=&quot;//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js&quot;&gt;&lt;/script&gt;
+    &lt;ins class=&quot;adsbygoogle&quot; style=&quot;display:block; text-align:center;&quot; data-ad-format=&quot;fluid&quot; data-ad-layout=&quot;in-article&quot; data-ad-client=&quot;ca-pub-1094744891389501&quot; data-ad-slot=&quot;6411936673&quot;&gt;&lt;/ins&gt;
+    &lt;script&gt;
+         (adsbygoogle = window.adsbygoogle || []).push({});
+    &lt;/script&gt;
+
+
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&quot;step-4&quot;&gt;Step 4:&lt;/h2&gt;
+
+&lt;p&gt;After you’ve rebooted your PC, open a command prompt window (click the Start button and type &lt;code class=&quot;highlighter-rouge&quot;&gt;cmd&lt;/code&gt;).&lt;/p&gt;
+
+&lt;p&gt;Type &lt;code class=&quot;highlighter-rouge&quot;&gt;bash&lt;/code&gt; and hit enter.&lt;/p&gt;
+
+&lt;p&gt;Since this is the first time you’re running &lt;code class=&quot;highlighter-rouge&quot;&gt;bash&lt;/code&gt;, you’ll be asked whether you want to install it. Type &lt;code class=&quot;highlighter-rouge&quot;&gt;y&lt;/code&gt; and hit enter to proceed.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/images/posts/2017-04-26-enabling-linux-bash-shell-in-windows-10-008.png&quot; alt=&quot;Installing bash via command prompt&quot; title=&quot;Installing bash via command prompt&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;After the installation is complete, you will be asked to create a new UNIX username and password. This user account is for the new Ubuntu environment and in no way related to your Windows account.&lt;/p&gt;
+
+&lt;p&gt;Well, that’s all there is. You should have a bash prompt now and can run linux commands.&lt;/p&gt;
+
+&lt;h2 id=&quot;step-5&quot;&gt;Step 5:&lt;/h2&gt;
+
+&lt;p&gt;To start &lt;code class=&quot;highlighter-rouge&quot;&gt;bash&lt;/code&gt; you can use two ways:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Simply open any command prompt window and type &lt;code class=&quot;highlighter-rouge&quot;&gt;bash&lt;/code&gt;. It will start the Ubuntu command line environment.&lt;/li&gt;
+  &lt;li&gt;Click the Start button and search for &lt;strong&gt;bash&lt;/strong&gt;. Open &lt;strong&gt;Bash on Ubuntu for Windows&lt;/strong&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/images/posts/2017-04-26-enabling-linux-bash-shell-in-windows-10-008.png&quot; alt=&quot;Launching Bash on Ubuntu for Windows&quot; title=&quot;Search for Bash on Ubuntu for Windows&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;That’s it!&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Note:&lt;/strong&gt; While in the Ubuntu environment, you can access your Windows drives under &lt;code class=&quot;highlighter-rouge&quot;&gt;/mnt/&lt;/code&gt;. All Windows drives will be listed under this. You can &lt;code class=&quot;highlighter-rouge&quot;&gt;cd&lt;/code&gt; to any directory and work with the files.&lt;/p&gt;
+
+&lt;p&gt;(header image source: &lt;a href=&quot;https://wall.alphacoders.com/big.php?i=520207&quot;&gt;wall.alphacoders.com&lt;/a&gt;)&lt;/p&gt;</content><author><name>wiseindy</name></author><category term="windows 10" /><category term="bash" /><category term="shell" /><category term="bash shell" /><category term="subsystem" /><category term="guide" /><category term="linux" /><category term="ubuntu" /><category term="ubuntu 14.04" /><category term="Guides" /><summary type="html">Windows 10 (the new Anniversary update, specifically) has a new feature called “Windows Subsystem for Linux”. It’s basically a full-fledged Ubuntu based bash shell running directly under Windows. Pretty cool, eh? This guide will show you how exactly to enable it. What you need: A PC running 64-bit of Windows 10 Anniversary Update build 14393 or later (Step 1 shows you how to check your Windows 10 version). And as always, an internet connection. Step 1: First, let’s find out whether your Windows 10 is build 14393 or later. To do this, simply open Settings Click on System Scroll to the end and click on About. Here you’ll see your OS Build number. This should be equal to or higher than 14393. Also, verify if your Windows 10 installation is 64 bit. If your build number is less than 14393, check for updates. Step 2: The next step is to enable Developer Mode in Windows 10. Open Settings again. Select Update &amp;amp; security. Click on For developers and enable Developer mode. If it asks you to restart the PC, go ahead and restart. Note: If you get an error message Developer mode package failed to install. Error code 0x80004005 while trying to enable developer mode, please click here to see how to fix it Step 3: Now, let’s enable Windows Subsystem for Linux. Click the Start button and search for Turn Windows features on or off. Check Windows Subsystem for Linux (Beta) to enable it and click OK Restart your PC when it prompts you to. Step 4: After you’ve rebooted your PC, open a command prompt window (click the Start button and type cmd). Type bash and hit enter. Since this is the first time you’re running bash, you’ll be asked whether you want to install it. Type y and hit enter to proceed. After the installation is complete, you will be asked to create a new UNIX username and password. This user account is for the new Ubuntu environment and in no way related to your Windows account. Well, that’s all there is. You should have a bash prompt now and can run linux commands. Step 5: To start bash you can use two ways: Simply open any command prompt window and type bash. It will start the Ubuntu command line environment. Click the Start button and search for bash. Open Bash on Ubuntu for Windows. That’s it! Note: While in the Ubuntu environment, you can access your Windows drives under /mnt/. All Windows drives will be listed under this. You can cd to any directory and work with the files. (header image source: wall.alphacoders.com)</summary></entry><entry><title type="html">How to install megatools in Ubuntu 14.04.5 LTS (Trusty Tahr)</title><link href="http://localhost:4000/it/how-to-install-megatools-in-ubuntu-14-04-5-lts-trusty-tahr/" rel="alternate" type="text/html" title="How to install megatools in Ubuntu 14.04.5 LTS (Trusty Tahr)" /><published>2016-10-09T01:43:44-04:00</published><updated>2016-10-09T01:43:44-04:00</updated><id>http://localhost:4000/it/how-to-install-megatools-in-ubuntu-14-04-5-lts-trusty-tahr</id><content type="html" xml:base="http://localhost:4000/it/how-to-install-megatools-in-ubuntu-14-04-5-lts-trusty-tahr/">&lt;p&gt;Megatools is a great collection of command line utilities that allow you to interact with your &lt;a target=&quot;_blank&quot; href=&quot;https://mega.nz&quot;&gt;mega.nz&lt;/a&gt; account directly from the command line. You can directly download using the cli on your Ubuntu machine. They are a great set of tools, however, installing them does get confusing for a new Linux user. This guide will show you how to install it and set it up in no time.&lt;/p&gt;
+
+&lt;!--more--&gt;
+&lt;h3&gt;What you need:&lt;/h3&gt;
+&lt;ul&gt;
+ 	&lt;li&gt;SSH or terminal access to an Ubuntu 14.04 server.&lt;/li&gt;
+ 	&lt;li&gt;An internet connection (duh).&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;Step 1:&lt;/h3&gt;
+&lt;p&gt;First you need to find out what’s the latest version of megatools available.&lt;/p&gt;
+
+&lt;p&gt;To find out the latest version, simply visit any one of the links below and see what’s the latest version number:&lt;/p&gt;
+&lt;ul&gt;
+ 	&lt;li&gt;&lt;a target=&quot;_blank&quot; href=&quot;https://megatools.megous.com/&quot;&gt;https://megatools.megous.com/&lt;/a&gt;&lt;/li&gt;
+ 	&lt;li&gt;&lt;a target=&quot;_blank&quot; href=&quot;https://github.com/megous/megatools&quot;&gt;https://github.com/megous/megatools&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;At the time of writing this article (9 October 2016), the latest version was &lt;code&gt;1.9.97&lt;/code&gt;. If it is different in your case, simply replace &lt;code&gt;1.9.97&lt;/code&gt; with your version in all the commands below.&lt;/p&gt;
+&lt;h3&gt;Step 2:&lt;/h3&gt;
+&lt;p&gt;Open your Ubuntu terminal (or SSH to it) and type in the following commands one after the other.&lt;/p&gt;
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sudo apt-get update
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Run this command to download the package lists from the repositories and “update” them to get information on the newest versions of packages and their dependencies.&lt;/p&gt;
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sudo apt-get install libtool libglib2.0-dev gobject-introspection libgmp3-dev nettle-dev asciidoc glib-networking openssl libcurl4-openssl-dev libssl-dev
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;This installs all the dependencies that you may need to compile megatools from source.&lt;/p&gt;
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;wget http://megatools.megous.com/builds/megatools-1.9.97.tar.gz
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;&lt;code&gt;wget&lt;/code&gt; is used to download the latest megatools. Replace &lt;code&gt;1.9.97&lt;/code&gt; with the latest version is available.&lt;/p&gt;
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;zcat megatools-1.9.97.tar.gz &amp;gt; megatools-1.9.97.tar
+tar -xf megatools-1.9.97.tar
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Use &lt;code&gt;zcat&lt;/code&gt; to decompress the downloaded file and &lt;code&gt;tar -xf&lt;/code&gt; to extract the contents to a folder.&lt;/p&gt;
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;cd &lt;/span&gt;megatools-1.9.97/
+./configure
+make
+sudo make install
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Finally, run the above commands to compile megatools and install it in your system.&lt;/p&gt;
+
+&lt;div class=&quot;row&quot;&gt;
+  &lt;div class=&quot;col-12&quot;&gt;
+    
+   &lt;script async=&quot;&quot; src=&quot;//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js&quot;&gt;&lt;/script&gt;
+    &lt;ins class=&quot;adsbygoogle&quot; style=&quot;display:block; text-align:center;&quot; data-ad-format=&quot;fluid&quot; data-ad-layout=&quot;in-article&quot; data-ad-client=&quot;ca-pub-1094744891389501&quot; data-ad-slot=&quot;6411936673&quot;&gt;&lt;/ins&gt;
+    &lt;script&gt;
+         (adsbygoogle = window.adsbygoogle || []).push({});
+    &lt;/script&gt;
+
+
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;h3&gt;Step 3:&lt;/h3&gt;
+&lt;p&gt;If all went well, you should now have megatools installed on your system.&lt;/p&gt;
+
+&lt;p&gt;To download from a &lt;a target=&quot;_blank&quot; href=&quot;https://mega.nz&quot;&gt;mega.nz&lt;/a&gt; link, simply type &lt;code&gt;megadl '&amp;lt;link&amp;gt;'&lt;/code&gt; and the download will start.&lt;/p&gt;
+
+&lt;p&gt;Here’s an example:&lt;/p&gt;
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;megadl &lt;span class=&quot;s1&quot;&gt;'https://mega.nz/#G!IK9KLpRS8J1h82Kpa0kWJkPwDh!2adB'&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;For syntax of other commands, type&lt;/p&gt;
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;man megatools
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;That’s it. You’re done!&lt;/p&gt;</content><author><name>wiseindy</name></author><category term="14.04" /><category term="download" /><category term="guide" /><category term="linux" /><category term="mega" /><category term="mega.nz" /><category term="megacopy" /><category term="megadf" /><category term="megadl" /><category term="megafs" /><category term="megaget" /><category term="megals" /><category term="megamkdir" /><category term="megaput" /><category term="megareg" /><category term="megarm" /><category term="megastream" /><category term="megatools" /><category term="ubuntu" /><category term="ubuntu 14.04" /><category term="Guides" /><summary type="html">Megatools is a great collection of command line utilities that allow you to interact with your mega.nz account directly from the command line. You can directly download using the cli on your Ubuntu machine. They are a great set of tools, however, installing them does get confusing for a new Linux user. This guide will show you how to install it and set it up in no time. What you need: SSH or terminal access to an Ubuntu 14.04 server. An internet connection (duh). Step 1: First you need to find out what’s the latest version of megatools available. To find out the latest version, simply visit any one of the links below and see what’s the latest version number: https://megatools.megous.com/ https://github.com/megous/megatools At the time of writing this article (9 October 2016), the latest version was 1.9.97. If it is different in your case, simply replace 1.9.97 with your version in all the commands below. Step 2: Open your Ubuntu terminal (or SSH to it) and type in the following commands one after the other. sudo apt-get update Run this command to download the package lists from the repositories and “update” them to get information on the newest versions of packages and their dependencies. sudo apt-get install libtool libglib2.0-dev gobject-introspection libgmp3-dev nettle-dev asciidoc glib-networking openssl libcurl4-openssl-dev libssl-dev This installs all the dependencies that you may need to compile megatools from source. wget http://megatools.megous.com/builds/megatools-1.9.97.tar.gz wget is used to download the latest megatools. Replace 1.9.97 with the latest version is available. zcat megatools-1.9.97.tar.gz &amp;gt; megatools-1.9.97.tar tar -xf megatools-1.9.97.tar Use zcat to decompress the downloaded file and tar -xf to extract the contents to a folder. cd megatools-1.9.97/ ./configure make sudo make install Finally, run the above commands to compile megatools and install it in your system. Step 3: If all went well, you should now have megatools installed on your system. To download from a mega.nz link, simply type megadl '&amp;lt;link&amp;gt;' and the download will start. Here’s an example: megadl 'https://mega.nz/#G!IK9KLpRS8J1h82Kpa0kWJkPwDh!2adB' For syntax of other commands, type man megatools That’s it. You’re done!</summary></entry><entry><title type="html">How to install or renew SSL certificate in Exchange 2010</title><link href="http://localhost:4000/it/how-to-install-or-renew-ssl-certificate-in-exchange-2010/" rel="alternate" type="text/html" title="How to install or renew SSL certificate in Exchange 2010" /><published>2016-08-01T04:00:08-04:00</published><updated>2016-08-01T04:00:08-04:00</updated><id>http://localhost:4000/it/how-to-install-or-renew-ssl-certificate-in-exchange-2010</id><content type="html" xml:base="http://localhost:4000/it/how-to-install-or-renew-ssl-certificate-in-exchange-2010/">&lt;p&gt;You will need to create and assign a new SSL certificate if you’re putting up a new Exchange server into production or renewing it for an existing server. The steps are fairly straightforward, however it may seem daunting and completely foreign for new users who aren’t familiar with certificates.&lt;/p&gt;
+
+&lt;!--more--&gt;
+
+&lt;p&gt;This guide will show you how to create a CSR (Certificate Signing Request) using your Exchange server and subsequently generating a new SSL cert and installing it.&lt;/p&gt;
+
+&lt;p&gt;Here’s a brief overview of what we will be doing in this guide:&lt;/p&gt;
+&lt;ol&gt;
+ 	&lt;li&gt;Create a certificate signing request (CSR) in Exchange.&lt;/li&gt;
+ 	&lt;li&gt;Buy a new certificate from one of many SSL providers (GoDaddy in this case - process should be similar for other providers).&lt;/li&gt;
+ 	&lt;li&gt;Use the CSR to create a new certificate on GoDaddy and download it&lt;/li&gt;
+ 	&lt;li&gt;Install this in our Exchange server.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3&gt;What you need:&lt;/h3&gt;
+&lt;ul&gt;
+ 	&lt;li&gt;Microsoft Exchange Server
+&lt;ul&gt;
+ 	&lt;li&gt;In this guide, we are using Microsoft Exchange 2010.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+ 	&lt;li&gt;A commercial Certificate Authority such as &lt;a target=&quot;_blank&quot; href=&quot;https://www.digicert.com/&quot;&gt;DigiCert&lt;/a&gt;, &lt;a target=&quot;_blank&quot; href=&quot;https://www.godaddy.com/&quot;&gt;GoDaddy&lt;/a&gt;, etc.
+&lt;ul&gt;
+ 	&lt;li&gt;In this guide, we are using Godaddy.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;Step 1:&lt;/h3&gt;
+&lt;p&gt;The first step is to generate a Certificate Signing Request. This is a requisite for generating your SSL certificate.&lt;/p&gt;
+
+&lt;p&gt;Open up your &lt;strong&gt;Exchange Management Console&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a target=&quot;_blank&quot; href=&quot;https://inderjotsingh.com/wp-content/uploads/2015/08/how-to-install-ssl-certificate-in-exchange-2010-01.png&quot;&gt;&lt;img class=&quot;alignnone size-full wp-image-1028&quot; src=&quot;https://inderjotsingh.com/wp-content/uploads/2015/08/how-to-install-ssl-certificate-in-exchange-2010-01.png&quot; alt=&quot;how-to-install-ssl-certificate-in-exchange-2010-01&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h3&gt;Step 2:&lt;/h3&gt;
+&lt;p&gt;Navigate to &lt;strong&gt;Server Configuration &amp;gt; Select your server&lt;/strong&gt; (from the Server Configuration list)&lt;strong&gt; &amp;gt; Exchange Certificates&lt;/strong&gt; tab and click on &lt;strong&gt;New Exchange Certificate&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;a target=&quot;_blank&quot; href=&quot;https://inderjotsingh.com/wp-content/uploads/2015/08/how-to-install-ssl-certificate-in-exchange-2010-02.png&quot;&gt;&lt;img class=&quot;alignnone size-full wp-image-1029&quot; src=&quot;https://inderjotsingh.com/wp-content/uploads/2015/08/how-to-install-ssl-certificate-in-exchange-2010-02.png&quot; alt=&quot;how-to-install-ssl-certificate-in-exchange-2010-02&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h3&gt;Step 3:&lt;/h3&gt;
+&lt;p&gt;In the &lt;strong&gt;New Exchange Certificate&lt;/strong&gt; Wizard, enter a name for your certificate. It can be anything you want. Click &lt;strong&gt;Next&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;a target=&quot;_blank&quot; href=&quot;https://inderjotsingh.com/wp-content/uploads/2016/08/how-to-install-ssl-certificate-in-exchange-2010-03_01.png&quot;&gt;&lt;img class=&quot;alignnone size-full wp-image-1228&quot; src=&quot;https://inderjotsingh.com/wp-content/uploads/2016/08/how-to-install-ssl-certificate-in-exchange-2010-03_01.png&quot; alt=&quot;how-to-install-ssl-certificate-in-exchange-2010-03_01&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h3&gt;Step 3:&lt;/h3&gt;
+&lt;p&gt;If you want to apply the certificate to &lt;strong&gt;all&lt;/strong&gt; your sub domains, check &lt;strong&gt;Enable wildcard certificate&lt;/strong&gt;. In my case, I wish to apply this certificate to 2 subdomains (not all), so I leave it unchecked.&lt;/p&gt;
+
+&lt;p&gt;&lt;img class=&quot;alignnone size-full wp-image-1032&quot; src=&quot;https://inderjotsingh.com/wp-content/uploads/2015/08/how-to-install-ssl-certificate-in-exchange-2010-04-alt-0.png&quot; alt=&quot;how-to-install-ssl-certificate-in-exchange-2010-04-alt-0&quot; /&gt;&lt;/p&gt;
+&lt;h3&gt;Step 4:&lt;/h3&gt;
+&lt;p&gt;On the next page, you’ll need to provide your Exchange Server configuration. Select whatever is applicable for &lt;strong&gt;each section&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;a target=&quot;_blank&quot; href=&quot;https://inderjotsingh.com/wp-content/uploads/2015/08/how-to-install-ssl-certificate-in-exchange-2010-04-alt-1.png&quot;&gt;&lt;img class=&quot;alignnone size-full wp-image-1033&quot; src=&quot;https://inderjotsingh.com/wp-content/uploads/2015/08/how-to-install-ssl-certificate-in-exchange-2010-04-alt-1.png&quot; alt=&quot;how-to-install-ssl-certificate-in-exchange-2010-04-alt-1&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;In my case, OWA (Outlook Web App/Access) is being accessed from the web. This is why I enable the second option “Outlook Web App is on the Internet” in the below image. The URL should be automatically populated.&lt;/p&gt;
+
+&lt;p&gt;&lt;a target=&quot;_blank&quot; href=&quot;https://inderjotsingh.com/wp-content/uploads/2015/08/how-to-install-ssl-certificate-in-exchange-2010-04-alt-2.png&quot;&gt;&lt;img class=&quot;alignnone size-full wp-image-1034&quot; src=&quot;https://inderjotsingh.com/wp-content/uploads/2015/08/how-to-install-ssl-certificate-in-exchange-2010-04-alt-2.png&quot; alt=&quot;how-to-install-ssl-certificate-in-exchange-2010-04-alt-2&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Go through each of the sections below and verify if everything you need is selected. In my case, I didn’t need to change anything other than the Outlook Web App part in the above step. I left everything else as it is.&lt;/p&gt;
+
+&lt;p&gt;&lt;a target=&quot;_blank&quot; href=&quot;https://inderjotsingh.com/wp-content/uploads/2015/08/how-to-install-ssl-certificate-in-exchange-2010-04-alt-3.png&quot;&gt;&lt;img class=&quot;alignnone size-full wp-image-1035&quot; src=&quot;https://inderjotsingh.com/wp-content/uploads/2015/08/how-to-install-ssl-certificate-in-exchange-2010-04-alt-3.png&quot; alt=&quot;how-to-install-ssl-certificate-in-exchange-2010-04-alt-3&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Some more pics to help you cross-verify your info.&lt;/p&gt;
+
+&lt;p&gt;&lt;a target=&quot;_blank&quot; href=&quot;https://inderjotsingh.com/wp-content/uploads/2015/08/how-to-install-ssl-certificate-in-exchange-2010-04-alt-4.png&quot;&gt;&lt;img class=&quot;alignnone size-full wp-image-1036&quot; src=&quot;https://inderjotsingh.com/wp-content/uploads/2015/08/how-to-install-ssl-certificate-in-exchange-2010-04-alt-4.png&quot; alt=&quot;how-to-install-ssl-certificate-in-exchange-2010-04-alt-4&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;If you use POP/IMAP, check the appropriate check boxes or leave them unchecked (as in my case since I don’t use it).&lt;/p&gt;
+
+&lt;p&gt;&lt;a target=&quot;_blank&quot; href=&quot;https://inderjotsingh.com/wp-content/uploads/2015/08/how-to-install-ssl-certificate-in-exchange-2010-04-alt-5.png&quot;&gt;&lt;img class=&quot;alignnone size-full wp-image-1037&quot; src=&quot;https://inderjotsingh.com/wp-content/uploads/2015/08/how-to-install-ssl-certificate-in-exchange-2010-04-alt-5.png&quot; alt=&quot;how-to-install-ssl-certificate-in-exchange-2010-04-alt-5&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Click Next.&lt;/p&gt;
+
+&lt;p&gt;&lt;a target=&quot;_blank&quot; href=&quot;https://inderjotsingh.com/wp-content/uploads/2015/08/how-to-install-ssl-certificate-in-exchange-2010-04-alt-6.png&quot;&gt;&lt;img class=&quot;alignnone size-full wp-image-1038&quot; src=&quot;https://inderjotsingh.com/wp-content/uploads/2015/08/how-to-install-ssl-certificate-in-exchange-2010-04-alt-6.png&quot; alt=&quot;how-to-install-ssl-certificate-in-exchange-2010-04-alt-6&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h3&gt;Step 5:&lt;/h3&gt;
+&lt;p&gt;On this page, enter the details of your organization. Everything should be self-explanatory. At the bottom it asks you to specify the location of the &lt;strong&gt;Certificate Request File Path&lt;/strong&gt; also known as a &lt;strong&gt;Certificate Signing Request&lt;/strong&gt; or &lt;strong&gt;CSR&lt;/strong&gt; in short.&lt;/p&gt;
+
+&lt;p&gt;&lt;a target=&quot;_blank&quot; href=&quot;https://inderjotsingh.com/wp-content/uploads/2015/08/how-to-install-ssl-certificate-in-exchange-2010-05.png&quot;&gt;&lt;img class=&quot;alignnone size-full wp-image-1039&quot; src=&quot;https://inderjotsingh.com/wp-content/uploads/2015/08/how-to-install-ssl-certificate-in-exchange-2010-05.png&quot; alt=&quot;how-to-install-ssl-certificate-in-exchange-2010-05&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Specify the location and click &lt;strong&gt;Save&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;a target=&quot;_blank&quot; href=&quot;https://inderjotsingh.com/wp-content/uploads/2015/08/how-to-install-ssl-certificate-in-exchange-2010-06.png&quot;&gt;&lt;img class=&quot;alignnone size-full wp-image-1040&quot; src=&quot;https://inderjotsingh.com/wp-content/uploads/2015/08/how-to-install-ssl-certificate-in-exchange-2010-06.png&quot; alt=&quot;how-to-install-ssl-certificate-in-exchange-2010-06&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Verify the information and click &lt;strong&gt;New&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;a target=&quot;_blank&quot; href=&quot;https://inderjotsingh.com/wp-content/uploads/2015/08/how-to-install-ssl-certificate-in-exchange-2010-07.png&quot;&gt;&lt;img class=&quot;alignnone size-full wp-image-1041&quot; src=&quot;https://inderjotsingh.com/wp-content/uploads/2015/08/how-to-install-ssl-certificate-in-exchange-2010-07.png&quot; alt=&quot;how-to-install-ssl-certificate-in-exchange-2010-07&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;div class=&quot;row&quot;&gt;
+  &lt;div class=&quot;col-12&quot;&gt;
+    
+   &lt;script async=&quot;&quot; src=&quot;//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js&quot;&gt;&lt;/script&gt;
+    &lt;ins class=&quot;adsbygoogle&quot; style=&quot;display:block; text-align:center;&quot; data-ad-format=&quot;fluid&quot; data-ad-layout=&quot;in-article&quot; data-ad-client=&quot;ca-pub-1094744891389501&quot; data-ad-slot=&quot;6411936673&quot;&gt;&lt;/ins&gt;
+    &lt;script&gt;
+         (adsbygoogle = window.adsbygoogle || []).push({});
+    &lt;/script&gt;
+
+
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;h3&gt;Step 6:&lt;/h3&gt;
+&lt;p&gt;If all goes well, which it should, you will find that your CSR is generated and saved it in the location you specified. It’s basically a text file with a &lt;code&gt;.req&lt;/code&gt; extension. We will need this file in a while.&lt;/p&gt;
+
+&lt;p&gt;&lt;a target=&quot;_blank&quot; href=&quot;https://inderjotsingh.com/wp-content/uploads/2015/08/how-to-install-ssl-certificate-in-exchange-2010-08.png&quot;&gt;&lt;img class=&quot;alignnone size-full wp-image-1042&quot; src=&quot;https://inderjotsingh.com/wp-content/uploads/2015/08/how-to-install-ssl-certificate-in-exchange-2010-08.png&quot; alt=&quot;how-to-install-ssl-certificate-in-exchange-2010-08&quot; /&gt;&lt;/a&gt; &lt;a target=&quot;_blank&quot; href=&quot;https://inderjotsingh.com/wp-content/uploads/2015/08/how-to-install-ssl-certificate-in-exchange-2010-09.png&quot;&gt;&lt;img class=&quot;alignnone size-full wp-image-1043&quot; src=&quot;https://inderjotsingh.com/wp-content/uploads/2015/08/how-to-install-ssl-certificate-in-exchange-2010-09.png&quot; alt=&quot;how-to-install-ssl-certificate-in-exchange-2010-09&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h3&gt;Step 7:&lt;/h3&gt;
+&lt;p&gt;Log in to your SSL provider and buy an SSL certificate if you haven’t bought one already.&lt;/p&gt;
+
+&lt;p&gt;Make sure you buy a &lt;strong&gt;Unified Communications Certificate&lt;/strong&gt; &lt;strong&gt;(UCC)&lt;/strong&gt; (also known as a &lt;strong&gt;Multiple Domain SSL&lt;/strong&gt; or &lt;strong&gt;SAN&lt;/strong&gt; certificate). A &lt;strong&gt;UCC/SAN&lt;/strong&gt; certificate will allow you to secure multiple domains. You need this for Microsoft Exchange. More information here: &lt;a target=&quot;_blank&quot; href=&quot;https://www.godaddy.com/help/what-is-a-multiple-domain-ucc-ssl-certificate-3908&quot;&gt;https://www.godaddy.com/help/what-is-a-multiple-domain-ucc-ssl-certificate-3908&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;In this tutorial, I’m using GoDaddy, but the steps should be more or less the same for other providers.&lt;/p&gt;
+&lt;h3&gt;Step 8:&lt;/h3&gt;
+&lt;p&gt;After you buy your SSL certificate, you’ll have to provide it your CSR that was generated in &lt;strong&gt;Step 6&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;In my case, I’m &lt;em&gt;renewing&lt;/em&gt; my certificate instead of purchasing a new one, so some screens may be different for you. If you’re renewing your certificate, you’ll have to &lt;strong&gt;re-key&lt;/strong&gt; your certificate. Again, that means you have to provide your &lt;strong&gt;CSR&lt;/strong&gt; from step 6.&lt;/p&gt;
+
+&lt;p&gt;Login to your SSL provider. Open your CSR (.req) file with notepad. Copy everything and paste it wherever your SSL provider asks you to.&lt;/p&gt;
+
+&lt;p&gt;&lt;a target=&quot;_blank&quot; href=&quot;https://inderjotsingh.com/wp-content/uploads/2016/08/how-to-install-ssl-certificate-in-exchange-2010-18.png&quot;&gt;&lt;img class=&quot;alignnone size-full wp-image-1212&quot; src=&quot;https://inderjotsingh.com/wp-content/uploads/2016/08/how-to-install-ssl-certificate-in-exchange-2010-18.png&quot; alt=&quot;how-to-install-ssl-certificate-in-exchange-2010-18&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h3&gt;Step 9:&lt;/h3&gt;
+&lt;p&gt;Once you provide your CSR, you’ll have to wait for a bit till your domain and other details are verified. You may even need to prove your domain ownership. In case you have to, then your SSL provider will give you the steps to do so.&lt;/p&gt;
+
+&lt;p&gt;&lt;a target=&quot;_blank&quot; href=&quot;https://inderjotsingh.com/wp-content/uploads/2016/08/how-to-install-ssl-certificate-in-exchange-2010-10.png&quot;&gt;&lt;img class=&quot;alignnone size-full wp-image-1211&quot; src=&quot;https://inderjotsingh.com/wp-content/uploads/2016/08/how-to-install-ssl-certificate-in-exchange-2010-10.png&quot; alt=&quot;how-to-install-ssl-certificate-in-exchange-2010-10&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h3&gt;Step 10:&lt;/h3&gt;
+&lt;p&gt;Once your certificate is ready, click the &lt;strong&gt;Download&lt;/strong&gt; button.&lt;/p&gt;
+
+&lt;p&gt;&lt;a target=&quot;_blank&quot; href=&quot;https://inderjotsingh.com/wp-content/uploads/2016/08/how-to-install-ssl-certificate-in-exchange-2010-11_1.png&quot;&gt;&lt;img class=&quot;alignnone size-full wp-image-1214&quot; src=&quot;https://inderjotsingh.com/wp-content/uploads/2016/08/how-to-install-ssl-certificate-in-exchange-2010-11_1.png&quot; alt=&quot;how-to-install-ssl-certificate-in-exchange-2010-11_1&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;From the server type drop down, select &lt;strong&gt;Exchange&lt;/strong&gt; and click &lt;strong&gt;Download File&lt;/strong&gt;. It will be a zip with two files. Extract it and copy this over to your Exchange server.&lt;/p&gt;
+
+&lt;p&gt;&lt;a target=&quot;_blank&quot; href=&quot;https://inderjotsingh.com/wp-content/uploads/2016/08/how-to-install-ssl-certificate-in-exchange-2010-12.png&quot;&gt;&lt;img class=&quot;alignnone size-full wp-image-1215&quot; src=&quot;https://inderjotsingh.com/wp-content/uploads/2016/08/how-to-install-ssl-certificate-in-exchange-2010-12.png&quot; alt=&quot;how-to-install-ssl-certificate-in-exchange-2010-12&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h3&gt;Step 11:&lt;/h3&gt;
+&lt;p&gt;Go to your Exchange server. Right-click your certificate in Exchange Management Console and select &lt;strong&gt;Complete Pending Request…&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a target=&quot;_blank&quot; href=&quot;https://inderjotsingh.com/wp-content/uploads/2016/08/how-to-install-ssl-certificate-in-exchange-2010-19_0.png&quot;&gt;&lt;img class=&quot;alignnone size-full wp-image-1223&quot; src=&quot;https://inderjotsingh.com/wp-content/uploads/2016/08/how-to-install-ssl-certificate-in-exchange-2010-19_0.png&quot; alt=&quot;how-to-install-ssl-certificate-in-exchange-2010-19_0&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h3&gt;Step 12:&lt;/h3&gt;
+&lt;p&gt;Click the &lt;strong&gt;Browse&lt;/strong&gt; button in the window that pops up.&lt;/p&gt;
+
+&lt;p&gt;&lt;a target=&quot;_blank&quot; href=&quot;https://inderjotsingh.com/wp-content/uploads/2016/08/how-to-install-ssl-certificate-in-exchange-2010-14.png&quot;&gt;&lt;img class=&quot;alignnone size-full wp-image-1218&quot; src=&quot;https://inderjotsingh.com/wp-content/uploads/2016/08/how-to-install-ssl-certificate-in-exchange-2010-14.png&quot; alt=&quot;how-to-install-ssl-certificate-in-exchange-2010-14&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;In the Browse window, select &lt;strong&gt;All Files(&lt;em&gt;.&lt;/em&gt;)&lt;/strong&gt; and then choose your certificate file that you received from your SSL provider (GoDaddy).&lt;/p&gt;
+
+&lt;p&gt;&lt;a target=&quot;_blank&quot; href=&quot;https://inderjotsingh.com/wp-content/uploads/2016/08/how-to-install-ssl-certificate-in-exchange-2010-15.png&quot;&gt;&lt;img class=&quot;alignnone size-full wp-image-1219&quot; src=&quot;https://inderjotsingh.com/wp-content/uploads/2016/08/how-to-install-ssl-certificate-in-exchange-2010-15.png&quot; alt=&quot;how-to-install-ssl-certificate-in-exchange-2010-15&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Click &lt;strong&gt;Complete&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;a target=&quot;_blank&quot; href=&quot;https://inderjotsingh.com/wp-content/uploads/2016/08/how-to-install-ssl-certificate-in-exchange-2010-16.png&quot;&gt;&lt;img class=&quot;alignnone size-full wp-image-1220&quot; src=&quot;https://inderjotsingh.com/wp-content/uploads/2016/08/how-to-install-ssl-certificate-in-exchange-2010-16.png&quot; alt=&quot;how-to-install-ssl-certificate-in-exchange-2010-16&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;If everything goes well, you’ll see the following screen. Click &lt;strong&gt;Finish.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a target=&quot;_blank&quot; href=&quot;https://inderjotsingh.com/wp-content/uploads/2016/08/how-to-install-ssl-certificate-in-exchange-2010-17.png&quot;&gt;&lt;img class=&quot;alignnone size-full wp-image-1221&quot; src=&quot;https://inderjotsingh.com/wp-content/uploads/2016/08/how-to-install-ssl-certificate-in-exchange-2010-17.png&quot; alt=&quot;how-to-install-ssl-certificate-in-exchange-2010-17&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h3&gt;Step 13:&lt;/h3&gt;
+&lt;p&gt;The new Exchange certificate should have a little blue tick on the icon now. The only thing remaining now is to assign Exchange services to this certificate. That’s easily done. Right click the certificate and choose &lt;strong&gt;Assign Services to Certificate…&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a target=&quot;_blank&quot; href=&quot;https://inderjotsingh.com/wp-content/uploads/2016/08/how-to-install-ssl-certificate-in-exchange-2010-19_2.png&quot;&gt;&lt;img class=&quot;alignnone size-full wp-image-1224&quot; src=&quot;https://inderjotsingh.com/wp-content/uploads/2016/08/how-to-install-ssl-certificate-in-exchange-2010-19_2.png&quot; alt=&quot;how-to-install-ssl-certificate-in-exchange-2010-19_2&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Step 14:&lt;/p&gt;
+
+&lt;p&gt;In the window that pops up, select your server and click &lt;strong&gt;Next&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;a target=&quot;_blank&quot; href=&quot;https://inderjotsingh.com/wp-content/uploads/2016/08/how-to-install-ssl-certificate-in-exchange-2010-20.png&quot;&gt;&lt;img class=&quot;alignnone size-full wp-image-1225&quot; src=&quot;https://inderjotsingh.com/wp-content/uploads/2016/08/how-to-install-ssl-certificate-in-exchange-2010-20.png&quot; alt=&quot;how-to-install-ssl-certificate-in-exchange-2010-20&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Select all appropriate services for this certificate. Click &lt;strong&gt;Next&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;a target=&quot;_blank&quot; href=&quot;https://inderjotsingh.com/wp-content/uploads/2016/08/how-to-install-ssl-certificate-in-exchange-2010-21.png&quot;&gt;&lt;img class=&quot;alignnone size-full wp-image-1226&quot; src=&quot;https://inderjotsingh.com/wp-content/uploads/2016/08/how-to-install-ssl-certificate-in-exchange-2010-21.png&quot; alt=&quot;how-to-install-ssl-certificate-in-exchange-2010-21&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;If you have some services already assigned to a different certificate, Exchange will ask you to confirm if you want to overwrite it with the new one. In my case, I do want to replace it, so I click &lt;strong&gt;Yes&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;a target=&quot;_blank&quot; href=&quot;https://inderjotsingh.com/wp-content/uploads/2016/08/how-to-install-ssl-certificate-in-exchange-2010-22.png&quot;&gt;&lt;img class=&quot;alignnone size-full wp-image-1227&quot; src=&quot;https://inderjotsingh.com/wp-content/uploads/2016/08/how-to-install-ssl-certificate-in-exchange-2010-22.png&quot; alt=&quot;how-to-install-ssl-certificate-in-exchange-2010-22&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Guess what? That’s it! You’ve successfully installed a new SSL certificate for your Microsoft Exchange server.&lt;/p&gt;
+
+&lt;p&gt; &lt;/p&gt;
+
+&lt;p&gt;(header image source: &lt;a target=&quot;_blank&quot; href=&quot;http://www.animalhi.com/Insects/spiders/rust_locker_room_spider_webs_lock_2560x1440_wallpaper_12182&quot;&gt;animalhi.com&lt;/a&gt;)&lt;/p&gt;</content><author><name>wiseindy</name></author><category term="certificate" /><category term="csr" /><category term="digicert" /><category term="exchange" /><category term="exchange 2010" /><category term="exchange 2013" /><category term="exchange management shell" /><category term="godaddy" /><category term="microsoft" /><category term="microsoft exchange" /><category term="request" /><category term="signing" /><category term="ssl" /><category term="trusted" /><category term="Guides" /><summary type="html">You will need to create and assign a new SSL certificate if you’re putting up a new Exchange server into production or renewing it for an existing server. The steps are fairly straightforward, however it may seem daunting and completely foreign for new users who aren’t familiar with certificates. This guide will show you how to create a CSR (Certificate Signing Request) using your Exchange server and subsequently generating a new SSL cert and installing it. Here’s a brief overview of what we will be doing in this guide: Create a certificate signing request (CSR) in Exchange. Buy a new certificate from one of many SSL providers (GoDaddy in this case - process should be similar for other providers). Use the CSR to create a new certificate on GoDaddy and download it Install this in our Exchange server. What you need: Microsoft Exchange Server In this guide, we are using Microsoft Exchange 2010. A commercial Certificate Authority such as DigiCert, GoDaddy, etc. In this guide, we are using Godaddy. Step 1: The first step is to generate a Certificate Signing Request. This is a requisite for generating your SSL certificate. Open up your Exchange Management Console Step 2: Navigate to Server Configuration &amp;gt; Select your server (from the Server Configuration list) &amp;gt; Exchange Certificates tab and click on New Exchange Certificate. Step 3: In the New Exchange Certificate Wizard, enter a name for your certificate. It can be anything you want. Click Next. Step 3: If you want to apply the certificate to all your sub domains, check Enable wildcard certificate. In my case, I wish to apply this certificate to 2 subdomains (not all), so I leave it unchecked. Step 4: On the next page, you’ll need to provide your Exchange Server configuration. Select whatever is applicable for each section. In my case, OWA (Outlook Web App/Access) is being accessed from the web. This is why I enable the second option “Outlook Web App is on the Internet” in the below image. The URL should be automatically populated. Go through each of the sections below and verify if everything you need is selected. In my case, I didn’t need to change anything other than the Outlook Web App part in the above step. I left everything else as it is. Some more pics to help you cross-verify your info. If you use POP/IMAP, check the appropriate check boxes or leave them unchecked (as in my case since I don’t use it). Click Next. Step 5: On this page, enter the details of your organization. Everything should be self-explanatory. At the bottom it asks you to specify the location of the Certificate Request File Path also known as a Certificate Signing Request or CSR in short. Specify the location and click Save. Verify the information and click New. Step 6: If all goes well, which it should, you will find that your CSR is generated and saved it in the location you specified. It’s basically a text file with a .req extension. We will need this file in a while. Step 7: Log in to your SSL provider and buy an SSL certificate if you haven’t bought one already. Make sure you buy a Unified Communications Certificate (UCC) (also known as a Multiple Domain SSL or SAN certificate). A UCC/SAN certificate will allow you to secure multiple domains. You need this for Microsoft Exchange. More information here: https://www.godaddy.com/help/what-is-a-multiple-domain-ucc-ssl-certificate-3908 In this tutorial, I’m using GoDaddy, but the steps should be more or less the same for other providers. Step 8: After you buy your SSL certificate, you’ll have to provide it your CSR that was generated in Step 6. In my case, I’m renewing my certificate instead of purchasing a new one, so some screens may be different for you. If you’re renewing your certificate, you’ll have to re-key your certificate. Again, that means you have to provide your CSR from step 6. Login to your SSL provider. Open your CSR (.req) file with notepad. Copy everything and paste it wherever your SSL provider asks you to. Step 9: Once you provide your CSR, you’ll have to wait for a bit till your domain and other details are verified. You may even need to prove your domain ownership. In case you have to, then your SSL provider will give you the steps to do so. Step 10: Once your certificate is ready, click the Download button. From the server type drop down, select Exchange and click Download File. It will be a zip with two files. Extract it and copy this over to your Exchange server. Step 11: Go to your Exchange server. Right-click your certificate in Exchange Management Console and select Complete Pending Request… Step 12: Click the Browse button in the window that pops up. In the Browse window, select All Files(.) and then choose your certificate file that you received from your SSL provider (GoDaddy). Click Complete. If everything goes well, you’ll see the following screen. Click Finish. Step 13: The new Exchange certificate should have a little blue tick on the icon now. The only thing remaining now is to assign Exchange services to this certificate. That’s easily done. Right click the certificate and choose Assign Services to Certificate… Step 14: In the window that pops up, select your server and click Next. Select all appropriate services for this certificate. Click Next. If you have some services already assigned to a different certificate, Exchange will ask you to confirm if you want to overwrite it with the new one. In my case, I do want to replace it, so I click Yes. Guess what? That’s it! You’ve successfully installed a new SSL certificate for your Microsoft Exchange server.   (header image source: animalhi.com)</summary></entry><entry><title type="html">How to Fix Outlook PDF Previews and Explorer thumbnails on 64-bit Windows</title><link href="http://localhost:4000/it/how-to-fix-outlook-pdf-previews-and-explorer-thumbnails-on-64-bit-windows/" rel="alternate" type="text/html" title="How to Fix Outlook PDF Previews and Explorer thumbnails on 64-bit Windows" /><published>2016-02-06T22:47:20-05:00</published><updated>2016-02-06T22:47:20-05:00</updated><id>http://localhost:4000/it/how-to-fix-outlook-pdf-previews-and-explorer-thumbnails-on-64-bit-windows</id><content type="html" xml:base="http://localhost:4000/it/how-to-fix-outlook-pdf-previews-and-explorer-thumbnails-on-64-bit-windows/">&lt;p&gt;“This file cannot be previewed because of an error with the following previewer: PDF Preview Handler for Vista”.&lt;/p&gt;
+
+&lt;p&gt;You might’ve seen this pretty common error in Outlook when you cannot preview PDF files in the preview pane. This happens on 64-bit Windows.&lt;/p&gt;
+
+&lt;p&gt;Well, it’s a pretty easy fix.&lt;/p&gt;
+
+&lt;!--more--&gt;
+
+&lt;p&gt;&lt;a target=&quot;_blank&quot; href=&quot;https://inderjotsingh.com/wp-content/uploads/2016/02/how-to-fix-outlook-pdf-previews-and-explorer-thumbnails-on-64-bit-windows_02.png&quot; rel=&quot;attachment wp-att-1159&quot;&gt;&lt;img class=&quot;alignnone size-full wp-image-1159&quot; src=&quot;https://inderjotsingh.com/wp-content/uploads/2016/02/how-to-fix-outlook-pdf-previews-and-explorer-thumbnails-on-64-bit-windows_02.png&quot; alt=&quot;how-to-fix-outlook-pdf-previews-and-explorer-thumbnails-on-64-bit-windows_02&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h2&gt;The manual way to fix this error&lt;/h2&gt;
+&lt;h3&gt;Step 1:&lt;/h3&gt;
+&lt;p&gt;Click the &lt;strong&gt;Start&lt;/strong&gt; button, type &lt;strong&gt;regedit.exe&lt;/strong&gt; and open it.&lt;/p&gt;
+
+&lt;p&gt;&lt;a target=&quot;_blank&quot; href=&quot;https://inderjotsingh.com/wp-content/uploads/2016/02/how-to-fix-outlook-pdf-previews-and-explorer-thumbnails-on-64-bit-windows_01.png&quot; rel=&quot;attachment wp-att-1158&quot;&gt;&lt;img class=&quot;alignnone size-full wp-image-1158&quot; src=&quot;https://inderjotsingh.com/wp-content/uploads/2016/02/how-to-fix-outlook-pdf-previews-and-explorer-thumbnails-on-64-bit-windows_01.png&quot; alt=&quot;how-to-fix-outlook-pdf-previews-and-explorer-thumbnails-on-64-bit-windows_01&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h3&gt;Step 2:&lt;/h3&gt;
+&lt;p&gt;Once open, navigate to &lt;code&gt;HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Classes\
+CLSID\{DC6EFB56-9CFA-464D-8880-44885D7DC193}&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a target=&quot;_blank&quot; href=&quot;https://inderjotsingh.com/wp-content/uploads/2016/02/how-to-fix-outlook-pdf-previews-and-explorer-thumbnails-on-64-bit-windows_03.png&quot; rel=&quot;attachment wp-att-1160&quot;&gt;&lt;img class=&quot;alignnone size-full wp-image-1160&quot; src=&quot;https://inderjotsingh.com/wp-content/uploads/2016/02/how-to-fix-outlook-pdf-previews-and-explorer-thumbnails-on-64-bit-windows_03.png&quot; alt=&quot;how-to-fix-outlook-pdf-previews-and-explorer-thumbnails-on-64-bit-windows_03&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h3&gt;Step 3:&lt;/h3&gt;
+&lt;p&gt;Double-click &lt;strong&gt;AppID&lt;/strong&gt; in the right column and copy paste this in the Value Data field: &lt;code&gt;{534A1E02-D58F-44f0-B58B-36CBED287C7C}&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a target=&quot;_blank&quot; href=&quot;https://inderjotsingh.com/wp-content/uploads/2016/02/how-to-fix-outlook-pdf-previews-and-explorer-thumbnails-on-64-bit-windows_04.png&quot; rel=&quot;attachment wp-att-1161&quot;&gt;&lt;img class=&quot;alignnone size-full wp-image-1161&quot; src=&quot;https://inderjotsingh.com/wp-content/uploads/2016/02/how-to-fix-outlook-pdf-previews-and-explorer-thumbnails-on-64-bit-windows_04.png&quot; alt=&quot;how-to-fix-outlook-pdf-previews-and-explorer-thumbnails-on-64-bit-windows_04&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Click &lt;strong&gt;OK&lt;/strong&gt; and close regedit. That’s it!&lt;/p&gt;
+
+&lt;div class=&quot;row&quot;&gt;
+  &lt;div class=&quot;col-12&quot;&gt;
+    
+   &lt;script async=&quot;&quot; src=&quot;//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js&quot;&gt;&lt;/script&gt;
+    &lt;ins class=&quot;adsbygoogle&quot; style=&quot;display:block; text-align:center;&quot; data-ad-format=&quot;fluid&quot; data-ad-layout=&quot;in-article&quot; data-ad-client=&quot;ca-pub-1094744891389501&quot; data-ad-slot=&quot;6411936673&quot;&gt;&lt;/ins&gt;
+    &lt;script&gt;
+         (adsbygoogle = window.adsbygoogle || []).push({});
+    &lt;/script&gt;
+
+
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;h2&gt;The automatic way to fix this error&lt;/h2&gt;
+&lt;h3&gt;Step 1:&lt;/h3&gt;
+&lt;p&gt;Download the Adobe Reader preview handler x64 fixer by &lt;a target=&quot;_blank&quot; href=&quot;http://www.pretentiousname.com/&quot;&gt;Leo Davidson&lt;/a&gt;, from this link: &lt;a target=&quot;_blank&quot; href=&quot;http://www.pretentiousname.com/adobe_pdf_x64_fix/#downl&quot;&gt;http://www.pretentiousname.com/adobe_pdf_x64_fix/#downl&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;You could download either with installer or without. I choose to do the one without the installer.&lt;/p&gt;
+
+&lt;p&gt;&lt;a target=&quot;_blank&quot; href=&quot;https://inderjotsingh.com/wp-content/uploads/2016/02/how-to-fix-outlook-pdf-previews-and-explorer-thumbnails-on-64-bit-windows_05.png&quot; rel=&quot;attachment wp-att-1162&quot;&gt;&lt;img class=&quot;alignnone size-full wp-image-1162&quot; src=&quot;https://inderjotsingh.com/wp-content/uploads/2016/02/how-to-fix-outlook-pdf-previews-and-explorer-thumbnails-on-64-bit-windows_05.png&quot; alt=&quot;how-to-fix-outlook-pdf-previews-and-explorer-thumbnails-on-64-bit-windows_05&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h3&gt;Step 2:&lt;/h3&gt;
+&lt;p&gt;Extract the downloaded files. You’ll see two folders. Open the one that says &lt;strong&gt;“Fix for x64 Adobe Reader preview handler”&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;a target=&quot;_blank&quot; href=&quot;https://inderjotsingh.com/wp-content/uploads/2016/02/how-to-fix-outlook-pdf-previews-and-explorer-thumbnails-on-64-bit-windows_06.png&quot; rel=&quot;attachment wp-att-1163&quot;&gt;&lt;img class=&quot;alignnone size-full wp-image-1163&quot; src=&quot;https://inderjotsingh.com/wp-content/uploads/2016/02/how-to-fix-outlook-pdf-previews-and-explorer-thumbnails-on-64-bit-windows_06.png&quot; alt=&quot;how-to-fix-outlook-pdf-previews-and-explorer-thumbnails-on-64-bit-windows_06&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Run the preview handler fix utility and click &lt;strong&gt;Apply Fix&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;a target=&quot;_blank&quot; href=&quot;https://inderjotsingh.com/wp-content/uploads/2016/02/how-to-fix-outlook-pdf-previews-and-explorer-thumbnails-on-64-bit-windows_07.png&quot; rel=&quot;attachment wp-att-1164&quot;&gt;&lt;img class=&quot;alignnone size-full wp-image-1164&quot; src=&quot;https://inderjotsingh.com/wp-content/uploads/2016/02/how-to-fix-outlook-pdf-previews-and-explorer-thumbnails-on-64-bit-windows_07.png&quot; alt=&quot;how-to-fix-outlook-pdf-previews-and-explorer-thumbnails-on-64-bit-windows_07&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;That’s it!&lt;/p&gt;
+
+&lt;p&gt;(header image source: &lt;a target=&quot;_blank&quot; href=&quot;http://blog.automart.co.za/wp-content/uploads/2015/01/trying_to_figure_out_car_trouble.jpg&quot;&gt;automart.co.za&lt;/a&gt;)&lt;/p&gt;</content><author><name>wiseindy</name></author><category term="64" /><category term="64 bit" /><category term="acrobat" /><category term="adobe" /><category term="adobe acrobat" /><category term="adobe acrobat reader" /><category term="adobe pdf preview handler for vista" /><category term="adobe reader" /><category term="microsoft outlook" /><category term="outlook" /><category term="pdf" /><category term="pdf handler" /><category term="pdf previewer" /><category term="reader" /><category term="regedit" /><category term="vista" /><category term="windows 10" /><category term="windows 7" /><category term="windows 8" /><category term="windows 8.1" /><category term="x64" /><category term="Guides" /><summary type="html">“This file cannot be previewed because of an error with the following previewer: PDF Preview Handler for Vista”. You might’ve seen this pretty common error in Outlook when you cannot preview PDF files in the preview pane. This happens on 64-bit Windows. Well, it’s a pretty easy fix. The manual way to fix this error Step 1: Click the Start button, type regedit.exe and open it. Step 2: Once open, navigate to HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Classes\ CLSID\{DC6EFB56-9CFA-464D-8880-44885D7DC193} Step 3: Double-click AppID in the right column and copy paste this in the Value Data field: {534A1E02-D58F-44f0-B58B-36CBED287C7C} Click OK and close regedit. That’s it! The automatic way to fix this error Step 1: Download the Adobe Reader preview handler x64 fixer by Leo Davidson, from this link: http://www.pretentiousname.com/adobe_pdf_x64_fix/#downl You could download either with installer or without. I choose to do the one without the installer. Step 2: Extract the downloaded files. You’ll see two folders. Open the one that says “Fix for x64 Adobe Reader preview handler”. Run the preview handler fix utility and click Apply Fix. That’s it! (header image source: automart.co.za)</summary></entry><entry><title type="html">How to change primary domain of free or paid Google Apps account.</title><link href="http://localhost:4000/it/how-to-change-primary-domain-of-free-or-paid-google-apps-account/" rel="alternate" type="text/html" title="How to change primary domain of free or paid Google Apps account." /><published>2016-01-31T03:05:38-05:00</published><updated>2016-01-31T03:05:38-05:00</updated><id>http://localhost:4000/it/how-to-change-primary-domain-of-free-or-paid-google-apps-account</id><content type="html" xml:base="http://localhost:4000/it/how-to-change-primary-domain-of-free-or-paid-google-apps-account/">&lt;p&gt;Back in the day, Google Apps for Business (Work) was free for up to 10 users. Sadly, that is no longer the case. If you are one of the lucky ones to have grabbed an account during those times and you’re now looking for ways to change that domain, well, you’ve come to the right place. This guide will show you how to do this AND it’s applicable for both free Google Apps accounts and paid Google Apps subscriptions.&lt;/p&gt;
+
+&lt;!--more--&gt;
+
+&lt;p&gt;If you have a paid account, you can simply create a new alias for your existing domain. However, you cannot do this if you have one of the “legacy” free accounts (which are now discontinued - however if you created one back in the day, you can still use them).&lt;/p&gt;
+
+&lt;p&gt;There can be many reasons for you to change your primary domain. For me it was because I lost ownership of my old domain and didn’t want my free Google Apps account sitting and gathering dust.&lt;/p&gt;
+
+&lt;p&gt;Google has a couple of support articles - &lt;a target=&quot;_blank&quot; href=&quot;https://support.google.com/a/answer/54819?hl=en&quot;&gt;here&lt;/a&gt; and &lt;a target=&quot;_blank&quot; href=&quot;https://support.google.com/a/answer/6301932&quot;&gt;here&lt;/a&gt; - that can help you achieve this. However even with the help of these articles it took me quite a while to figure it out. This is why I wrote this step-by-step guide to make it easier for you guys.&lt;/p&gt;
+
+&lt;p&gt;So, enough talk. Let’s get started.&lt;/p&gt;
+&lt;h3&gt;What do you need:&lt;/h3&gt;
+&lt;ul&gt;
+	&lt;li&gt;A free or paid Google Apps account.&lt;/li&gt;
+	&lt;li&gt;Access to your &lt;strong&gt;new&lt;/strong&gt; domain's registrar/hosting account (so that you can verify domain ownership when Google asks you to).&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;In short, this is what will we be doing:&lt;/h3&gt;
+&lt;p&gt;&lt;span style=&quot;text-decoration: underline;&quot;&gt;&lt;strong&gt;If you have a “legacy” free account&lt;/strong&gt;:&lt;/span&gt; We are going to &lt;strong&gt;temporarily&lt;/strong&gt; convert our &lt;strong&gt;free&lt;/strong&gt; account to a free 30 day enterprise trial account. Then we are going to add in another domain to your account and make it the primary one. Next, we disable and remove the old domain and cancel our trial to convert our paid account back to free.&lt;/p&gt;
+
+&lt;p&gt;&lt;span style=&quot;text-decoration: underline;&quot;&gt;&lt;strong&gt;If you have a paid Google Apps for Work subscription&lt;/strong&gt;:&lt;/span&gt; We are going to add in another domain to your account and then make it the primary one.&lt;/p&gt;
+&lt;blockquote&gt;&lt;span style=&quot;text-decoration: underline;&quot;&gt;Note:&lt;/span&gt; If you have a paid Google Apps subscription, skip to &lt;strong&gt;Step 3&lt;/strong&gt;.&lt;/blockquote&gt;
+&lt;h3&gt;Step 1:&lt;/h3&gt;
+&lt;p&gt;Log into your existing Google Apps account. Navigate to &lt;a target=&quot;_blank&quot; href=&quot;https://apps.google.com&quot;&gt;https://apps.google.com&lt;/a&gt; and sign in.&lt;/p&gt;
+
+&lt;p&gt;Alternatively, you could navigate to &lt;a target=&quot;_blank&quot; href=&quot;https://www.google.com/work/apps/business/&quot;&gt;https://www.google.com/work/apps/business/&lt;/a&gt; or even use your domain’s custom Google Apps URL.&lt;/p&gt;
+
+&lt;p&gt;For example, if your domain is &lt;a target=&quot;_blank&quot; href=&quot;http://inderjotsingh.com&quot;&gt;inderjotsingh.com&lt;/a&gt;, simply navigate to &lt;a target=&quot;_blank&quot; href=&quot;https://google.com/a/example.com&quot;&gt;https://google.com/a/&lt;strong&gt;inderjotsingh.com&lt;/strong&gt;&lt;/a&gt;.&lt;/p&gt;
+&lt;h3&gt;Step 2:&lt;/h3&gt;
+&lt;p&gt;Once you’re logged in, click on the big red &lt;strong&gt;Upgrade Now&lt;/strong&gt; button on the right hand sidebar.&lt;/p&gt;
+
+&lt;p&gt;&lt;a target=&quot;_blank&quot; href=&quot;http://inderjotsingh.com/wp-content/uploads/2016/01/how-to-change-primary-domain-of-free-or-paid-google-apps-account-01.png&quot; rel=&quot;attachment wp-att-1143&quot;&gt;&lt;img class=&quot;alignnone size-full wp-image-1143&quot; src=&quot;http://inderjotsingh.com/wp-content/uploads/2016/01/how-to-change-primary-domain-of-free-or-paid-google-apps-account-01.png&quot; alt=&quot;how-to-change-primary-domain-of-free-or-paid-google-apps-account-01&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Enter in your information, check the terms and conditions check box and click &lt;strong&gt;I accept! Upgrade my account&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;a target=&quot;_blank&quot; href=&quot;http://inderjotsingh.com/wp-content/uploads/2016/01/how-to-change-primary-domain-of-free-or-paid-google-apps-account-02.png&quot; rel=&quot;attachment wp-att-1145&quot;&gt;&lt;img class=&quot;alignnone size-full wp-image-1145&quot; src=&quot;http://inderjotsingh.com/wp-content/uploads/2016/01/how-to-change-primary-domain-of-free-or-paid-google-apps-account-02.png&quot; alt=&quot;how-to-change-primary-domain-of-free-or-paid-google-apps-account-02&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h3&gt;Step 3:&lt;/h3&gt;
+&lt;p&gt;Next, go back to the admin console and click &lt;strong&gt;Domains&lt;/strong&gt;. If you don’t see the &lt;strong&gt;Domains&lt;/strong&gt; tile, click the &lt;strong&gt;Show More&lt;/strong&gt; link at the bottom and then select &lt;strong&gt;Domains&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;Then click on &lt;strong&gt;Add/Remove&lt;/strong&gt; domains.&lt;/p&gt;
+
+&lt;p&gt;Alternatively, you can just navigate to the domains page directly via this link: &lt;a target=&quot;_blank&quot; href=&quot;https://admin.google.com/AdminHome?pli=1&amp;amp;fral=1#Domains:&quot;&gt;https://admin.google.com/AdminHome?pli=1&amp;amp;fral=1#Domains:&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a target=&quot;_blank&quot; href=&quot;http://inderjotsingh.com/wp-content/uploads/2016/01/how-to-change-primary-domain-of-free-or-paid-google-apps-account-03.png&quot; rel=&quot;attachment wp-att-1146&quot;&gt;&lt;img class=&quot;alignnone size-full wp-image-1146&quot; src=&quot;http://inderjotsingh.com/wp-content/uploads/2016/01/how-to-change-primary-domain-of-free-or-paid-google-apps-account-03.png&quot; alt=&quot;how-to-change-primary-domain-of-free-or-paid-google-apps-account-03&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a target=&quot;_blank&quot; href=&quot;http://inderjotsingh.com/wp-content/uploads/2016/01/how-to-change-primary-domain-of-free-or-paid-google-apps-account-04.png&quot; rel=&quot;attachment wp-att-1147&quot;&gt;&lt;img class=&quot;alignnone size-full wp-image-1147&quot; src=&quot;http://inderjotsingh.com/wp-content/uploads/2016/01/how-to-change-primary-domain-of-free-or-paid-google-apps-account-04.png&quot; alt=&quot;how-to-change-primary-domain-of-free-or-paid-google-apps-account-04&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Disable the test domain alias by clicking the &lt;strong&gt;Deactivate&lt;/strong&gt; button as shown below. A popup box will ask you to confirm this action. Confirm it.&lt;/p&gt;
+
+&lt;p&gt;&lt;a target=&quot;_blank&quot; href=&quot;http://inderjotsingh.com/wp-content/uploads/2016/01/how-to-change-primary-domain-of-free-or-paid-google-apps-account-05.png&quot; rel=&quot;attachment wp-att-1148&quot;&gt;&lt;img class=&quot;alignnone size-full wp-image-1148&quot; src=&quot;http://inderjotsingh.com/wp-content/uploads/2016/01/how-to-change-primary-domain-of-free-or-paid-google-apps-account-05.png&quot; alt=&quot;how-to-change-primary-domain-of-free-or-paid-google-apps-account-05&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;After the test domain alias is deactivated, click the &lt;strong&gt;Add a domain or domain alias&lt;/strong&gt; button at the top.&lt;/p&gt;
+
+&lt;p&gt;&lt;a target=&quot;_blank&quot; href=&quot;http://inderjotsingh.com/wp-content/uploads/2016/01/how-to-change-primary-domain-of-free-or-paid-google-apps-account-06.png&quot; rel=&quot;attachment wp-att-1149&quot;&gt;&lt;img class=&quot;alignnone size-full wp-image-1149&quot; src=&quot;http://inderjotsingh.com/wp-content/uploads/2016/01/how-to-change-primary-domain-of-free-or-paid-google-apps-account-06.png&quot; alt=&quot;how-to-change-primary-domain-of-free-or-paid-google-apps-account-06&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h3&gt;Step 4:&lt;/h3&gt;
+&lt;p&gt;Enter the new domain name. Follow Google’s verification steps to verify ownership for your new domain. This should be pretty straightforward if you have access to your domain registrar/hosting account. Since Google shows you step by step how to verify your domain, I won’t cover it here.&lt;/p&gt;
+&lt;h3&gt;Step 5:&lt;/h3&gt;
+&lt;p&gt;If everything goes well, you should have your new domain added to your Google Apps account. You can confirm by going to the &lt;strong&gt;Domains&lt;/strong&gt; panel from the admin console (here is the direct link: &lt;a target=&quot;_blank&quot; href=&quot;https://admin.google.com/AdminHome?pli=1&amp;amp;fral=1#Domains:&quot;&gt;https://admin.google.com/AdminHome?pli=1&amp;amp;fral=1#Domains:&lt;/a&gt;)&lt;/p&gt;
+
+&lt;p&gt;You’ll notice that even though the new domain has been successfully added, the old domain is still marked as the &lt;strong&gt;primary&lt;/strong&gt; one. Let’s change that.&lt;/p&gt;
+
+&lt;p&gt;Navigate to &lt;a target=&quot;_blank&quot; href=&quot;https://developers.google.com/admin-sdk/directory/v1/reference/customers/update&quot;&gt;https://developers.google.com/admin-sdk/directory/v1/reference/customers/update&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Make sure you’re logged into your existing Google Apps account (you can see your email address in the top right corner).&lt;/p&gt;
+
+&lt;p&gt;Click &lt;strong&gt;Try it now.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a target=&quot;_blank&quot; href=&quot;http://inderjotsingh.com/wp-content/uploads/2016/01/how-to-change-primary-domain-of-free-or-paid-google-apps-account-07.png&quot; rel=&quot;attachment wp-att-1150&quot;&gt;&lt;img class=&quot;alignnone size-full wp-image-1150&quot; src=&quot;http://inderjotsingh.com/wp-content/uploads/2016/01/how-to-change-primary-domain-of-free-or-paid-google-apps-account-07.png&quot; alt=&quot;how-to-change-primary-domain-of-free-or-paid-google-apps-account-07&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Enter the information as shown in the screenshot below.&lt;/p&gt;
+&lt;ul&gt;
+	&lt;li&gt;&lt;code&gt;&lt;strong&gt;customerKey:&lt;/strong&gt; my_customer&lt;/code&gt;&lt;/li&gt;
+	&lt;li&gt;&lt;code&gt;&lt;strong&gt;fields&lt;/strong&gt;: customerDomain&lt;/code&gt;&lt;/li&gt;
+	&lt;li&gt;&lt;code&gt;&lt;strong&gt;Request body&lt;/strong&gt;: { &quot;customerDomain&quot;:&quot;newinderjotsingh.com&quot; }&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;For &lt;strong&gt;Request body&lt;/strong&gt;, you don’t need to type the brackets and all that. They will automatically appear when you click the &lt;strong&gt;Request body&lt;/strong&gt; field. Simply choose &lt;strong&gt;customerDomain&lt;/strong&gt; from the dropdown and then &lt;strong&gt;type in your &lt;span style=&quot;text-decoration: underline;&quot;&gt;new domain&lt;/span&gt;&lt;/strong&gt; (the one that you want as your &lt;strong&gt;primary&lt;/strong&gt; domain).&lt;/p&gt;
+
+&lt;p&gt;Click &lt;strong&gt;Authorize and Execute&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;div class=&quot;row&quot;&gt;
+  &lt;div class=&quot;col-12&quot;&gt;
+    
+   &lt;script async=&quot;&quot; src=&quot;//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js&quot;&gt;&lt;/script&gt;
+    &lt;ins class=&quot;adsbygoogle&quot; style=&quot;display:block; text-align:center;&quot; data-ad-format=&quot;fluid&quot; data-ad-layout=&quot;in-article&quot; data-ad-client=&quot;ca-pub-1094744891389501&quot; data-ad-slot=&quot;6411936673&quot;&gt;&lt;/ins&gt;
+    &lt;script&gt;
+         (adsbygoogle = window.adsbygoogle || []).push({});
+    &lt;/script&gt;
+
+
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;p&gt;A couple of popups might show up asking you to authorize this with your Google account, Authorize everything.&lt;/p&gt;
+
+&lt;p&gt;&lt;a target=&quot;_blank&quot; href=&quot;http://inderjotsingh.com/wp-content/uploads/2016/01/how-to-change-primary-domain-of-free-or-paid-google-apps-account-08.png&quot; rel=&quot;attachment wp-att-1151&quot;&gt;&lt;img class=&quot;alignnone size-full wp-image-1151&quot; src=&quot;http://inderjotsingh.com/wp-content/uploads/2016/01/how-to-change-primary-domain-of-free-or-paid-google-apps-account-08.png&quot; alt=&quot;how-to-change-primary-domain-of-free-or-paid-google-apps-account-08&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Guess what? Your secondary domain (the one you typed above) is now your &lt;strong&gt;primary&lt;/strong&gt; domain! You can confirm by going to the &lt;strong&gt;Domains&lt;/strong&gt; panel from the admin console (direct link: &lt;a target=&quot;_blank&quot; href=&quot;https://admin.google.com/AdminHome?pli=1&amp;amp;fral=1#Domains:&quot;&gt;https://admin.google.com/AdminHome?pli=1&amp;amp;fral=1#Domains:&lt;/a&gt;)&lt;/p&gt;
+&lt;h3&gt;Step 6:&lt;/h3&gt;
+&lt;p&gt;If you are using a &lt;strong&gt;paid&lt;/strong&gt; Google Apps account, you can stop here.&lt;/p&gt;
+
+&lt;p&gt;However if you are using a &lt;strong&gt;free&lt;/strong&gt; account, &lt;span style=&quot;text-decoration: underline;&quot;&gt;&lt;strong&gt;make sure you follow these steps to DOWNGRADE your 30 day trial back to the free account&lt;/strong&gt;&lt;/span&gt;.&lt;/p&gt;
+
+&lt;p&gt;If you do not downgrade within 30 days, you’ll lose your free account (in the sense that you’ll have to pay for it beyond the 30 days time period).&lt;/p&gt;
+
+&lt;p&gt;You can only downgrade if you have only one domain in your account. But we now have two. The old domain and the new domain (which was just promoted to primary).&lt;/p&gt;
+
+&lt;p&gt;Let’s remove the old domain (that USED to be the primary once upon a time).&lt;/p&gt;
+&lt;ul&gt;
+	&lt;li&gt;Go to the &lt;strong&gt;Domains&lt;/strong&gt; panel from the admin console (direct link: &lt;a target=&quot;_blank&quot; href=&quot;https://admin.google.com/AdminHome?pli=1&amp;amp;fral=1#Domains:&quot;&gt;https://admin.google.com/AdminHome?pli=1&amp;amp;fral=1#Domains:&lt;/a&gt;)&lt;/li&gt;
+	&lt;li&gt;Delete the old domain
+&lt;ul&gt;
+	&lt;li&gt;If you're unable to delete it (ie, even after clicking &lt;strong&gt;Delete&lt;/strong&gt;, the domain still stays, make sure the &lt;strong&gt;Test domain alias&lt;/strong&gt; is deactivated. If that is active, you won't be able to delete the old domain).&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;Step 7:&lt;/h3&gt;
+&lt;p&gt;Let’s convert our 30 day trial back to a free account. In the admin console, click on &lt;strong&gt;Billing&lt;/strong&gt;. Alternatively, directly open it via this link: &lt;a target=&quot;_blank&quot; href=&quot;https://admin.google.com/AdminHome?pli=1&amp;amp;fral=1#DomainSettings/notab=1&amp;amp;subtab=subscriptions&quot;&gt;https://admin.google.com/AdminHome?pli=1&amp;amp;fral=1#DomainSettings/notab=1&amp;amp;subtab=subscriptions&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a target=&quot;_blank&quot; href=&quot;http://inderjotsingh.com/wp-content/uploads/2016/01/how-to-change-primary-domain-of-free-or-paid-google-apps-account-09.png&quot; rel=&quot;attachment wp-att-1152&quot;&gt;&lt;img class=&quot;alignnone size-full wp-image-1152&quot; src=&quot;http://inderjotsingh.com/wp-content/uploads/2016/01/how-to-change-primary-domain-of-free-or-paid-google-apps-account-09.png&quot; alt=&quot;how-to-change-primary-domain-of-free-or-paid-google-apps-account-09&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Click the 3 vertical dots and in the dropdown select &lt;strong&gt;Cancel Subscription&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;a target=&quot;_blank&quot; href=&quot;http://inderjotsingh.com/wp-content/uploads/2016/01/how-to-change-primary-domain-of-free-or-paid-google-apps-account-10.png&quot; rel=&quot;attachment wp-att-1153&quot;&gt;&lt;img class=&quot;alignnone size-full wp-image-1153&quot; src=&quot;http://inderjotsingh.com/wp-content/uploads/2016/01/how-to-change-primary-domain-of-free-or-paid-google-apps-account-10.png&quot; alt=&quot;how-to-change-primary-domain-of-free-or-paid-google-apps-account-10&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Chose &lt;strong&gt;Downgrade to Google Apps&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;span style=&quot;color: #ff0000;&quot;&gt;Do not choose Cancel Google Apps for Work. This will completely delete your account. Yes. Free, paid, everything. &lt;/span&gt;&lt;/strong&gt;Make sure you choose &lt;strong&gt;Downgrade to Google Apps&lt;/strong&gt;. If you do not see the &lt;strong&gt;“downgrade”&lt;/strong&gt; option, then make sure that you have only &lt;strong&gt;one&lt;/strong&gt; domain in your &lt;strong&gt;Domains&lt;/strong&gt; panel (direct link: &lt;a target=&quot;_blank&quot; href=&quot;https://admin.google.com/AdminHome?pli=1&amp;amp;fral=1#Domains:&quot;&gt;https://admin.google.com/AdminHome?pli=1&amp;amp;fral=1#Domains:&lt;/a&gt;)&lt;/p&gt;
+
+&lt;p&gt;&lt;a target=&quot;_blank&quot; href=&quot;http://inderjotsingh.com/wp-content/uploads/2016/01/how-to-change-primary-domain-of-free-or-paid-google-apps-account-11.png&quot; rel=&quot;attachment wp-att-1154&quot;&gt;&lt;img class=&quot;alignnone size-full wp-image-1154&quot; src=&quot;http://inderjotsingh.com/wp-content/uploads/2016/01/how-to-change-primary-domain-of-free-or-paid-google-apps-account-11.png&quot; alt=&quot;how-to-change-primary-domain-of-free-or-paid-google-apps-account-11&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Click &lt;strong&gt;Continue&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;That’s it. You’ve successfully changed the primary domain of your free/paid Google Apps account!&lt;/p&gt;
+
+&lt;p&gt;(header image source: &lt;a target=&quot;_blank&quot; href=&quot;http://www.imdb.com/title/tt0098904/&quot;&gt;Seinfeld&lt;/a&gt;)&lt;/p&gt;</content><author><name>Wiseindy</name></author><category term="domain" /><category term="google" /><category term="google apps" /><category term="google apps for business" /><category term="google apps for work" /><category term="Guides" /><summary type="html">Back in the day, Google Apps for Business (Work) was free for up to 10 users. Sadly, that is no longer the case. If you are one of the lucky ones to have grabbed an account during those times and you’re now looking for ways to change that domain, well, you’ve come to the right place. This guide will show you how to do this AND it’s applicable for both free Google Apps accounts and paid Google Apps subscriptions. If you have a paid account, you can simply create a new alias for your existing domain. However, you cannot do this if you have one of the “legacy” free accounts (which are now discontinued - however if you created one back in the day, you can still use them). There can be many reasons for you to change your primary domain. For me it was because I lost ownership of my old domain and didn’t want my free Google Apps account sitting and gathering dust. Google has a couple of support articles - here and here - that can help you achieve this. However even with the help of these articles it took me quite a while to figure it out. This is why I wrote this step-by-step guide to make it easier for you guys. So, enough talk. Let’s get started. What do you need: A free or paid Google Apps account. Access to your new domain's registrar/hosting account (so that you can verify domain ownership when Google asks you to). In short, this is what will we be doing: If you have a “legacy” free account: We are going to temporarily convert our free account to a free 30 day enterprise trial account. Then we are going to add in another domain to your account and make it the primary one. Next, we disable and remove the old domain and cancel our trial to convert our paid account back to free. If you have a paid Google Apps for Work subscription: We are going to add in another domain to your account and then make it the primary one. Note: If you have a paid Google Apps subscription, skip to Step 3. Step 1: Log into your existing Google Apps account. Navigate to https://apps.google.com and sign in. Alternatively, you could navigate to https://www.google.com/work/apps/business/ or even use your domain’s custom Google Apps URL. For example, if your domain is inderjotsingh.com, simply navigate to https://google.com/a/inderjotsingh.com. Step 2: Once you’re logged in, click on the big red Upgrade Now button on the right hand sidebar. Enter in your information, check the terms and conditions check box and click I accept! Upgrade my account. Step 3: Next, go back to the admin console and click Domains. If you don’t see the Domains tile, click the Show More link at the bottom and then select Domains. Then click on Add/Remove domains. Alternatively, you can just navigate to the domains page directly via this link: https://admin.google.com/AdminHome?pli=1&amp;amp;fral=1#Domains: Disable the test domain alias by clicking the Deactivate button as shown below. A popup box will ask you to confirm this action. Confirm it. After the test domain alias is deactivated, click the Add a domain or domain alias button at the top. Step 4: Enter the new domain name. Follow Google’s verification steps to verify ownership for your new domain. This should be pretty straightforward if you have access to your domain registrar/hosting account. Since Google shows you step by step how to verify your domain, I won’t cover it here. Step 5: If everything goes well, you should have your new domain added to your Google Apps account. You can confirm by going to the Domains panel from the admin console (here is the direct link: https://admin.google.com/AdminHome?pli=1&amp;amp;fral=1#Domains:) You’ll notice that even though the new domain has been successfully added, the old domain is still marked as the primary one. Let’s change that. Navigate to https://developers.google.com/admin-sdk/directory/v1/reference/customers/update Make sure you’re logged into your existing Google Apps account (you can see your email address in the top right corner). Click Try it now. Enter the information as shown in the screenshot below. customerKey: my_customer fields: customerDomain Request body: { &quot;customerDomain&quot;:&quot;newinderjotsingh.com&quot; } For Request body, you don’t need to type the brackets and all that. They will automatically appear when you click the Request body field. Simply choose customerDomain from the dropdown and then type in your new domain (the one that you want as your primary domain). Click Authorize and Execute. A couple of popups might show up asking you to authorize this with your Google account, Authorize everything. Guess what? Your secondary domain (the one you typed above) is now your primary domain! You can confirm by going to the Domains panel from the admin console (direct link: https://admin.google.com/AdminHome?pli=1&amp;amp;fral=1#Domains:) Step 6: If you are using a paid Google Apps account, you can stop here. However if you are using a free account, make sure you follow these steps to DOWNGRADE your 30 day trial back to the free account. If you do not downgrade within 30 days, you’ll lose your free account (in the sense that you’ll have to pay for it beyond the 30 days time period). You can only downgrade if you have only one domain in your account. But we now have two. The old domain and the new domain (which was just promoted to primary). Let’s remove the old domain (that USED to be the primary once upon a time). Go to the Domains panel from the admin console (direct link: https://admin.google.com/AdminHome?pli=1&amp;amp;fral=1#Domains:) Delete the old domain If you're unable to delete it (ie, even after clicking Delete, the domain still stays, make sure the Test domain alias is deactivated. If that is active, you won't be able to delete the old domain). Step 7: Let’s convert our 30 day trial back to a free account. In the admin console, click on Billing. Alternatively, directly open it via this link: https://admin.google.com/AdminHome?pli=1&amp;amp;fral=1#DomainSettings/notab=1&amp;amp;subtab=subscriptions Click the 3 vertical dots and in the dropdown select Cancel Subscription. Chose Downgrade to Google Apps. Do not choose Cancel Google Apps for Work. This will completely delete your account. Yes. Free, paid, everything. Make sure you choose Downgrade to Google Apps. If you do not see the “downgrade” option, then make sure that you have only one domain in your Domains panel (direct link: https://admin.google.com/AdminHome?pli=1&amp;amp;fral=1#Domains:) Click Continue. That’s it. You’ve successfully changed the primary domain of your free/paid Google Apps account! (header image source: Seinfeld)</summary></entry><entry><title type="html">How to set up Shrew Soft IPSec VPN Client for WatchGuard</title><link href="http://localhost:4000/it/set-up-shrew-soft-ipsec-vpn-client-watchguard/" rel="alternate" type="text/html" title="How to set up Shrew Soft IPSec VPN Client for WatchGuard" /><published>2016-01-20T01:36:14-05:00</published><updated>2016-01-20T01:36:14-05:00</updated><id>http://localhost:4000/it/set-up-shrew-soft-ipsec-vpn-client-watchguard</id><content type="html" xml:base="http://localhost:4000/it/set-up-shrew-soft-ipsec-vpn-client-watchguard/">&lt;p&gt;This guide will show you how to enable Mobile VPN with IPSec for WatchGuard Firebox M300. It’s a pretty straightfoward process, however it took me quite a while to figure out initially. Hope this guide makes it easier for you.&lt;/p&gt;
+
+&lt;!--more--&gt;
+
+&lt;p&gt;It will also show you how to install and configure the &lt;a target=&quot;_blank&quot; href=&quot;https://www.shrew.net/download/vpn&quot;&gt;Shrew Soft IPSec VPN Client&lt;/a&gt;. In my opinion, you are better off using this client than the &lt;a target=&quot;_blank&quot; href=&quot;http://www.watchguard.com/help/docs/wsm/xtm_11/en-US/index.html#en-US/mvpn/client/mvpn-ipsec_client_about_c.html%3FTocPath%3DMobile%2520VPN%2520with%2520IPSec%7CAbout%2520the%2520IPSec%2520Mobile%2520VPN%25C2%25A0Client%7C_____0&quot;&gt;WatchGuard IPSec Mobile VPN Monitor&lt;/a&gt;. Old versions of this WatchGuard IPSec Mobile VPN Monitor were free, but they do not work on Windows 10. The new version of the IPSec client needs a paid subscription license. Unless you want to go this route, I would suggest using the Shrew Soft IPSec VPN Client. It’s free and you can &lt;a target=&quot;_blank&quot; href=&quot;https://www.shrew.net/download/vpn&quot;&gt;download&lt;/a&gt; it from their &lt;a target=&quot;_blank&quot; href=&quot;https://www.shrew.net/download/vpn&quot;&gt;official website&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Note:&lt;/strong&gt; While this guide was created for Firebox M300, it should work with other WatchGuard XTM devices as well.&lt;/p&gt;
+&lt;h3&gt;What do you need:&lt;/h3&gt;
+&lt;ul&gt;
+	&lt;li&gt;An environment where a WatchGuard firewall is installed and running.&lt;/li&gt;
+	&lt;li&gt;Administrative access to the firewall (of course).&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;So let’s being shall we?&lt;/p&gt;
+&lt;h3&gt;Step 1&lt;/h3&gt;
+&lt;p&gt;Fire up your browser and navigate to the web interface of your firewall? If your firewall’s IP address is &lt;code&gt;192.168.1.1&lt;/code&gt;, then type &lt;code&gt;https://192.168.1.1:8080&lt;/code&gt; in the URL bar.&lt;/p&gt;
+
+&lt;p&gt;After logging in, go to &lt;strong&gt;VPN&lt;/strong&gt; &amp;gt; &lt;strong&gt;Mobile VPN with IPSec&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;Click on &lt;strong&gt;Add&lt;/strong&gt; to add a new group.&lt;/p&gt;
+
+&lt;p&gt;&lt;a target=&quot;_blank&quot; href=&quot;https://inderjotsingh.com/wp-content/uploads/2016/01/set-up-shrew-soft-ipsec-vpn-client-watchguard-01.png&quot; rel=&quot;attachment wp-att-1087&quot;&gt;&lt;img class=&quot;alignnone size-full wp-image-1087&quot; src=&quot;https://inderjotsingh.com/wp-content/uploads/2016/01/set-up-shrew-soft-ipsec-vpn-client-watchguard-01.png&quot; alt=&quot;set-up-shrew-soft-ipsec-vpn-client-watchguard-01&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h3&gt;Step 2:&lt;/h3&gt;
+&lt;p&gt;Select the &lt;strong&gt;General&lt;/strong&gt; tab. Type in a &lt;strong&gt;Name&lt;/strong&gt; and select Authentication Server as &lt;strong&gt;Firebox-DB&lt;/strong&gt;. You can also set it to authenticate it with your domain, but for this tutorial we will use the firewall as the authentication server.&lt;/p&gt;
+
+&lt;p&gt;Next, enter the &lt;strong&gt;passphrase&lt;/strong&gt; and enter your firewall’s external IP address. This is the IP address that you use to connect to your firewall from the Internet.&lt;/p&gt;
+
+&lt;p&gt;&lt;a target=&quot;_blank&quot; href=&quot;https://inderjotsingh.com/wp-content/uploads/2016/01/set-up-shrew-soft-ipsec-vpn-client-watchguard-02.png&quot; rel=&quot;attachment wp-att-1062&quot;&gt;&lt;img class=&quot;alignnone size-full wp-image-1062&quot; src=&quot;https://inderjotsingh.com/wp-content/uploads/2016/01/set-up-shrew-soft-ipsec-vpn-client-watchguard-02.png&quot; alt=&quot;set-up-shrew-soft-ipsec-vpn-client-watchguard-02&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h3&gt;Step 3:&lt;/h3&gt;
+&lt;p&gt;Select the &lt;strong&gt;IPSec Tunnel&lt;/strong&gt; tab. Make the following changes as shown in the image below.&lt;/p&gt;
+&lt;ul&gt;
+	&lt;li&gt;Select &lt;strong&gt;Use the passphrase of the end user profile as the pre-shared key&lt;/strong&gt;.&lt;/li&gt;
+	&lt;li&gt;Under &lt;strong&gt;Phase 1&lt;/strong&gt;&lt;strong&gt; Settings&lt;/strong&gt;, select &lt;strong&gt;Authentication&lt;/strong&gt; as &lt;strong&gt;SHA1&lt;/strong&gt; and &lt;strong&gt;Encryption&lt;/strong&gt; as &lt;strong&gt;3DES&lt;/strong&gt;.&lt;/li&gt;
+	&lt;li&gt;Under &lt;strong&gt;Phase 2&lt;/strong&gt;&lt;strong&gt; Settings&lt;/strong&gt;, seelct &lt;strong&gt;PFS&lt;/strong&gt; and choose &lt;strong&gt;Diffie-Hellman Group 1&lt;/strong&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;a target=&quot;_blank&quot; href=&quot;https://inderjotsingh.com/wp-content/uploads/2016/01/set-up-shrew-soft-ipsec-vpn-client-watchguard-03.png&quot; rel=&quot;attachment wp-att-1063&quot;&gt;&lt;img class=&quot;alignnone size-full wp-image-1063&quot; src=&quot;https://inderjotsingh.com/wp-content/uploads/2016/01/set-up-shrew-soft-ipsec-vpn-client-watchguard-03.png&quot; alt=&quot;set-up-shrew-soft-ipsec-vpn-client-watchguard-03&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h3&gt;Step 4:&lt;/h3&gt;
+&lt;p&gt;Select the &lt;strong&gt;Resources&lt;/strong&gt; tab. Here under &lt;strong&gt;Allowed Resources&lt;/strong&gt; you can specify which IP addresses are allowed to connect through the tunnel. Click &lt;strong&gt;Add&lt;/strong&gt; and type in an IP range.&lt;/p&gt;
+
+&lt;p&gt;Next, you’ll have to specify the &lt;strong&gt;Virtual IP Address Pool&lt;/strong&gt;. Whenever a device connects to your tunnel, it will be assigned an IP address from this pool.&lt;/p&gt;
+
+&lt;p&gt;&lt;a target=&quot;_blank&quot; href=&quot;https://inderjotsingh.com/wp-content/uploads/2016/01/set-up-shrew-soft-ipsec-vpn-client-watchguard-04.png&quot; rel=&quot;attachment wp-att-1064&quot;&gt;&lt;img class=&quot;alignnone size-full wp-image-1064&quot; src=&quot;https://inderjotsingh.com/wp-content/uploads/2016/01/set-up-shrew-soft-ipsec-vpn-client-watchguard-04.png&quot; alt=&quot;set-up-shrew-soft-ipsec-vpn-client-watchguard-04&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;div class=&quot;row&quot;&gt;
+  &lt;div class=&quot;col-12&quot;&gt;
+    
+   &lt;script async=&quot;&quot; src=&quot;//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js&quot;&gt;&lt;/script&gt;
+    &lt;ins class=&quot;adsbygoogle&quot; style=&quot;display:block; text-align:center;&quot; data-ad-format=&quot;fluid&quot; data-ad-layout=&quot;in-article&quot; data-ad-client=&quot;ca-pub-1094744891389501&quot; data-ad-slot=&quot;6411936673&quot;&gt;&lt;/ins&gt;
+    &lt;script&gt;
+         (adsbygoogle = window.adsbygoogle || []).push({});
+    &lt;/script&gt;
+
+
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;h3&gt;Step 5:&lt;/h3&gt;
+&lt;p&gt;Finally, go the &lt;strong&gt;Advanced&lt;/strong&gt; tab and set the &lt;strong&gt;Connect mode&lt;/strong&gt; to &lt;strong&gt;Manual&lt;/strong&gt; and &lt;strong&gt;Inactivity timeout&lt;/strong&gt; to &lt;strong&gt;0 seconds&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;Click &lt;strong&gt;Save&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;a target=&quot;_blank&quot; href=&quot;https://inderjotsingh.com/wp-content/uploads/2016/01/set-up-shrew-soft-ipsec-vpn-client-watchguard-05.png&quot; rel=&quot;attachment wp-att-1065&quot;&gt;&lt;img class=&quot;alignnone size-full wp-image-1065&quot; src=&quot;https://inderjotsingh.com/wp-content/uploads/2016/01/set-up-shrew-soft-ipsec-vpn-client-watchguard-05.png&quot; alt=&quot;set-up-shrew-soft-ipsec-vpn-client-watchguard-05&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h3&gt;Step 6:&lt;/h3&gt;
+&lt;p&gt;The next step is to create a user which will connect to the tunnel.&lt;/p&gt;
+
+&lt;p&gt;In your firewall web interface, navigate to &lt;strong&gt;Authentication&lt;/strong&gt; &amp;gt; &lt;strong&gt;Servers&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;Select &lt;strong&gt;Firebox&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;a target=&quot;_blank&quot; href=&quot;https://inderjotsingh.com/wp-content/uploads/2016/01/set-up-shrew-soft-ipsec-vpn-client-watchguard-06.png&quot; rel=&quot;attachment wp-att-1066&quot;&gt;&lt;img class=&quot;alignnone size-full wp-image-1066&quot; src=&quot;https://inderjotsingh.com/wp-content/uploads/2016/01/set-up-shrew-soft-ipsec-vpn-client-watchguard-06.png&quot; alt=&quot;set-up-shrew-soft-ipsec-vpn-client-watchguard-06&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h3&gt;Step 7:&lt;/h3&gt;
+&lt;p&gt;Under &lt;strong&gt;Firebox Users&lt;/strong&gt;, click &lt;strong&gt;Add&lt;/strong&gt; to create a new user.&lt;/p&gt;
+
+&lt;p&gt;&lt;a target=&quot;_blank&quot; href=&quot;https://inderjotsingh.com/wp-content/uploads/2016/01/set-up-shrew-soft-ipsec-vpn-client-watchguard-07.png&quot; rel=&quot;attachment wp-att-1067&quot;&gt;&lt;img class=&quot;alignnone size-full wp-image-1067&quot; src=&quot;https://inderjotsingh.com/wp-content/uploads/2016/01/set-up-shrew-soft-ipsec-vpn-client-watchguard-07.png&quot; alt=&quot;set-up-shrew-soft-ipsec-vpn-client-watchguard-07&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h3&gt;Step 8:&lt;/h3&gt;
+&lt;p&gt;This part is pretty straight forward. Enter the &lt;strong&gt;Name&lt;/strong&gt;, &lt;strong&gt;Description&lt;/strong&gt;, &lt;strong&gt;Passphrase &lt;/strong&gt;and&lt;strong&gt; timeout&lt;/strong&gt; values.&lt;/p&gt;
+
+&lt;p&gt;&lt;a target=&quot;_blank&quot; href=&quot;https://inderjotsingh.com/wp-content/uploads/2016/01/set-up-shrew-soft-ipsec-vpn-client-watchguard-08.png&quot; rel=&quot;attachment wp-att-1068&quot;&gt;&lt;img class=&quot;alignnone size-full wp-image-1068&quot; src=&quot;https://inderjotsingh.com/wp-content/uploads/2016/01/set-up-shrew-soft-ipsec-vpn-client-watchguard-08.png&quot; alt=&quot;set-up-shrew-soft-ipsec-vpn-client-watchguard-08&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Under &lt;strong&gt;Firebox Authentication Groups&lt;/strong&gt;, select the &lt;strong&gt;Group&lt;/strong&gt; we created previously. In our case, it was &lt;strong&gt;WISEINDY&lt;/strong&gt;, so we check that one.&lt;/p&gt;
+
+&lt;p&gt;Click &lt;strong&gt;OK&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;a target=&quot;_blank&quot; href=&quot;https://inderjotsingh.com/wp-content/uploads/2016/01/set-up-shrew-soft-ipsec-vpn-client-watchguard-09.png&quot; rel=&quot;attachment wp-att-1069&quot;&gt;&lt;img class=&quot;alignnone size-full wp-image-1069&quot; src=&quot;https://inderjotsingh.com/wp-content/uploads/2016/01/set-up-shrew-soft-ipsec-vpn-client-watchguard-09.png&quot; alt=&quot;set-up-shrew-soft-ipsec-vpn-client-watchguard-09&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h3&gt;Step 9:&lt;/h3&gt;
+&lt;p&gt;Now, navigate back to &lt;strong&gt;VPN&lt;/strong&gt; &amp;gt; &lt;strong&gt;Mobile VPN with IPSec&lt;/strong&gt; in the firewall web interface.&lt;/p&gt;
+
+&lt;p&gt;Here you can download the configuration settings for your preferred IPSec VPN Client. I prefer the free &lt;a target=&quot;_blank&quot; href=&quot;https://www.shrew.net/download/vpn&quot;&gt;Shrew Soft IPSec VPN Client&lt;/a&gt; (click to download the client).&lt;/p&gt;
+
+&lt;p&gt;From the &lt;strong&gt;Client&lt;/strong&gt; dropdown box, select &lt;strong&gt;Shrew Soft VPN&lt;/strong&gt; and click &lt;strong&gt;Generate&lt;/strong&gt;. It will generate a &lt;code&gt;.vpn&lt;/code&gt; file. Save this on your PC.&lt;/p&gt;
+
+&lt;p&gt;&lt;a target=&quot;_blank&quot; href=&quot;https://inderjotsingh.com/wp-content/uploads/2016/01/set-up-shrew-soft-ipsec-vpn-client-watchguard-10.png&quot; rel=&quot;attachment wp-att-1070&quot;&gt;&lt;img class=&quot;alignnone size-full wp-image-1070&quot; src=&quot;https://inderjotsingh.com/wp-content/uploads/2016/01/set-up-shrew-soft-ipsec-vpn-client-watchguard-10.png&quot; alt=&quot;set-up-shrew-soft-ipsec-vpn-client-watchguard-10&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h3&gt;Step 10:&lt;/h3&gt;
+&lt;p&gt;Go ahead and install the Shrew Soft VPN Client on your PC. Once installed, double click the &lt;strong&gt;VPN Access Manager&lt;/strong&gt; icon on your desktop to launch it.&lt;/p&gt;
+
+&lt;p&gt;Select &lt;strong&gt;File&lt;/strong&gt; &amp;gt;&lt;strong&gt; Import&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;a target=&quot;_blank&quot; href=&quot;https://inderjotsingh.com/wp-content/uploads/2016/01/set-up-shrew-soft-ipsec-vpn-client-watchguard-11.png&quot; rel=&quot;attachment wp-att-1071&quot;&gt;&lt;img class=&quot;alignnone size-full wp-image-1071&quot; src=&quot;https://inderjotsingh.com/wp-content/uploads/2016/01/set-up-shrew-soft-ipsec-vpn-client-watchguard-11.png&quot; alt=&quot;set-up-shrew-soft-ipsec-vpn-client-watchguard-11&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Choose the &lt;code&gt;.vpn&lt;/code&gt; file that was downloaded in the previous step. Click &lt;strong&gt;Open&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;a target=&quot;_blank&quot; href=&quot;https://inderjotsingh.com/wp-content/uploads/2016/01/set-up-shrew-soft-ipsec-vpn-client-watchguard-12.png&quot; rel=&quot;attachment wp-att-1072&quot;&gt;&lt;img class=&quot;alignnone size-full wp-image-1072&quot; src=&quot;https://inderjotsingh.com/wp-content/uploads/2016/01/set-up-shrew-soft-ipsec-vpn-client-watchguard-12.png&quot; alt=&quot;set-up-shrew-soft-ipsec-vpn-client-watchguard-12&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h3&gt;Step 11:&lt;/h3&gt;
+&lt;p&gt;A new connection will be created from the imported settings. Select this connection and click &lt;strong&gt;Connect.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a target=&quot;_blank&quot; href=&quot;https://inderjotsingh.com/wp-content/uploads/2016/01/set-up-shrew-soft-ipsec-vpn-client-watchguard-13.png&quot; rel=&quot;attachment wp-att-1073&quot;&gt;&lt;img class=&quot;alignnone size-full wp-image-1073&quot; src=&quot;https://inderjotsingh.com/wp-content/uploads/2016/01/set-up-shrew-soft-ipsec-vpn-client-watchguard-13.png&quot; alt=&quot;set-up-shrew-soft-ipsec-vpn-client-watchguard-13&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;When you click &lt;strong&gt;Connect&lt;/strong&gt;, a window will pop up asking you to input credentials to connect to the tunnel.&lt;/p&gt;
+
+&lt;p&gt;Enter the &lt;strong&gt;Username&lt;/strong&gt; and &lt;strong&gt;Password&lt;/strong&gt; that you used to create a user in &lt;strong&gt;Step 8&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;Click &lt;strong&gt;Connect&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;a target=&quot;_blank&quot; href=&quot;https://inderjotsingh.com/wp-content/uploads/2016/01/set-up-shrew-soft-ipsec-vpn-client-watchguard-14.png&quot; rel=&quot;attachment wp-att-1074&quot;&gt;&lt;img class=&quot;alignnone size-full wp-image-1074&quot; src=&quot;https://inderjotsingh.com/wp-content/uploads/2016/01/set-up-shrew-soft-ipsec-vpn-client-watchguard-14.png&quot; alt=&quot;set-up-shrew-soft-ipsec-vpn-client-watchguard-14&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;If the connection is successful, you’ll see a &lt;strong&gt;tunnel enabled&lt;/strong&gt; message in the window.&lt;/p&gt;
+
+&lt;p&gt;&lt;a target=&quot;_blank&quot; href=&quot;https://inderjotsingh.com/wp-content/uploads/2016/01/set-up-shrew-soft-ipsec-vpn-client-watchguard-15.png&quot; rel=&quot;attachment wp-att-1075&quot;&gt;&lt;img class=&quot;alignnone size-full wp-image-1075&quot; src=&quot;https://inderjotsingh.com/wp-content/uploads/2016/01/set-up-shrew-soft-ipsec-vpn-client-watchguard-15.png&quot; alt=&quot;set-up-shrew-soft-ipsec-vpn-client-watchguard-15&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;That’s all. You have sucessfully set up and configured IPSec VPN for your WatchGuard XTM device.&lt;/p&gt;
+&lt;h3&gt;Additional information:&lt;/h3&gt;
+&lt;p&gt;In case someone needs it, here are my configuration settings that were imported into the Shrew Soft VPN client. You don’t need to change anything here. The correct settings should automatically be configured when this file was generated by your firewall. I’ve only put up this screenshots in case someone is facing any issues and would like to double-check or compare his settings.&lt;/p&gt;
+
+&lt;p&gt;&lt;a target=&quot;_blank&quot; href=&quot;https://inderjotsingh.com/wp-content/uploads/2016/01/set-up-shrew-soft-ipsec-vpn-client-watchguard-16.png&quot; rel=&quot;attachment wp-att-1076&quot;&gt;&lt;img class=&quot;alignnone size-full wp-image-1076&quot; src=&quot;https://inderjotsingh.com/wp-content/uploads/2016/01/set-up-shrew-soft-ipsec-vpn-client-watchguard-16.png&quot; alt=&quot;set-up-shrew-soft-ipsec-vpn-client-watchguard-16&quot; /&gt;&lt;/a&gt; &lt;a target=&quot;_blank&quot; href=&quot;https://inderjotsingh.com/wp-content/uploads/2016/01/set-up-shrew-soft-ipsec-vpn-client-watchguard-17.png&quot; rel=&quot;attachment wp-att-1077&quot;&gt;&lt;img class=&quot;alignnone size-full wp-image-1077&quot; src=&quot;https://inderjotsingh.com/wp-content/uploads/2016/01/set-up-shrew-soft-ipsec-vpn-client-watchguard-17.png&quot; alt=&quot;set-up-shrew-soft-ipsec-vpn-client-watchguard-17&quot; /&gt;&lt;/a&gt; &lt;a target=&quot;_blank&quot; href=&quot;https://inderjotsingh.com/wp-content/uploads/2016/01/set-up-shrew-soft-ipsec-vpn-client-watchguard-18.png&quot; rel=&quot;attachment wp-att-1078&quot;&gt;&lt;img class=&quot;alignnone size-full wp-image-1078&quot; src=&quot;https://inderjotsingh.com/wp-content/uploads/2016/01/set-up-shrew-soft-ipsec-vpn-client-watchguard-18.png&quot; alt=&quot;set-up-shrew-soft-ipsec-vpn-client-watchguard-18&quot; /&gt;&lt;/a&gt; &lt;a target=&quot;_blank&quot; href=&quot;https://inderjotsingh.com/wp-content/uploads/2016/01/set-up-shrew-soft-ipsec-vpn-client-watchguard-19.png&quot; rel=&quot;attachment wp-att-1079&quot;&gt;&lt;img class=&quot;alignnone size-full wp-image-1079&quot; src=&quot;https://inderjotsingh.com/wp-content/uploads/2016/01/set-up-shrew-soft-ipsec-vpn-client-watchguard-19.png&quot; alt=&quot;set-up-shrew-soft-ipsec-vpn-client-watchguard-19&quot; /&gt;&lt;/a&gt; &lt;a target=&quot;_blank&quot; href=&quot;https://inderjotsingh.com/wp-content/uploads/2016/01/set-up-shrew-soft-ipsec-vpn-client-watchguard-20.png&quot; rel=&quot;attachment wp-att-1080&quot;&gt;&lt;img class=&quot;alignnone size-full wp-image-1080&quot; src=&quot;https://inderjotsingh.com/wp-content/uploads/2016/01/set-up-shrew-soft-ipsec-vpn-client-watchguard-20.png&quot; alt=&quot;set-up-shrew-soft-ipsec-vpn-client-watchguard-20&quot; /&gt;&lt;/a&gt; &lt;a target=&quot;_blank&quot; href=&quot;https://inderjotsingh.com/wp-content/uploads/2016/01/set-up-shrew-soft-ipsec-vpn-client-watchguard-21.png&quot; rel=&quot;attachment wp-att-1081&quot;&gt;&lt;img class=&quot;alignnone size-full wp-image-1081&quot; src=&quot;https://inderjotsingh.com/wp-content/uploads/2016/01/set-up-shrew-soft-ipsec-vpn-client-watchguard-21.png&quot; alt=&quot;set-up-shrew-soft-ipsec-vpn-client-watchguard-21&quot; /&gt;&lt;/a&gt; &lt;a target=&quot;_blank&quot; href=&quot;https://inderjotsingh.com/wp-content/uploads/2016/01/set-up-shrew-soft-ipsec-vpn-client-watchguard-22.png&quot; rel=&quot;attachment wp-att-1082&quot;&gt;&lt;img class=&quot;alignnone size-full wp-image-1082&quot; src=&quot;https://inderjotsingh.com/wp-content/uploads/2016/01/set-up-shrew-soft-ipsec-vpn-client-watchguard-22.png&quot; alt=&quot;set-up-shrew-soft-ipsec-vpn-client-watchguard-22&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;(header image source: &lt;a target=&quot;_blank&quot; href=&quot;https://www.sciencenews.org/sites/default/files/main/articles/note_shrew_001.jpg&quot;&gt;sciencenews.org&lt;/a&gt;)&lt;/p&gt;</content><author><name>wiseindy</name></author><category term="firebox" /><category term="firewall" /><category term="ipsec" /><category term="m300" /><category term="network" /><category term="networking" /><category term="shrew" /><category term="shrew soft" /><category term="vpn" /><category term="watchguard" /><category term="xtm" /><category term="Guides" /><summary type="html">This guide will show you how to enable Mobile VPN with IPSec for WatchGuard Firebox M300. It’s a pretty straightfoward process, however it took me quite a while to figure out initially. Hope this guide makes it easier for you. It will also show you how to install and configure the Shrew Soft IPSec VPN Client. In my opinion, you are better off using this client than the WatchGuard IPSec Mobile VPN Monitor. Old versions of this WatchGuard IPSec Mobile VPN Monitor were free, but they do not work on Windows 10. The new version of the IPSec client needs a paid subscription license. Unless you want to go this route, I would suggest using the Shrew Soft IPSec VPN Client. It’s free and you can download it from their official website. Note: While this guide was created for Firebox M300, it should work with other WatchGuard XTM devices as well. What do you need: An environment where a WatchGuard firewall is installed and running. Administrative access to the firewall (of course). So let’s being shall we? Step 1 Fire up your browser and navigate to the web interface of your firewall? If your firewall’s IP address is 192.168.1.1, then type https://192.168.1.1:8080 in the URL bar. After logging in, go to VPN &amp;gt; Mobile VPN with IPSec. Click on Add to add a new group. Step 2: Select the General tab. Type in a Name and select Authentication Server as Firebox-DB. You can also set it to authenticate it with your domain, but for this tutorial we will use the firewall as the authentication server. Next, enter the passphrase and enter your firewall’s external IP address. This is the IP address that you use to connect to your firewall from the Internet. Step 3: Select the IPSec Tunnel tab. Make the following changes as shown in the image below. Select Use the passphrase of the end user profile as the pre-shared key. Under Phase 1 Settings, select Authentication as SHA1 and Encryption as 3DES. Under Phase 2 Settings, seelct PFS and choose Diffie-Hellman Group 1. Step 4: Select the Resources tab. Here under Allowed Resources you can specify which IP addresses are allowed to connect through the tunnel. Click Add and type in an IP range. Next, you’ll have to specify the Virtual IP Address Pool. Whenever a device connects to your tunnel, it will be assigned an IP address from this pool. Step 5: Finally, go the Advanced tab and set the Connect mode to Manual and Inactivity timeout to 0 seconds. Click Save. Step 6: The next step is to create a user which will connect to the tunnel. In your firewall web interface, navigate to Authentication &amp;gt; Servers. Select Firebox. Step 7: Under Firebox Users, click Add to create a new user. Step 8: This part is pretty straight forward. Enter the Name, Description, Passphrase and timeout values. Under Firebox Authentication Groups, select the Group we created previously. In our case, it was WISEINDY, so we check that one. Click OK. Step 9: Now, navigate back to VPN &amp;gt; Mobile VPN with IPSec in the firewall web interface. Here you can download the configuration settings for your preferred IPSec VPN Client. I prefer the free Shrew Soft IPSec VPN Client (click to download the client). From the Client dropdown box, select Shrew Soft VPN and click Generate. It will generate a .vpn file. Save this on your PC. Step 10: Go ahead and install the Shrew Soft VPN Client on your PC. Once installed, double click the VPN Access Manager icon on your desktop to launch it. Select File &amp;gt; Import. Choose the .vpn file that was downloaded in the previous step. Click Open. Step 11: A new connection will be created from the imported settings. Select this connection and click Connect. When you click Connect, a window will pop up asking you to input credentials to connect to the tunnel. Enter the Username and Password that you used to create a user in Step 8. Click Connect. If the connection is successful, you’ll see a tunnel enabled message in the window. That’s all. You have sucessfully set up and configured IPSec VPN for your WatchGuard XTM device. Additional information: In case someone needs it, here are my configuration settings that were imported into the Shrew Soft VPN client. You don’t need to change anything here. The correct settings should automatically be configured when this file was generated by your firewall. I’ve only put up this screenshots in case someone is facing any issues and would like to double-check or compare his settings. (header image source: sciencenews.org)</summary></entry><entry><title type="html">Virtual Machines: Snapshots aren’t backups</title><link href="http://localhost:4000/it/virtual-machines-snapshots-arent-backups/" rel="alternate" type="text/html" title="Virtual Machines: Snapshots aren&amp;#8217;t backups" /><published>2015-08-23T02:50:33-04:00</published><updated>2015-08-23T02:50:33-04:00</updated><id>http://localhost:4000/it/virtual-machines-snapshots-arent-backups</id><content type="html" xml:base="http://localhost:4000/it/virtual-machines-snapshots-arent-backups/">&lt;p&gt;Backups, Snapshots and Archives. They are three different things, however they’re frequently confused to be the same. Does the advent of virtualization mean traditional backups can be replaced by new data protection methods such as snapshots?&lt;/p&gt;
+
+&lt;!--more--&gt;
+&lt;h3&gt;Backups&lt;/h3&gt;
+&lt;p&gt;Backing up is the process of making an additional copy of data that can be easily restored if the primary data becomes lost or unusable. Backups can be copied to external media, like portable hard drives and tape, or remote storage, like a NAS, SAN, or server at another site.&lt;/p&gt;
+
+&lt;p&gt;Backups offers a solid solution should a major hardware or site disaster occur. Although traditional backups don’t necessarily provide the flexibility or efficiency of other methods, they offer a better long-term solution for data retention especially where backup policies dictate redundant backup copies in geographically dispersed locations.&lt;/p&gt;
+&lt;h3&gt;Archives&lt;/h3&gt;
+&lt;p&gt;Archives are different. Imagine you back your SQL databases up to simple *.bak files on the same drive as the database, you haven’t created a backup, but rather you’ve created an archive. An archive is a copy of your data as it exists at a point in time that doesn’t meet all of the requirements to be a true backup. Assume that your SQL server crashes. You will not be able to restore your database from the archives. You’ll have to first rebuild your entire server and configure it exactly as it was before and then restore from archive. Not ideal.&lt;/p&gt;
+
+&lt;p&gt;However, archives can be very useful for quick restores and solving minor issues, but only backups truly protect your data. A backup must be able to survive a total failure of the source, not just a single hard drive failure.&lt;/p&gt;
+&lt;h3&gt;Snapshots&lt;/h3&gt;
+&lt;p&gt;Snapshots are point-in-time copies of the data. As the name indicates, they’re “snapshots” of the entire data set taken at a specific time. Snapshots are not backups. A snapshot file is only a change log of the original virtual disk. Snapshots are sometimes marketed as valid “backup solutions”. This is an incorrect and dangerous assumption.&lt;/p&gt;
+
+&lt;div class=&quot;row&quot;&gt;
+  &lt;div class=&quot;col-12&quot;&gt;
+    
+   &lt;script async=&quot;&quot; src=&quot;//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js&quot;&gt;&lt;/script&gt;
+    &lt;ins class=&quot;adsbygoogle&quot; style=&quot;display:block; text-align:center;&quot; data-ad-format=&quot;fluid&quot; data-ad-layout=&quot;in-article&quot; data-ad-client=&quot;ca-pub-1094744891389501&quot; data-ad-slot=&quot;6411936673&quot;&gt;&lt;/ins&gt;
+    &lt;script&gt;
+         (adsbygoogle = window.adsbygoogle || []).push({});
+    &lt;/script&gt;
+
+
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Snapshots &lt;strong&gt;are not complete copies of the original virtual machine disk files&lt;/strong&gt;. Taking a snapshot does not create a complete copy of the original vm disk file, rather it only copies the changes that were made since the previous snapshot. Every snapshot needs the base disk and the previous snapshot file to be fucntional. At any point of time, to access a snapshot, you should have full access to the snapshot chain before it. If the base disks are deleted, the snapshot files are useless.&lt;/p&gt;
+
+&lt;p&gt;While there are benefits of using snapshots for development or testing purposes on non-production systems, they should not be considered as valid data protection or backups of your virtual machines.&lt;/p&gt;
+
+&lt;p&gt;A good data protection strategy combines a number of aspects that can include all of the above features.&lt;/p&gt;
+
+&lt;p&gt;While snapshots aren’t true backups, they do provide a lot of value. Short-term snapshots are great for dealing with user errors and some data corruption scenarios. More importantly, they are very fast (data can be reverted or restored in seconds). They’re extremely space-efficient and in many cases, restores can be performed very quickly. Snapshots reduce the amount of labor needed to manage an environment and are generally good enough for daily use. The issue is simply that they can’t be relied upon in a major disaster, and any true backup strategy must go beyond snapshots.&lt;/p&gt;
+
+&lt;p&gt;(header image source: &lt;a target=&quot;_blank&quot; href=&quot;http://www.wallpaperlayer.com/vintage-camera-wallpaper-704.html&quot;&gt;wallpaperlayer.com&lt;/a&gt;)&lt;/p&gt;</content><author><name>wiseindy</name></author><category term="Guides" /><category term="virtual machines" /><category term="backup" /><category term="snapshot" /><summary type="html">Backups, Snapshots and Archives. They are three different things, however they’re frequently confused to be the same. Does the advent of virtualization mean traditional backups can be replaced by new data protection methods such as snapshots? Backups Backing up is the process of making an additional copy of data that can be easily restored if the primary data becomes lost or unusable. Backups can be copied to external media, like portable hard drives and tape, or remote storage, like a NAS, SAN, or server at another site. Backups offers a solid solution should a major hardware or site disaster occur. Although traditional backups don’t necessarily provide the flexibility or efficiency of other methods, they offer a better long-term solution for data retention especially where backup policies dictate redundant backup copies in geographically dispersed locations. Archives Archives are different. Imagine you back your SQL databases up to simple *.bak files on the same drive as the database, you haven’t created a backup, but rather you’ve created an archive. An archive is a copy of your data as it exists at a point in time that doesn’t meet all of the requirements to be a true backup. Assume that your SQL server crashes. You will not be able to restore your database from the archives. You’ll have to first rebuild your entire server and configure it exactly as it was before and then restore from archive. Not ideal. However, archives can be very useful for quick restores and solving minor issues, but only backups truly protect your data. A backup must be able to survive a total failure of the source, not just a single hard drive failure. Snapshots Snapshots are point-in-time copies of the data. As the name indicates, they’re “snapshots” of the entire data set taken at a specific time. Snapshots are not backups. A snapshot file is only a change log of the original virtual disk. Snapshots are sometimes marketed as valid “backup solutions”. This is an incorrect and dangerous assumption. Snapshots are not complete copies of the original virtual machine disk files. Taking a snapshot does not create a complete copy of the original vm disk file, rather it only copies the changes that were made since the previous snapshot. Every snapshot needs the base disk and the previous snapshot file to be fucntional. At any point of time, to access a snapshot, you should have full access to the snapshot chain before it. If the base disks are deleted, the snapshot files are useless. While there are benefits of using snapshots for development or testing purposes on non-production systems, they should not be considered as valid data protection or backups of your virtual machines. A good data protection strategy combines a number of aspects that can include all of the above features. While snapshots aren’t true backups, they do provide a lot of value. Short-term snapshots are great for dealing with user errors and some data corruption scenarios. More importantly, they are very fast (data can be reverted or restored in seconds). They’re extremely space-efficient and in many cases, restores can be performed very quickly. Snapshots reduce the amount of labor needed to manage an environment and are generally good enough for daily use. The issue is simply that they can’t be relied upon in a major disaster, and any true backup strategy must go beyond snapshots. (header image source: wallpaperlayer.com)</summary></entry></feed>

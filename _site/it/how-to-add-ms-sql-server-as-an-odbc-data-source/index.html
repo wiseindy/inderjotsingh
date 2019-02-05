@@ -1,0 +1,520 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.2.2 by Michael Rose
+  Copyright 2017 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE.txt
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin SEO -->
+
+
+
+
+
+
+
+
+
+<title>How to add MS SQL server as an ODBC data source? - Wiseindy</title>
+
+
+
+
+<meta name="description" content="ODBC stands for Open Database Connectivity. It is an API that allows you to access database systems. This connection was developed with an aim to make it independent of database systems and operating systems.In this quick guide, we will see how a connection can be established to a Microsoft SQL server on your network.What you need:	A Microsoft SQL Server (MS SQL) on the network.	In this case, we will be connection to a server running Microsoft SQL Server 2005.	A normal PC on the network.	In this example, I&#39;ll be using a workstation running Windows 7.Step 1:Click the Start button. Either navigate to Administrative Tools &gt; Data Sources (ODBC) or simply search for ODBC.  Step 2:In the ODBC Data Source Administrator window, click Add.Step 3:Since we are going to be connecting to MS SQL Server 2005, select SQL server in the Create New Data Source window. Click Next.                   Step 4:Type a Name for your data source. Next, enter the Server hostname or IP address. Click Next.Step 5:Select With SQL Server authentication using a login ID and password entered by the user.Enter the Login ID and Password for your SQL server. Click Next.Step 6:Leave all settings as default and click Next.Step 7:Leave all settings as default and click Finish.Step 8:A window will pop up asking you whether you want to test the connection or not. Click Test Data Source… If all goes well, you should see a TESTS COMPLETED SUCCESSFULLY! message. Click OK.Step 10:Your new ODBC data source has been successfully added. Now you can use this data source in different applications to connect and access data from your SQL server.Further readinghttps://msdn.microsoft.com/en-us/library/ms811006.aspx(header image source: thebigdatainsightgroup.com)">
+
+
+
+
+<meta name="author" content="wiseindy">
+
+<meta property="og:locale" content="en">
+<meta property="og:site_name" content="Wiseindy">
+<meta property="og:title" content="How to add MS SQL server as an ODBC data source?">
+
+
+  <link rel="canonical" href="http://localhost:4000/it/how-to-add-ms-sql-server-as-an-odbc-data-source/">
+  <meta property="og:url" content="http://localhost:4000/it/how-to-add-ms-sql-server-as-an-odbc-data-source/">
+
+
+
+  <meta property="og:description" content="ODBC stands for Open Database Connectivity. It is an API that allows you to access database systems. This connection was developed with an aim to make it independent of database systems and operating systems.In this quick guide, we will see how a connection can be established to a Microsoft SQL server on your network.What you need:	A Microsoft SQL Server (MS SQL) on the network.	In this case, we will be connection to a server running Microsoft SQL Server 2005.	A normal PC on the network.	In this example, I&#39;ll be using a workstation running Windows 7.Step 1:Click the Start button. Either navigate to Administrative Tools &gt; Data Sources (ODBC) or simply search for ODBC.  Step 2:In the ODBC Data Source Administrator window, click Add.Step 3:Since we are going to be connecting to MS SQL Server 2005, select SQL server in the Create New Data Source window. Click Next.                   Step 4:Type a Name for your data source. Next, enter the Server hostname or IP address. Click Next.Step 5:Select With SQL Server authentication using a login ID and password entered by the user.Enter the Login ID and Password for your SQL server. Click Next.Step 6:Leave all settings as default and click Next.Step 7:Leave all settings as default and click Finish.Step 8:A window will pop up asking you whether you want to test the connection or not. Click Test Data Source… If all goes well, you should see a TESTS COMPLETED SUCCESSFULLY! message. Click OK.Step 10:Your new ODBC data source has been successfully added. Now you can use this data source in different applications to connect and access data from your SQL server.Further readinghttps://msdn.microsoft.com/en-us/library/ms811006.aspx(header image source: thebigdatainsightgroup.com)">
+
+
+
+
+
+  
+
+  
+
+
+
+  <meta property="og:image" content="http://localhost:4000/wp-content/uploads/2015/06/how-to-add-odbc-data-source_microsoft_sql_server.jpg">
+
+
+
+  <meta property="og:type" content="article">
+  <meta property="article:published_time" content="2015-06-17T01:29:51-04:00">
+
+
+
+
+
+
+
+
+  <script type="application/ld+json">
+    {
+      "@context" : "http://schema.org",
+      "@type" : "Person",
+      "name" : "Wiseindy",
+      "url" : "http://localhost:4000",
+      "sameAs" : null
+    }
+  </script>
+
+
+
+
+
+
+<!-- end SEO -->
+
+
+<link href="http://localhost:4000/feed.xml" type="application/atom+xml" rel="alternate" title="Wiseindy Feed">
+
+<!-- http://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="http://localhost:4000/assets/css/main.css">
+
+<!--[if lte IE 9]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+<meta http-equiv="cleartype" content="on">
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use http://realfavicongenerator.net/ -->
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#666666">
+<meta name="theme-color" content="#ffffff">
+
+<!-- Adsense -->
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-2192084948183024",
+    enable_page_level_ads: true
+  });
+</script>
+<!-- !Adsense -->
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--post">
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+    <div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        <a class="site-title" href="http://localhost:4000/">Wiseindy</a>
+        <ul class="visible-links">
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/it">IT</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/guides">Guides</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/powershell">Powershell</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/networking">Networking</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/exchange">Exchange</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/doodles">Doodles</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/about">About</a></li>
+          
+        </ul>
+        <button><div class="navicon"></div></button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+    
+  <link rel="amphtml" href="http://localhost:4000/amp/it/how-to-add-ms-sql-server-as-an-odbc-data-source">
+
+
+
+  
+
+
+
+
+
+
+
+<div class="page__hero"
+  style=" "
+>
+  
+    <img src="http://localhost:4000/wp-content/uploads/2015/06/how-to-add-odbc-data-source_microsoft_sql_server.jpg" alt="How to add MS SQL server as an ODBC data source?" class="page__hero-image">
+  
+  
+</div>
+
+
+
+
+
+<div id="main" role="main">
+  
+
+  <article class="page" itemscope itemtype="http://schema.org/CreativeWork">
+    <meta itemprop="headline" content="How to add MS SQL server as an ODBC data source?">
+    <meta itemprop="description" content="ODBC stands for Open Database Connectivity. It is an API that allows you to access database systems. This connection was developed with an aim to make it independent of database systems and operating systems.In this quick guide, we will see how a connection can be established to a Microsoft SQL server on your network.What you need:	A Microsoft SQL Server (MS SQL) on the network.	In this case, we will be connection to a server running Microsoft SQL Server 2005.	A normal PC on the network.	In this example, I&#39;ll be using a workstation running Windows 7.Step 1:Click the Start button. Either navigate to Administrative Tools &gt; Data Sources (ODBC) or simply search for ODBC.  Step 2:In the ODBC Data Source Administrator window, click Add.Step 3:Since we are going to be connecting to MS SQL Server 2005, select SQL server in the Create New Data Source window. Click Next.                   Step 4:Type a Name for your data source. Next, enter the Server hostname or IP address. Click Next.Step 5:Select With SQL Server authentication using a login ID and password entered by the user.Enter the Login ID and Password for your SQL server. Click Next.Step 6:Leave all settings as default and click Next.Step 7:Leave all settings as default and click Finish.Step 8:A window will pop up asking you whether you want to test the connection or not. Click Test Data Source… If all goes well, you should see a TESTS COMPLETED SUCCESSFULLY! message. Click OK.Step 10:Your new ODBC data source has been successfully added. Now you can use this data source in different applications to connect and access data from your SQL server.Further readinghttps://msdn.microsoft.com/en-us/library/ms811006.aspx(header image source: thebigdatainsightgroup.com)">
+    <meta itemprop="datePublished" content="June 17, 2015">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 class="page__title" itemprop="headline">How to add MS SQL server as an ODBC data source?
+</h1>
+          
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+		<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-format="fluid"
+     data-ad-layout="in-article"
+     data-ad-client="ca-pub-1094744891389501"
+     data-ad-slot="6411936673"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+        <p><a target="_blank" href="https://en.wikipedia.org/wiki/Open_Database_Connectivity">ODBC</a> stands for <a target="_blank" href="https://en.wikipedia.org/wiki/Open_Database_Connectivity">Open Database Connectivity</a>. It is an API that allows you to access database systems. This connection was developed with an aim to make it independent of database systems and operating systems.</p>
+
+<!--more-->
+
+<p>In this quick guide, we will see how a connection can be established to a Microsoft SQL server on your network.</p>
+<h3>What you need:</h3>
+<ul>
+	<li>A Microsoft SQL Server (MS SQL) on the network.
+<ul>
+	<li>In this case, we will be connection to a server running Microsoft SQL Server 2005.</li>
+</ul>
+</li>
+	<li>A normal PC on the network.
+<ul>
+	<li>In this example, I'll be using a workstation running Windows 7.</li>
+</ul>
+</li>
+</ul>
+<h3>Step 1:</h3>
+<p>Click the <strong>Start</strong> button. Either navigate to <strong>Administrative Tools &gt; Data Sources (ODBC)</strong> or simply search for <strong>ODBC</strong>.</p>
+
+<p><a target="_blank" href="http://inderjotsingh.com/wp-content/uploads/2015/06/how-to-add-odbc-data-source_02.png"><img class="alignnone wp-image-829 size-medium" src="http://inderjotsingh.com/wp-content/uploads/2015/06/how-to-add-odbc-data-source_02.png" alt="how-to-add-odbc-data-source_02" /></a>  <a target="_blank" href="http://inderjotsingh.com/wp-content/uploads/2015/06/how-to-add-odbc-data-source_01.png"><img class="alignnone wp-image-828 size-medium" src="http://inderjotsingh.com/wp-content/uploads/2015/06/how-to-add-odbc-data-source_01.png" alt="How to add ODBC data source - Microsoft SQL Server" /></a></p>
+<h3>Step 2:</h3>
+<p>In the <strong>ODBC Data Source Administrator</strong> window, click <strong>Add</strong>.</p>
+
+<p><a target="_blank" href="http://inderjotsingh.com/wp-content/uploads/2015/06/how-to-add-odbc-data-source_03.png"><img class="alignnone size-full wp-image-830" src="http://inderjotsingh.com/wp-content/uploads/2015/06/how-to-add-odbc-data-source_03.png" alt="how-to-add-odbc-data-source_03" /></a></p>
+<h3>Step 3:</h3>
+<p>Since we are going to be connecting to MS SQL Server 2005, select <strong>SQL server</strong> in the <strong>Create New Data Source</strong> window. Click <strong>Next</strong>.</p>
+
+<p><a target="_blank" href="http://inderjotsingh.com/wp-content/uploads/2015/06/how-to-add-odbc-data-source_04.png"><img class="alignnone size-full wp-image-831" src="http://inderjotsingh.com/wp-content/uploads/2015/06/how-to-add-odbc-data-source_04.png" alt="how-to-add-odbc-data-source_04" /></a></p>
+
+<div class="row">
+  <div class="col-12">
+    
+   <script async="" src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-format="fluid" data-ad-layout="in-article" data-ad-client="ca-pub-1094744891389501" data-ad-slot="6411936673"></ins>
+    <script>
+         (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+
+
+  </div>
+</div>
+
+<h3>Step 4:</h3>
+<p>Type a <strong>Name</strong> for your data source. Next, enter the <strong>Server</strong> hostname or IP address. Click <strong>Next</strong>.</p>
+
+<p><a target="_blank" href="http://inderjotsingh.com/wp-content/uploads/2015/06/how-to-add-odbc-data-source_05.png"><img class="alignnone size-full wp-image-832" src="http://inderjotsingh.com/wp-content/uploads/2015/06/how-to-add-odbc-data-source_05.png" alt="how-to-add-odbc-data-source_05" /></a></p>
+<h3>Step 5:</h3>
+<p>Select <strong>With SQL Server authentication using a login ID and password entered by the user.</strong></p>
+
+<p>Enter the <strong>Login ID</strong> and <strong>Password</strong> for your SQL server. Click <strong>Next</strong>.</p>
+
+<p><a target="_blank" href="http://inderjotsingh.com/wp-content/uploads/2015/06/how-to-add-odbc-data-source_06.png"><img class="alignnone size-full wp-image-833" src="http://inderjotsingh.com/wp-content/uploads/2015/06/how-to-add-odbc-data-source_06.png" alt="how-to-add-odbc-data-source_06" /></a></p>
+<h3>Step 6:</h3>
+<p>Leave all settings as default and click <strong>Next</strong>.</p>
+
+<p><a target="_blank" href="http://inderjotsingh.com/wp-content/uploads/2015/06/how-to-add-odbc-data-source_07.png"><img class="alignnone size-full wp-image-834" src="http://inderjotsingh.com/wp-content/uploads/2015/06/how-to-add-odbc-data-source_07.png" alt="how-to-add-odbc-data-source_07" /></a></p>
+<h3>Step 7:</h3>
+<p>Leave all settings as default and click <strong>Finish</strong>.</p>
+
+<p><a target="_blank" href="http://inderjotsingh.com/wp-content/uploads/2015/06/how-to-add-odbc-data-source_08.png"><img class="alignnone size-full wp-image-835" src="http://inderjotsingh.com/wp-content/uploads/2015/06/how-to-add-odbc-data-source_08.png" alt="how-to-add-odbc-data-source_08" /></a></p>
+<h3>Step 8:</h3>
+<p>A window will pop up asking you whether you want to test the connection or not. Click <strong>Test Data Source… </strong>If all goes well, you should see a <strong>TESTS COMPLETED SUCCESSFULLY!</strong> message. Click <strong>OK</strong>.</p>
+
+<p><a target="_blank" href="http://inderjotsingh.com/wp-content/uploads/2015/06/how-to-add-odbc-data-source_09.png"><img class="alignnone size-full wp-image-836" src="http://inderjotsingh.com/wp-content/uploads/2015/06/how-to-add-odbc-data-source_09.png" alt="how-to-add-odbc-data-source_09" /></a></p>
+
+<p><a target="_blank" href="http://inderjotsingh.com/wp-content/uploads/2015/06/how-to-add-odbc-data-source_10.png"><img class="alignnone size-full wp-image-837" src="http://inderjotsingh.com/wp-content/uploads/2015/06/how-to-add-odbc-data-source_10.png" alt="how-to-add-odbc-data-source_10" /></a></p>
+<h3>Step 10:</h3>
+<p>Your new ODBC data source has been successfully added. Now you can use this data source in different applications to connect and access data from your SQL server.</p>
+
+<p><a target="_blank" href="http://inderjotsingh.com/wp-content/uploads/2015/06/how-to-add-odbc-data-source_11.png"><img class="alignnone size-full wp-image-838" src="http://inderjotsingh.com/wp-content/uploads/2015/06/how-to-add-odbc-data-source_11.png" alt="how-to-add-odbc-data-source_11" /></a></p>
+<h3>Further reading</h3>
+<p><a target="_blank" href="https://msdn.microsoft.com/en-us/library/ms811006.aspx">https://msdn.microsoft.com/en-us/library/ms811006.aspx</a></p>
+
+<p>(header image source: <a target="_blank" href="http://www.thebigdatainsightgroup.com/site/topics/relational%20database">thebigdatainsightgroup.com</a>)</p>
+
+		<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-format="fluid"
+     data-ad-layout="in-article"
+     data-ad-client="ca-pub-1094744891389501"
+     data-ad-slot="6411936673"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fa fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="http://localhost:4000/tags/#connection" class="page__taxonomy-item" rel="tag">connection</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#database-connection" class="page__taxonomy-item" rel="tag">database connection</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#database" class="page__taxonomy-item" rel="tag">database</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#guides" class="page__taxonomy-item" rel="tag">Guides</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#microsoft" class="page__taxonomy-item" rel="tag">microsoft</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#ms-sql" class="page__taxonomy-item" rel="tag">ms sql</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#mssql" class="page__taxonomy-item" rel="tag">mssql</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#odbc" class="page__taxonomy-item" rel="tag">odbc</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#sql-server" class="page__taxonomy-item" rel="tag">sql server</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#sql" class="page__taxonomy-item" rel="tag">sql</a>
+    
+    </span>
+  </p>
+
+
+
+
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fa fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="http://localhost:4000/categories/#it" class="page__taxonomy-item" rel="tag">IT</a>
+    
+    </span>
+  </p>
+
+
+        
+          <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Updated:</strong> <time datetime="2015-06-17T01:29:51-04:00">June 17, 2015</time></p>
+        
+      </footer>
+
+      
+
+      
+  <nav class="pagination">
+    
+      <a href="http://localhost:4000/it/convert-a-physical-machine-to-a-virtual-machine-p2v-using-vmware-vcenter-converter-standalone-a-step-by-step-guide/" class="pagination--pager" title="Convert a physical machine to a virtual machine (P2V) using VMware vCenter Converter Standalone – A Step-by-Step Guide
+">Previous</a>
+    
+    
+      <a href="http://localhost:4000/it/how-to-import-csv-as-external-contacts-in-exchange/" class="pagination--pager" title="How to import .CSV as external contacts in Exchange?
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+      <div class="page__comments">
+  
+  
+    <h4 class="page__comments-title">Leave a Comment</h4>
+    <section id="disqus_thread"></section>
+  
+</div>
+
+    
+  </article>
+
+  
+  
+</div>
+
+
+    <div class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Follow:</strong></li>
+    
+    
+    
+    
+      <li><a href="http://github.com/wiseindy"><i class="fa fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+    
+    
+    <li><a href="http://localhost:4000/feed.xml"><i class="fa fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2019 Wiseindy. Powered by <a href="http://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+      </footer>
+    </div>
+
+    <script src="http://localhost:4000/assets/js/main.min.js"></script>
+
+
+
+
+  <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-41402704-6']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+
+
+
+
+  
+  <script type="text/javascript">
+  	/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+  	var disqus_shortname = 'wiseindy';
+
+  	/* * * DON'T EDIT BELOW THIS LINE * * */
+  	(function() {
+  		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  	})();
+
+  	/* * * DON'T EDIT BELOW THIS LINE * * */
+  	(function () {
+  		var s = document.createElement('script'); s.async = true;
+  		s.type = 'text/javascript';
+  		s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+  		(document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+  	}());
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+
+
+
+
+  </body>
+</html>

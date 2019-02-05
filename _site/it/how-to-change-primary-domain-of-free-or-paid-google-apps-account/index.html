@@ -1,0 +1,562 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.2.2 by Michael Rose
+  Copyright 2017 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE.txt
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin SEO -->
+
+
+
+
+
+
+
+
+
+<title>How to change primary domain of free or paid Google Apps account. - Wiseindy</title>
+
+
+
+
+<meta name="description" content="Back in the day, Google Apps for Business (Work) was free for up to 10 users. Sadly, that is no longer the case. If you are one of the lucky ones to have grabbed an account during those times and you’re now looking for ways to change that domain, well, you’ve come to the right place. This guide will show you how to do this AND it’s applicable for both free Google Apps accounts and paid Google Apps subscriptions.If you have a paid account, you can simply create a new alias for your existing domain. However, you cannot do this if you have one of the “legacy” free accounts (which are now discontinued - however if you created one back in the day, you can still use them).There can be many reasons for you to change your primary domain. For me it was because I lost ownership of my old domain and didn’t want my free Google Apps account sitting and gathering dust.Google has a couple of support articles - here and here - that can help you achieve this. However even with the help of these articles it took me quite a while to figure it out. This is why I wrote this step-by-step guide to make it easier for you guys.So, enough talk. Let’s get started.What do you need:	A free or paid Google Apps account.	Access to your new domain&#39;s registrar/hosting account (so that you can verify domain ownership when Google asks you to).In short, this is what will we be doing:If you have a “legacy” free account: We are going to temporarily convert our free account to a free 30 day enterprise trial account. Then we are going to add in another domain to your account and make it the primary one. Next, we disable and remove the old domain and cancel our trial to convert our paid account back to free.If you have a paid Google Apps for Work subscription: We are going to add in another domain to your account and then make it the primary one.Note: If you have a paid Google Apps subscription, skip to Step 3.Step 1:Log into your existing Google Apps account. Navigate to https://apps.google.com and sign in.Alternatively, you could navigate to https://www.google.com/work/apps/business/ or even use your domain’s custom Google Apps URL.For example, if your domain is inderjotsingh.com, simply navigate to https://google.com/a/inderjotsingh.com.Step 2:Once you’re logged in, click on the big red Upgrade Now button on the right hand sidebar.Enter in your information, check the terms and conditions check box and click I accept! Upgrade my account.Step 3:Next, go back to the admin console and click Domains. If you don’t see the Domains tile, click the Show More link at the bottom and then select Domains.Then click on Add/Remove domains.Alternatively, you can just navigate to the domains page directly via this link: https://admin.google.com/AdminHome?pli=1&amp;fral=1#Domains:Disable the test domain alias by clicking the Deactivate button as shown below. A popup box will ask you to confirm this action. Confirm it.After the test domain alias is deactivated, click the Add a domain or domain alias button at the top.Step 4:Enter the new domain name. Follow Google’s verification steps to verify ownership for your new domain. This should be pretty straightforward if you have access to your domain registrar/hosting account. Since Google shows you step by step how to verify your domain, I won’t cover it here.Step 5:If everything goes well, you should have your new domain added to your Google Apps account. You can confirm by going to the Domains panel from the admin console (here is the direct link: https://admin.google.com/AdminHome?pli=1&amp;fral=1#Domains:)You’ll notice that even though the new domain has been successfully added, the old domain is still marked as the primary one. Let’s change that.Navigate to https://developers.google.com/admin-sdk/directory/v1/reference/customers/updateMake sure you’re logged into your existing Google Apps account (you can see your email address in the top right corner).Click Try it now.Enter the information as shown in the screenshot below.	customerKey: my_customer	fields: customerDomain	Request body: { &quot;customerDomain&quot;:&quot;newinderjotsingh.com&quot; }For Request body, you don’t need to type the brackets and all that. They will automatically appear when you click the Request body field. Simply choose customerDomain from the dropdown and then type in your new domain (the one that you want as your primary domain).Click Authorize and Execute.                   A couple of popups might show up asking you to authorize this with your Google account, Authorize everything.Guess what? Your secondary domain (the one you typed above) is now your primary domain! You can confirm by going to the Domains panel from the admin console (direct link: https://admin.google.com/AdminHome?pli=1&amp;fral=1#Domains:)Step 6:If you are using a paid Google Apps account, you can stop here.However if you are using a free account, make sure you follow these steps to DOWNGRADE your 30 day trial back to the free account.If you do not downgrade within 30 days, you’ll lose your free account (in the sense that you’ll have to pay for it beyond the 30 days time period).You can only downgrade if you have only one domain in your account. But we now have two. The old domain and the new domain (which was just promoted to primary).Let’s remove the old domain (that USED to be the primary once upon a time).	Go to the Domains panel from the admin console (direct link: https://admin.google.com/AdminHome?pli=1&amp;fral=1#Domains:)	Delete the old domain	If you&#39;re unable to delete it (ie, even after clicking Delete, the domain still stays, make sure the Test domain alias is deactivated. If that is active, you won&#39;t be able to delete the old domain).Step 7:Let’s convert our 30 day trial back to a free account. In the admin console, click on Billing. Alternatively, directly open it via this link: https://admin.google.com/AdminHome?pli=1&amp;fral=1#DomainSettings/notab=1&amp;subtab=subscriptionsClick the 3 vertical dots and in the dropdown select Cancel Subscription.Chose Downgrade to Google Apps.Do not choose Cancel Google Apps for Work. This will completely delete your account. Yes. Free, paid, everything. Make sure you choose Downgrade to Google Apps. If you do not see the “downgrade” option, then make sure that you have only one domain in your Domains panel (direct link: https://admin.google.com/AdminHome?pli=1&amp;fral=1#Domains:)Click Continue.That’s it. You’ve successfully changed the primary domain of your free/paid Google Apps account!(header image source: Seinfeld)">
+
+
+
+
+<meta name="author" content="Wiseindy">
+
+<meta property="og:locale" content="en">
+<meta property="og:site_name" content="Wiseindy">
+<meta property="og:title" content="How to change primary domain of free or paid Google Apps account.">
+
+
+  <link rel="canonical" href="http://localhost:4000/it/how-to-change-primary-domain-of-free-or-paid-google-apps-account/">
+  <meta property="og:url" content="http://localhost:4000/it/how-to-change-primary-domain-of-free-or-paid-google-apps-account/">
+
+
+
+  <meta property="og:description" content="Back in the day, Google Apps for Business (Work) was free for up to 10 users. Sadly, that is no longer the case. If you are one of the lucky ones to have grabbed an account during those times and you’re now looking for ways to change that domain, well, you’ve come to the right place. This guide will show you how to do this AND it’s applicable for both free Google Apps accounts and paid Google Apps subscriptions.If you have a paid account, you can simply create a new alias for your existing domain. However, you cannot do this if you have one of the “legacy” free accounts (which are now discontinued - however if you created one back in the day, you can still use them).There can be many reasons for you to change your primary domain. For me it was because I lost ownership of my old domain and didn’t want my free Google Apps account sitting and gathering dust.Google has a couple of support articles - here and here - that can help you achieve this. However even with the help of these articles it took me quite a while to figure it out. This is why I wrote this step-by-step guide to make it easier for you guys.So, enough talk. Let’s get started.What do you need:	A free or paid Google Apps account.	Access to your new domain&#39;s registrar/hosting account (so that you can verify domain ownership when Google asks you to).In short, this is what will we be doing:If you have a “legacy” free account: We are going to temporarily convert our free account to a free 30 day enterprise trial account. Then we are going to add in another domain to your account and make it the primary one. Next, we disable and remove the old domain and cancel our trial to convert our paid account back to free.If you have a paid Google Apps for Work subscription: We are going to add in another domain to your account and then make it the primary one.Note: If you have a paid Google Apps subscription, skip to Step 3.Step 1:Log into your existing Google Apps account. Navigate to https://apps.google.com and sign in.Alternatively, you could navigate to https://www.google.com/work/apps/business/ or even use your domain’s custom Google Apps URL.For example, if your domain is inderjotsingh.com, simply navigate to https://google.com/a/inderjotsingh.com.Step 2:Once you’re logged in, click on the big red Upgrade Now button on the right hand sidebar.Enter in your information, check the terms and conditions check box and click I accept! Upgrade my account.Step 3:Next, go back to the admin console and click Domains. If you don’t see the Domains tile, click the Show More link at the bottom and then select Domains.Then click on Add/Remove domains.Alternatively, you can just navigate to the domains page directly via this link: https://admin.google.com/AdminHome?pli=1&amp;fral=1#Domains:Disable the test domain alias by clicking the Deactivate button as shown below. A popup box will ask you to confirm this action. Confirm it.After the test domain alias is deactivated, click the Add a domain or domain alias button at the top.Step 4:Enter the new domain name. Follow Google’s verification steps to verify ownership for your new domain. This should be pretty straightforward if you have access to your domain registrar/hosting account. Since Google shows you step by step how to verify your domain, I won’t cover it here.Step 5:If everything goes well, you should have your new domain added to your Google Apps account. You can confirm by going to the Domains panel from the admin console (here is the direct link: https://admin.google.com/AdminHome?pli=1&amp;fral=1#Domains:)You’ll notice that even though the new domain has been successfully added, the old domain is still marked as the primary one. Let’s change that.Navigate to https://developers.google.com/admin-sdk/directory/v1/reference/customers/updateMake sure you’re logged into your existing Google Apps account (you can see your email address in the top right corner).Click Try it now.Enter the information as shown in the screenshot below.	customerKey: my_customer	fields: customerDomain	Request body: { &quot;customerDomain&quot;:&quot;newinderjotsingh.com&quot; }For Request body, you don’t need to type the brackets and all that. They will automatically appear when you click the Request body field. Simply choose customerDomain from the dropdown and then type in your new domain (the one that you want as your primary domain).Click Authorize and Execute.                   A couple of popups might show up asking you to authorize this with your Google account, Authorize everything.Guess what? Your secondary domain (the one you typed above) is now your primary domain! You can confirm by going to the Domains panel from the admin console (direct link: https://admin.google.com/AdminHome?pli=1&amp;fral=1#Domains:)Step 6:If you are using a paid Google Apps account, you can stop here.However if you are using a free account, make sure you follow these steps to DOWNGRADE your 30 day trial back to the free account.If you do not downgrade within 30 days, you’ll lose your free account (in the sense that you’ll have to pay for it beyond the 30 days time period).You can only downgrade if you have only one domain in your account. But we now have two. The old domain and the new domain (which was just promoted to primary).Let’s remove the old domain (that USED to be the primary once upon a time).	Go to the Domains panel from the admin console (direct link: https://admin.google.com/AdminHome?pli=1&amp;fral=1#Domains:)	Delete the old domain	If you&#39;re unable to delete it (ie, even after clicking Delete, the domain still stays, make sure the Test domain alias is deactivated. If that is active, you won&#39;t be able to delete the old domain).Step 7:Let’s convert our 30 day trial back to a free account. In the admin console, click on Billing. Alternatively, directly open it via this link: https://admin.google.com/AdminHome?pli=1&amp;fral=1#DomainSettings/notab=1&amp;subtab=subscriptionsClick the 3 vertical dots and in the dropdown select Cancel Subscription.Chose Downgrade to Google Apps.Do not choose Cancel Google Apps for Work. This will completely delete your account. Yes. Free, paid, everything. Make sure you choose Downgrade to Google Apps. If you do not see the “downgrade” option, then make sure that you have only one domain in your Domains panel (direct link: https://admin.google.com/AdminHome?pli=1&amp;fral=1#Domains:)Click Continue.That’s it. You’ve successfully changed the primary domain of your free/paid Google Apps account!(header image source: Seinfeld)">
+
+
+
+
+
+  
+
+  
+
+
+
+  <meta property="og:image" content="http://localhost:4000/wp-content/uploads/2016/01/how-to-change-primary-domain-of-free-or-paid-google-apps-account.jpg">
+
+
+
+  <meta property="og:type" content="article">
+  <meta property="article:published_time" content="2016-01-31T03:05:38-05:00">
+
+
+
+
+
+
+
+
+  <script type="application/ld+json">
+    {
+      "@context" : "http://schema.org",
+      "@type" : "Person",
+      "name" : "Wiseindy",
+      "url" : "http://localhost:4000",
+      "sameAs" : null
+    }
+  </script>
+
+
+
+
+
+
+<!-- end SEO -->
+
+
+<link href="http://localhost:4000/feed.xml" type="application/atom+xml" rel="alternate" title="Wiseindy Feed">
+
+<!-- http://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="http://localhost:4000/assets/css/main.css">
+
+<!--[if lte IE 9]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+<meta http-equiv="cleartype" content="on">
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use http://realfavicongenerator.net/ -->
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#666666">
+<meta name="theme-color" content="#ffffff">
+
+<!-- Adsense -->
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-2192084948183024",
+    enable_page_level_ads: true
+  });
+</script>
+<!-- !Adsense -->
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--post">
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+    <div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        <a class="site-title" href="http://localhost:4000/">Wiseindy</a>
+        <ul class="visible-links">
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/it">IT</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/guides">Guides</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/powershell">Powershell</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/networking">Networking</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/exchange">Exchange</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/doodles">Doodles</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/about">About</a></li>
+          
+        </ul>
+        <button><div class="navicon"></div></button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+    
+  <link rel="amphtml" href="http://localhost:4000/amp/it/how-to-change-primary-domain-of-free-or-paid-google-apps-account">
+
+
+
+  
+
+
+
+
+
+
+
+<div class="page__hero"
+  style=" "
+>
+  
+    <img src="http://localhost:4000/wp-content/uploads/2016/01/how-to-change-primary-domain-of-free-or-paid-google-apps-account.jpg" alt="How to change primary domain of free or paid Google Apps account." class="page__hero-image">
+  
+  
+</div>
+
+
+
+
+
+<div id="main" role="main">
+  
+
+  <article class="page" itemscope itemtype="http://schema.org/CreativeWork">
+    <meta itemprop="headline" content="How to change primary domain of free or paid Google Apps account.">
+    <meta itemprop="description" content="Back in the day, Google Apps for Business (Work) was free for up to 10 users. Sadly, that is no longer the case. If you are one of the lucky ones to have grabbed an account during those times and you’re now looking for ways to change that domain, well, you’ve come to the right place. This guide will show you how to do this AND it’s applicable for both free Google Apps accounts and paid Google Apps subscriptions.If you have a paid account, you can simply create a new alias for your existing domain. However, you cannot do this if you have one of the “legacy” free accounts (which are now discontinued - however if you created one back in the day, you can still use them).There can be many reasons for you to change your primary domain. For me it was because I lost ownership of my old domain and didn’t want my free Google Apps account sitting and gathering dust.Google has a couple of support articles - here and here - that can help you achieve this. However even with the help of these articles it took me quite a while to figure it out. This is why I wrote this step-by-step guide to make it easier for you guys.So, enough talk. Let’s get started.What do you need:	A free or paid Google Apps account.	Access to your new domain&#39;s registrar/hosting account (so that you can verify domain ownership when Google asks you to).In short, this is what will we be doing:If you have a “legacy” free account: We are going to temporarily convert our free account to a free 30 day enterprise trial account. Then we are going to add in another domain to your account and make it the primary one. Next, we disable and remove the old domain and cancel our trial to convert our paid account back to free.If you have a paid Google Apps for Work subscription: We are going to add in another domain to your account and then make it the primary one.Note: If you have a paid Google Apps subscription, skip to Step 3.Step 1:Log into your existing Google Apps account. Navigate to https://apps.google.com and sign in.Alternatively, you could navigate to https://www.google.com/work/apps/business/ or even use your domain’s custom Google Apps URL.For example, if your domain is inderjotsingh.com, simply navigate to https://google.com/a/inderjotsingh.com.Step 2:Once you’re logged in, click on the big red Upgrade Now button on the right hand sidebar.Enter in your information, check the terms and conditions check box and click I accept! Upgrade my account.Step 3:Next, go back to the admin console and click Domains. If you don’t see the Domains tile, click the Show More link at the bottom and then select Domains.Then click on Add/Remove domains.Alternatively, you can just navigate to the domains page directly via this link: https://admin.google.com/AdminHome?pli=1&amp;fral=1#Domains:Disable the test domain alias by clicking the Deactivate button as shown below. A popup box will ask you to confirm this action. Confirm it.After the test domain alias is deactivated, click the Add a domain or domain alias button at the top.Step 4:Enter the new domain name. Follow Google’s verification steps to verify ownership for your new domain. This should be pretty straightforward if you have access to your domain registrar/hosting account. Since Google shows you step by step how to verify your domain, I won’t cover it here.Step 5:If everything goes well, you should have your new domain added to your Google Apps account. You can confirm by going to the Domains panel from the admin console (here is the direct link: https://admin.google.com/AdminHome?pli=1&amp;fral=1#Domains:)You’ll notice that even though the new domain has been successfully added, the old domain is still marked as the primary one. Let’s change that.Navigate to https://developers.google.com/admin-sdk/directory/v1/reference/customers/updateMake sure you’re logged into your existing Google Apps account (you can see your email address in the top right corner).Click Try it now.Enter the information as shown in the screenshot below.	customerKey: my_customer	fields: customerDomain	Request body: { &quot;customerDomain&quot;:&quot;newinderjotsingh.com&quot; }For Request body, you don’t need to type the brackets and all that. They will automatically appear when you click the Request body field. Simply choose customerDomain from the dropdown and then type in your new domain (the one that you want as your primary domain).Click Authorize and Execute.                   A couple of popups might show up asking you to authorize this with your Google account, Authorize everything.Guess what? Your secondary domain (the one you typed above) is now your primary domain! You can confirm by going to the Domains panel from the admin console (direct link: https://admin.google.com/AdminHome?pli=1&amp;fral=1#Domains:)Step 6:If you are using a paid Google Apps account, you can stop here.However if you are using a free account, make sure you follow these steps to DOWNGRADE your 30 day trial back to the free account.If you do not downgrade within 30 days, you’ll lose your free account (in the sense that you’ll have to pay for it beyond the 30 days time period).You can only downgrade if you have only one domain in your account. But we now have two. The old domain and the new domain (which was just promoted to primary).Let’s remove the old domain (that USED to be the primary once upon a time).	Go to the Domains panel from the admin console (direct link: https://admin.google.com/AdminHome?pli=1&amp;fral=1#Domains:)	Delete the old domain	If you&#39;re unable to delete it (ie, even after clicking Delete, the domain still stays, make sure the Test domain alias is deactivated. If that is active, you won&#39;t be able to delete the old domain).Step 7:Let’s convert our 30 day trial back to a free account. In the admin console, click on Billing. Alternatively, directly open it via this link: https://admin.google.com/AdminHome?pli=1&amp;fral=1#DomainSettings/notab=1&amp;subtab=subscriptionsClick the 3 vertical dots and in the dropdown select Cancel Subscription.Chose Downgrade to Google Apps.Do not choose Cancel Google Apps for Work. This will completely delete your account. Yes. Free, paid, everything. Make sure you choose Downgrade to Google Apps. If you do not see the “downgrade” option, then make sure that you have only one domain in your Domains panel (direct link: https://admin.google.com/AdminHome?pli=1&amp;fral=1#Domains:)Click Continue.That’s it. You’ve successfully changed the primary domain of your free/paid Google Apps account!(header image source: Seinfeld)">
+    <meta itemprop="datePublished" content="January 31, 2016">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 class="page__title" itemprop="headline">How to change primary domain of free or paid Google Apps account.
+</h1>
+          
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+		<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-format="fluid"
+     data-ad-layout="in-article"
+     data-ad-client="ca-pub-1094744891389501"
+     data-ad-slot="6411936673"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+        <p>Back in the day, Google Apps for Business (Work) was free for up to 10 users. Sadly, that is no longer the case. If you are one of the lucky ones to have grabbed an account during those times and you’re now looking for ways to change that domain, well, you’ve come to the right place. This guide will show you how to do this AND it’s applicable for both free Google Apps accounts and paid Google Apps subscriptions.</p>
+
+<!--more-->
+
+<p>If you have a paid account, you can simply create a new alias for your existing domain. However, you cannot do this if you have one of the “legacy” free accounts (which are now discontinued - however if you created one back in the day, you can still use them).</p>
+
+<p>There can be many reasons for you to change your primary domain. For me it was because I lost ownership of my old domain and didn’t want my free Google Apps account sitting and gathering dust.</p>
+
+<p>Google has a couple of support articles - <a target="_blank" href="https://support.google.com/a/answer/54819?hl=en">here</a> and <a target="_blank" href="https://support.google.com/a/answer/6301932">here</a> - that can help you achieve this. However even with the help of these articles it took me quite a while to figure it out. This is why I wrote this step-by-step guide to make it easier for you guys.</p>
+
+<p>So, enough talk. Let’s get started.</p>
+<h3>What do you need:</h3>
+<ul>
+	<li>A free or paid Google Apps account.</li>
+	<li>Access to your <strong>new</strong> domain's registrar/hosting account (so that you can verify domain ownership when Google asks you to).</li>
+</ul>
+<h3>In short, this is what will we be doing:</h3>
+<p><span style="text-decoration: underline;"><strong>If you have a “legacy” free account</strong>:</span> We are going to <strong>temporarily</strong> convert our <strong>free</strong> account to a free 30 day enterprise trial account. Then we are going to add in another domain to your account and make it the primary one. Next, we disable and remove the old domain and cancel our trial to convert our paid account back to free.</p>
+
+<p><span style="text-decoration: underline;"><strong>If you have a paid Google Apps for Work subscription</strong>:</span> We are going to add in another domain to your account and then make it the primary one.</p>
+<blockquote><span style="text-decoration: underline;">Note:</span> If you have a paid Google Apps subscription, skip to <strong>Step 3</strong>.</blockquote>
+<h3>Step 1:</h3>
+<p>Log into your existing Google Apps account. Navigate to <a target="_blank" href="https://apps.google.com">https://apps.google.com</a> and sign in.</p>
+
+<p>Alternatively, you could navigate to <a target="_blank" href="https://www.google.com/work/apps/business/">https://www.google.com/work/apps/business/</a> or even use your domain’s custom Google Apps URL.</p>
+
+<p>For example, if your domain is <a target="_blank" href="http://inderjotsingh.com">inderjotsingh.com</a>, simply navigate to <a target="_blank" href="https://google.com/a/example.com">https://google.com/a/<strong>inderjotsingh.com</strong></a>.</p>
+<h3>Step 2:</h3>
+<p>Once you’re logged in, click on the big red <strong>Upgrade Now</strong> button on the right hand sidebar.</p>
+
+<p><a target="_blank" href="http://inderjotsingh.com/wp-content/uploads/2016/01/how-to-change-primary-domain-of-free-or-paid-google-apps-account-01.png" rel="attachment wp-att-1143"><img class="alignnone size-full wp-image-1143" src="http://inderjotsingh.com/wp-content/uploads/2016/01/how-to-change-primary-domain-of-free-or-paid-google-apps-account-01.png" alt="how-to-change-primary-domain-of-free-or-paid-google-apps-account-01" /></a></p>
+
+<p>Enter in your information, check the terms and conditions check box and click <strong>I accept! Upgrade my account</strong>.</p>
+
+<p><a target="_blank" href="http://inderjotsingh.com/wp-content/uploads/2016/01/how-to-change-primary-domain-of-free-or-paid-google-apps-account-02.png" rel="attachment wp-att-1145"><img class="alignnone size-full wp-image-1145" src="http://inderjotsingh.com/wp-content/uploads/2016/01/how-to-change-primary-domain-of-free-or-paid-google-apps-account-02.png" alt="how-to-change-primary-domain-of-free-or-paid-google-apps-account-02" /></a></p>
+<h3>Step 3:</h3>
+<p>Next, go back to the admin console and click <strong>Domains</strong>. If you don’t see the <strong>Domains</strong> tile, click the <strong>Show More</strong> link at the bottom and then select <strong>Domains</strong>.</p>
+
+<p>Then click on <strong>Add/Remove</strong> domains.</p>
+
+<p>Alternatively, you can just navigate to the domains page directly via this link: <a target="_blank" href="https://admin.google.com/AdminHome?pli=1&amp;fral=1#Domains:">https://admin.google.com/AdminHome?pli=1&amp;fral=1#Domains:</a></p>
+
+<p><a target="_blank" href="http://inderjotsingh.com/wp-content/uploads/2016/01/how-to-change-primary-domain-of-free-or-paid-google-apps-account-03.png" rel="attachment wp-att-1146"><img class="alignnone size-full wp-image-1146" src="http://inderjotsingh.com/wp-content/uploads/2016/01/how-to-change-primary-domain-of-free-or-paid-google-apps-account-03.png" alt="how-to-change-primary-domain-of-free-or-paid-google-apps-account-03" /></a></p>
+
+<p><a target="_blank" href="http://inderjotsingh.com/wp-content/uploads/2016/01/how-to-change-primary-domain-of-free-or-paid-google-apps-account-04.png" rel="attachment wp-att-1147"><img class="alignnone size-full wp-image-1147" src="http://inderjotsingh.com/wp-content/uploads/2016/01/how-to-change-primary-domain-of-free-or-paid-google-apps-account-04.png" alt="how-to-change-primary-domain-of-free-or-paid-google-apps-account-04" /></a></p>
+
+<p>Disable the test domain alias by clicking the <strong>Deactivate</strong> button as shown below. A popup box will ask you to confirm this action. Confirm it.</p>
+
+<p><a target="_blank" href="http://inderjotsingh.com/wp-content/uploads/2016/01/how-to-change-primary-domain-of-free-or-paid-google-apps-account-05.png" rel="attachment wp-att-1148"><img class="alignnone size-full wp-image-1148" src="http://inderjotsingh.com/wp-content/uploads/2016/01/how-to-change-primary-domain-of-free-or-paid-google-apps-account-05.png" alt="how-to-change-primary-domain-of-free-or-paid-google-apps-account-05" /></a></p>
+
+<p>After the test domain alias is deactivated, click the <strong>Add a domain or domain alias</strong> button at the top.</p>
+
+<p><a target="_blank" href="http://inderjotsingh.com/wp-content/uploads/2016/01/how-to-change-primary-domain-of-free-or-paid-google-apps-account-06.png" rel="attachment wp-att-1149"><img class="alignnone size-full wp-image-1149" src="http://inderjotsingh.com/wp-content/uploads/2016/01/how-to-change-primary-domain-of-free-or-paid-google-apps-account-06.png" alt="how-to-change-primary-domain-of-free-or-paid-google-apps-account-06" /></a></p>
+<h3>Step 4:</h3>
+<p>Enter the new domain name. Follow Google’s verification steps to verify ownership for your new domain. This should be pretty straightforward if you have access to your domain registrar/hosting account. Since Google shows you step by step how to verify your domain, I won’t cover it here.</p>
+<h3>Step 5:</h3>
+<p>If everything goes well, you should have your new domain added to your Google Apps account. You can confirm by going to the <strong>Domains</strong> panel from the admin console (here is the direct link: <a target="_blank" href="https://admin.google.com/AdminHome?pli=1&amp;fral=1#Domains:">https://admin.google.com/AdminHome?pli=1&amp;fral=1#Domains:</a>)</p>
+
+<p>You’ll notice that even though the new domain has been successfully added, the old domain is still marked as the <strong>primary</strong> one. Let’s change that.</p>
+
+<p>Navigate to <a target="_blank" href="https://developers.google.com/admin-sdk/directory/v1/reference/customers/update">https://developers.google.com/admin-sdk/directory/v1/reference/customers/update</a></p>
+
+<p>Make sure you’re logged into your existing Google Apps account (you can see your email address in the top right corner).</p>
+
+<p>Click <strong>Try it now.</strong></p>
+
+<p><a target="_blank" href="http://inderjotsingh.com/wp-content/uploads/2016/01/how-to-change-primary-domain-of-free-or-paid-google-apps-account-07.png" rel="attachment wp-att-1150"><img class="alignnone size-full wp-image-1150" src="http://inderjotsingh.com/wp-content/uploads/2016/01/how-to-change-primary-domain-of-free-or-paid-google-apps-account-07.png" alt="how-to-change-primary-domain-of-free-or-paid-google-apps-account-07" /></a></p>
+
+<p>Enter the information as shown in the screenshot below.</p>
+<ul>
+	<li><code><strong>customerKey:</strong> my_customer</code></li>
+	<li><code><strong>fields</strong>: customerDomain</code></li>
+	<li><code><strong>Request body</strong>: { "customerDomain":"newinderjotsingh.com" }</code></li>
+</ul>
+<p>For <strong>Request body</strong>, you don’t need to type the brackets and all that. They will automatically appear when you click the <strong>Request body</strong> field. Simply choose <strong>customerDomain</strong> from the dropdown and then <strong>type in your <span style="text-decoration: underline;">new domain</span></strong> (the one that you want as your <strong>primary</strong> domain).</p>
+
+<p>Click <strong>Authorize and Execute</strong>.</p>
+
+<div class="row">
+  <div class="col-12">
+    
+   <script async="" src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-format="fluid" data-ad-layout="in-article" data-ad-client="ca-pub-1094744891389501" data-ad-slot="6411936673"></ins>
+    <script>
+         (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+
+
+  </div>
+</div>
+
+<p>A couple of popups might show up asking you to authorize this with your Google account, Authorize everything.</p>
+
+<p><a target="_blank" href="http://inderjotsingh.com/wp-content/uploads/2016/01/how-to-change-primary-domain-of-free-or-paid-google-apps-account-08.png" rel="attachment wp-att-1151"><img class="alignnone size-full wp-image-1151" src="http://inderjotsingh.com/wp-content/uploads/2016/01/how-to-change-primary-domain-of-free-or-paid-google-apps-account-08.png" alt="how-to-change-primary-domain-of-free-or-paid-google-apps-account-08" /></a></p>
+
+<p>Guess what? Your secondary domain (the one you typed above) is now your <strong>primary</strong> domain! You can confirm by going to the <strong>Domains</strong> panel from the admin console (direct link: <a target="_blank" href="https://admin.google.com/AdminHome?pli=1&amp;fral=1#Domains:">https://admin.google.com/AdminHome?pli=1&amp;fral=1#Domains:</a>)</p>
+<h3>Step 6:</h3>
+<p>If you are using a <strong>paid</strong> Google Apps account, you can stop here.</p>
+
+<p>However if you are using a <strong>free</strong> account, <span style="text-decoration: underline;"><strong>make sure you follow these steps to DOWNGRADE your 30 day trial back to the free account</strong></span>.</p>
+
+<p>If you do not downgrade within 30 days, you’ll lose your free account (in the sense that you’ll have to pay for it beyond the 30 days time period).</p>
+
+<p>You can only downgrade if you have only one domain in your account. But we now have two. The old domain and the new domain (which was just promoted to primary).</p>
+
+<p>Let’s remove the old domain (that USED to be the primary once upon a time).</p>
+<ul>
+	<li>Go to the <strong>Domains</strong> panel from the admin console (direct link: <a target="_blank" href="https://admin.google.com/AdminHome?pli=1&amp;fral=1#Domains:">https://admin.google.com/AdminHome?pli=1&amp;fral=1#Domains:</a>)</li>
+	<li>Delete the old domain
+<ul>
+	<li>If you're unable to delete it (ie, even after clicking <strong>Delete</strong>, the domain still stays, make sure the <strong>Test domain alias</strong> is deactivated. If that is active, you won't be able to delete the old domain).</li>
+</ul>
+</li>
+</ul>
+<h3>Step 7:</h3>
+<p>Let’s convert our 30 day trial back to a free account. In the admin console, click on <strong>Billing</strong>. Alternatively, directly open it via this link: <a target="_blank" href="https://admin.google.com/AdminHome?pli=1&amp;fral=1#DomainSettings/notab=1&amp;subtab=subscriptions">https://admin.google.com/AdminHome?pli=1&amp;fral=1#DomainSettings/notab=1&amp;subtab=subscriptions</a></p>
+
+<p><a target="_blank" href="http://inderjotsingh.com/wp-content/uploads/2016/01/how-to-change-primary-domain-of-free-or-paid-google-apps-account-09.png" rel="attachment wp-att-1152"><img class="alignnone size-full wp-image-1152" src="http://inderjotsingh.com/wp-content/uploads/2016/01/how-to-change-primary-domain-of-free-or-paid-google-apps-account-09.png" alt="how-to-change-primary-domain-of-free-or-paid-google-apps-account-09" /></a></p>
+
+<p>Click the 3 vertical dots and in the dropdown select <strong>Cancel Subscription</strong>.</p>
+
+<p><a target="_blank" href="http://inderjotsingh.com/wp-content/uploads/2016/01/how-to-change-primary-domain-of-free-or-paid-google-apps-account-10.png" rel="attachment wp-att-1153"><img class="alignnone size-full wp-image-1153" src="http://inderjotsingh.com/wp-content/uploads/2016/01/how-to-change-primary-domain-of-free-or-paid-google-apps-account-10.png" alt="how-to-change-primary-domain-of-free-or-paid-google-apps-account-10" /></a></p>
+
+<p>Chose <strong>Downgrade to Google Apps</strong>.</p>
+
+<p><strong><span style="color: #ff0000;">Do not choose Cancel Google Apps for Work. This will completely delete your account. Yes. Free, paid, everything. </span></strong>Make sure you choose <strong>Downgrade to Google Apps</strong>. If you do not see the <strong>“downgrade”</strong> option, then make sure that you have only <strong>one</strong> domain in your <strong>Domains</strong> panel (direct link: <a target="_blank" href="https://admin.google.com/AdminHome?pli=1&amp;fral=1#Domains:">https://admin.google.com/AdminHome?pli=1&amp;fral=1#Domains:</a>)</p>
+
+<p><a target="_blank" href="http://inderjotsingh.com/wp-content/uploads/2016/01/how-to-change-primary-domain-of-free-or-paid-google-apps-account-11.png" rel="attachment wp-att-1154"><img class="alignnone size-full wp-image-1154" src="http://inderjotsingh.com/wp-content/uploads/2016/01/how-to-change-primary-domain-of-free-or-paid-google-apps-account-11.png" alt="how-to-change-primary-domain-of-free-or-paid-google-apps-account-11" /></a></p>
+
+<p>Click <strong>Continue</strong>.</p>
+
+<p>That’s it. You’ve successfully changed the primary domain of your free/paid Google Apps account!</p>
+
+<p>(header image source: <a target="_blank" href="http://www.imdb.com/title/tt0098904/">Seinfeld</a>)</p>
+
+		<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-format="fluid"
+     data-ad-layout="in-article"
+     data-ad-client="ca-pub-1094744891389501"
+     data-ad-slot="6411936673"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fa fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="http://localhost:4000/tags/#domain" class="page__taxonomy-item" rel="tag">domain</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#google-apps-for-business" class="page__taxonomy-item" rel="tag">google apps for business</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#google-apps-for-work" class="page__taxonomy-item" rel="tag">google apps for work</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#google-apps" class="page__taxonomy-item" rel="tag">google apps</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#google" class="page__taxonomy-item" rel="tag">google</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#guides" class="page__taxonomy-item" rel="tag">Guides</a>
+    
+    </span>
+  </p>
+
+
+
+
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fa fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="http://localhost:4000/categories/#it" class="page__taxonomy-item" rel="tag">IT</a>
+    
+    </span>
+  </p>
+
+
+        
+          <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Updated:</strong> <time datetime="2016-01-31T03:05:38-05:00">January 31, 2016</time></p>
+        
+      </footer>
+
+      
+
+      
+  <nav class="pagination">
+    
+      <a href="http://localhost:4000/it/set-up-shrew-soft-ipsec-vpn-client-watchguard/" class="pagination--pager" title="How to set up Shrew Soft IPSec VPN Client for WatchGuard
+">Previous</a>
+    
+    
+      <a href="http://localhost:4000/it/how-to-fix-outlook-pdf-previews-and-explorer-thumbnails-on-64-bit-windows/" class="pagination--pager" title="How to Fix Outlook PDF Previews and Explorer thumbnails on 64-bit Windows
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+      <div class="page__comments">
+  
+  
+    <h4 class="page__comments-title">Leave a Comment</h4>
+    <section id="disqus_thread"></section>
+  
+</div>
+
+    
+  </article>
+
+  
+  
+</div>
+
+
+    <div class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Follow:</strong></li>
+    
+    
+    
+    
+      <li><a href="http://github.com/wiseindy"><i class="fa fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+    
+    
+    <li><a href="http://localhost:4000/feed.xml"><i class="fa fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2019 Wiseindy. Powered by <a href="http://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+      </footer>
+    </div>
+
+    <script src="http://localhost:4000/assets/js/main.min.js"></script>
+
+
+
+
+  <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-41402704-6']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+
+
+
+
+  
+  <script type="text/javascript">
+  	/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+  	var disqus_shortname = 'wiseindy';
+
+  	/* * * DON'T EDIT BELOW THIS LINE * * */
+  	(function() {
+  		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  	})();
+
+  	/* * * DON'T EDIT BELOW THIS LINE * * */
+  	(function () {
+  		var s = document.createElement('script'); s.async = true;
+  		s.type = 'text/javascript';
+  		s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+  		(document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+  	}());
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+
+
+
+
+  </body>
+</html>

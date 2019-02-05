@@ -1,0 +1,814 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.2.2 by Michael Rose
+  Copyright 2017 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE.txt
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin SEO -->
+
+
+
+
+
+
+
+
+
+<title>How to set up WSUS on Windows Server 2012 R2 – A Step-by-Step Guide - Wiseindy</title>
+
+
+
+
+<meta name="description" content="Windows Server Update Services (WSUS) is a free patch management tool by Microsoft. It allows sysadmins to centrally push Microsoft product updates to computers that are running Windows on their network.This guide will help you set up your very own WSUS server on Windows Server 2012 R2.Why WSUS?How do Windows computers usually update? In a non-WSUS environment (generally all home environments), each PC independently connects to Microsoft Update to get its patches and MS product updates.This may not be always preferred in a corporate environment. Instead of each workstation manually connecting to Microsoft Update, testing updates and then deploying updates using traditional methods, administrators can use WSUS to download updates centrally to an internal server. Once updates are authorised in WSUS, they’re also deployed internally and reporting tools keep administrators informed of patch progress. This is a very efficient way of working, allowing administrators full control of which updates are deployed to workstations.In Windows Server 2012 and 2012 R2, WSUS is integrated with the operating system as a server role. In previous versions of Windows Server (2003, 2008, 2008 R2), you had to separately install WSUS 3.0.Also, seems like Microsoft will be moving away from WSUS to an entirely new product called Windows Update for Business (WUB). You can read more about it here.Ok, so now, let’s see how we can set up WSUS on Windows Server 2012 R2What you need:	A machine with Windows Server 2012 R2 installed	Internet connection	20 minutes (not including download times)I started with a fresh install of Windows Server 2012 R2 on a VM and connected it to my domain.Step 1:On your Windows Server 2012 R2 machine, launch Server Manager as shown below.You can either launch it using the icon in the taskbar or you can click the Start button and just search for “server manager”.Step 2:Once Server Manager is open, select Add roles and features.Step 3:In the Add Roles and Features Wizard, click next on the Before You Begin page. You can optionally select to Skip this page by default for the future.Step 4:Select Role-based or feature-based installationStep 5:Select your server from the server pool. If you’re not using Hyper-V, you will see only one server, i.e., your soon-to-be WSUS server.Step 6:In the Server Roles list, scroll down and select Windows Server Update ServicesStep 7:A window will pop up showing you the features that are required for WSUS which will be enabled. Click Add FeaturesStep 8:You will notice that IIS has been automatically selected. Leave everything as default and click NextStep 9:On the Features screen, leave the default selections and click Next                   Step 10:On the Web Server Role (IIS) page, click NextStep 11:Leave all selections as default on the Role Services page and click NextStep 12:Click Next on this screenStep 13:On the Role Services page, make sure WID Database and WSUS Services are selected (They should be selected by default). Click NextStep 14:This page will allow you to set the destination directory for the downloaded updates. Tick the checkbox for Store updates in the following location.Enter the path here. It can either be a local or a remote path.Keep in mind that WSUS will take up considerable amount of storage as time goes on. It is not unusual to find update folders of sizes greater than 100 GB.Choose your destination accordingly.Step 15:On the Confirmation screen, check the Restart the destination server automatically if required option if you wish to do so, otherwise you can leave it unchecked.Click InstallStep 16:Sit back and grab a coffee. This will take about 5-10 minutes.Step 17:Once its installed, hit CloseStep 18:Search for WSUS or Windows Server Update Services and launch itStep 19:Since it’s the first time you’re opening it, it’ll take a while to set up. Wait for it to complete and then hit CloseStep 20:You will now see a wizard that will walk you through a series of steps to configure your installation.Before starting, make sure of the following:	Confirm whether the PCs on your network can communicate with this server.	Your WSUS server should be able to communicate with Microsoft Update (Make sure your firewall isn&#39;t blocking it)	If your environment uses a proxy, make sure you have the proxy server credentials before continuing.If all seems well, click NextStep 21:If you would like to join the Microsoft Update Improvement Program, check the box. Otherwise uncheck it. Click NextStep 22:If you want to synch updates directly from Microsoft Update (the most likely scenario in your case since you’re reading this guide), enable the first option and click Next.If you have already have a WSUS server in your environment and want your new WSUS to synch updates from that instead of Microsoft Update, enable the second option.	Enter the server name and port number (For WSUS on Windows Servere 2012 R2, the default port is 8530)	Enable/disable SSL based on your environment	Decide whether it is going to be a replica server or not and click NextStep 23:If you use a proxy server, enter the details here, otherwise leave the checkbox unchecked and click NextStep 24:Your server will now need to connect to Microsoft Update and find out information about all available updates.Click Start Connecting. This might take upto 20 minutes or more depending upon your connection.Once it’s done, hit NextStep 25:Choose which all languages do you need updates for and click Next. You can always modify this later.Step 26:The Choose Products screen will allow you to subscribe for updates for different Microsoft products.After selecting your products, click NextStep 27:Here you can choose what type of updates you want to subscribe to. Do you want just critical &amp; security updates? Or do you want everything? This is where you can specify that.Step 28:Configure your sync schedule for updates here. The synchronization process involves downloading updates from Microsoft Update or another WSUS server. WSUS determines if any new updates have been made available since the last time you synchronized. If this is the first time you are synchronizing the WSUS server, all of the updates are made available for approval.I chose to automatically sync my server with Microsoft Update daily at 2 AM.Step 29:Select Begin initial synchronization to sync with Microsoft Update and click Next and then FinishStep 30:The Update Services console will now launch.This is going to be the place from where you can control everything.Right now, under the To Do section, you will not see much. Wait for the server to synchronize with Microsoft Update. Once it syncs, you will see information like how many updates are available, how many are approved, etc.Under the Overview section, you can see the Synchronization Status.Synchronization status is now 12%Step 31:Synchronization is finally complete. You can now see the number of updates that are available to you under the To Do section.This completes the installation and initial configuration of our WSUS server. However, this server is not going to be much use to you right now. It still isn’t pushing any updates to your workstations still.Lets fix that.Step 32:We will be using a GPO to register the workstations on our network with our newly created WSUS server.Fire up your Group Policy Management console. Right-click Group Policy Objects and create a new GPO.Give it an easy-to-identify name.After its created, right-click and choose Edit. We will now configure the GPO.Step 33:Expand Computer Configuration &gt; Policies &gt; Administrative Templates &gt; Windows Components &gt; Windows UpdateStep 34:Double-click Configure Automatic UpdatesSelect EnabledUnder Options, choose how would you want your workstations to update. In my case, I prefer the PCs to download the updates and schedule them to be installed at 3 AM daily.Once you are satisfied with the options, click OK to exit the screen.Step 35:Next, double-click Enable client-side targeting.Configuring this setting will enable the workstations on your network to register directly with your WSUS server (client-side registration).Select Enabled.In the Options area, type the group name for this computer (Your WSUS server can use this information to group computers into different groups. We will see how this is done further below).Step 36:Next, double-click on Specify intranet Microsoft update service location.This is where you will specify your WSUS server’s address.Select Enabled.In the Options area, specify your server name in the form of a URL as shown below.My WSUS server’s hostname is my-wsus-server. The default port number for WSUS on Windows Server 2012 R2 is 8530, so my complete server address is:http://my-wsus-server:8530Enter the same URL in both the text boxes and click OK.Step 37:Well, the last step is to link the GPO to an OU. Select an OU which has your test computer. Right-click it and select Link an Existing GPO.Choose your newly created GPO and click OK.Step 38:Let’s go back to our WSUS server and create a new computer group. By default, under All Computers, you’ll see a default group called Unassigned Computers. Any computer that doesn’t belong to a group will appear here.Right-click All Computers and select Add Computer Group…Enter the name of the group. I entered the same group name that I had specified in my GPO (Step 35).Click Add.Step 39:Now, we can either wait for the GPO to be automatically applied to our test computer or, if you are impatient like me, we can speed things up.Log into your test computer.Open up Command Prompt as Administrator and run 3 commands as shown below.	gpupdate /force	wuauclt.exe /detectnow	wuauclt.exe /reportnow Step 40:Go back to your WSUS server. Select All Computers group.Hit refresh.You will see that your test computer has appeared in the list.If you don’t see your test computer here, do the following:	Wait for about 5 minutes and hit Refresh again. Sometimes it takes a while for the PCs to show up even if you have run the above commands.	Double-check your GPO settings. Make sure you linked it to the correct OU. The OU should have your test computer account and not the user account since its a Computer Configuration policy.	Run the commands (specified in Step 39) again on your test computer. Make sure you run them from an elevated command prompt.	Reboot your test computer.Step 41:You will notice that even though you have specified the computer to be added to a group wsus-workstations in the GPO, the test computer still appears under Unassigned Computers.Well, that’s because by default, WSUS ignores the groups and places all discovered computers in the Unassigned Computers group. You can then manually move it to whichever group you want.You can change this setting. If you want the computers to automatically add themselves to the group specified in the GPO, do the following.In your Update Services console, select Options. Double-click on ComputersChoose the second option that says Use Group Policy or registry settings on computers.Now any computer that your GPO will apply to, will automatically appear in the group wsus-computers instead of Unassigned Computers.You can make different GPOs for machines that you want to be grouped differently.Step 42:Now, since we have added a test computer, lets see how we can push updates to it.In your WSUS console, expand the Updates tree and select All Updates. You will see updates which are needed and that are not yet approve.You will have to Approve them so that they can be pushed out to your test computer.Select the updates you want to approve using the Shift or Ctrl key.From the Actions sidebar on the right, select Approve… (you can also right-click the selected updates and do the same)In the window that pops up, right-click All Computers and select Approved for Install.You’ll notice that the updates haven’t been approved for the groups individually. Right-click All Computers again and select Apply to Children. This will approve updates for all the children groups under All Computers.Since you have just one test computer right now, we have approved it for all the computers. However, in a production environment you should first approve the updates to a test group (instead of all computers) to see if the updates cause any sorts of problems. Once you are certain the updates don’t break anything, you can push it to the critical machines.Select OKThe updates have been approved. Now during the scheduled time (3 AM in our case), these updates will be pushed to out test computer.That’s it! Our WSUS server is now set up.Hope this guide was useful to you. You can leave your feedback in the comments below.">
+
+
+
+
+<meta name="author" content="wiseindy">
+
+<meta property="og:locale" content="en">
+<meta property="og:site_name" content="Wiseindy">
+<meta property="og:title" content="How to set up WSUS on Windows Server 2012 R2 – A Step-by-Step Guide">
+
+
+  <link rel="canonical" href="http://localhost:4000/it/how-to-set-up-wsus-on-windows-server-2012-r2-a-step-by-step-guide/">
+  <meta property="og:url" content="http://localhost:4000/it/how-to-set-up-wsus-on-windows-server-2012-r2-a-step-by-step-guide/">
+
+
+
+  <meta property="og:description" content="Windows Server Update Services (WSUS) is a free patch management tool by Microsoft. It allows sysadmins to centrally push Microsoft product updates to computers that are running Windows on their network.This guide will help you set up your very own WSUS server on Windows Server 2012 R2.Why WSUS?How do Windows computers usually update? In a non-WSUS environment (generally all home environments), each PC independently connects to Microsoft Update to get its patches and MS product updates.This may not be always preferred in a corporate environment. Instead of each workstation manually connecting to Microsoft Update, testing updates and then deploying updates using traditional methods, administrators can use WSUS to download updates centrally to an internal server. Once updates are authorised in WSUS, they’re also deployed internally and reporting tools keep administrators informed of patch progress. This is a very efficient way of working, allowing administrators full control of which updates are deployed to workstations.In Windows Server 2012 and 2012 R2, WSUS is integrated with the operating system as a server role. In previous versions of Windows Server (2003, 2008, 2008 R2), you had to separately install WSUS 3.0.Also, seems like Microsoft will be moving away from WSUS to an entirely new product called Windows Update for Business (WUB). You can read more about it here.Ok, so now, let’s see how we can set up WSUS on Windows Server 2012 R2What you need:	A machine with Windows Server 2012 R2 installed	Internet connection	20 minutes (not including download times)I started with a fresh install of Windows Server 2012 R2 on a VM and connected it to my domain.Step 1:On your Windows Server 2012 R2 machine, launch Server Manager as shown below.You can either launch it using the icon in the taskbar or you can click the Start button and just search for “server manager”.Step 2:Once Server Manager is open, select Add roles and features.Step 3:In the Add Roles and Features Wizard, click next on the Before You Begin page. You can optionally select to Skip this page by default for the future.Step 4:Select Role-based or feature-based installationStep 5:Select your server from the server pool. If you’re not using Hyper-V, you will see only one server, i.e., your soon-to-be WSUS server.Step 6:In the Server Roles list, scroll down and select Windows Server Update ServicesStep 7:A window will pop up showing you the features that are required for WSUS which will be enabled. Click Add FeaturesStep 8:You will notice that IIS has been automatically selected. Leave everything as default and click NextStep 9:On the Features screen, leave the default selections and click Next                   Step 10:On the Web Server Role (IIS) page, click NextStep 11:Leave all selections as default on the Role Services page and click NextStep 12:Click Next on this screenStep 13:On the Role Services page, make sure WID Database and WSUS Services are selected (They should be selected by default). Click NextStep 14:This page will allow you to set the destination directory for the downloaded updates. Tick the checkbox for Store updates in the following location.Enter the path here. It can either be a local or a remote path.Keep in mind that WSUS will take up considerable amount of storage as time goes on. It is not unusual to find update folders of sizes greater than 100 GB.Choose your destination accordingly.Step 15:On the Confirmation screen, check the Restart the destination server automatically if required option if you wish to do so, otherwise you can leave it unchecked.Click InstallStep 16:Sit back and grab a coffee. This will take about 5-10 minutes.Step 17:Once its installed, hit CloseStep 18:Search for WSUS or Windows Server Update Services and launch itStep 19:Since it’s the first time you’re opening it, it’ll take a while to set up. Wait for it to complete and then hit CloseStep 20:You will now see a wizard that will walk you through a series of steps to configure your installation.Before starting, make sure of the following:	Confirm whether the PCs on your network can communicate with this server.	Your WSUS server should be able to communicate with Microsoft Update (Make sure your firewall isn&#39;t blocking it)	If your environment uses a proxy, make sure you have the proxy server credentials before continuing.If all seems well, click NextStep 21:If you would like to join the Microsoft Update Improvement Program, check the box. Otherwise uncheck it. Click NextStep 22:If you want to synch updates directly from Microsoft Update (the most likely scenario in your case since you’re reading this guide), enable the first option and click Next.If you have already have a WSUS server in your environment and want your new WSUS to synch updates from that instead of Microsoft Update, enable the second option.	Enter the server name and port number (For WSUS on Windows Servere 2012 R2, the default port is 8530)	Enable/disable SSL based on your environment	Decide whether it is going to be a replica server or not and click NextStep 23:If you use a proxy server, enter the details here, otherwise leave the checkbox unchecked and click NextStep 24:Your server will now need to connect to Microsoft Update and find out information about all available updates.Click Start Connecting. This might take upto 20 minutes or more depending upon your connection.Once it’s done, hit NextStep 25:Choose which all languages do you need updates for and click Next. You can always modify this later.Step 26:The Choose Products screen will allow you to subscribe for updates for different Microsoft products.After selecting your products, click NextStep 27:Here you can choose what type of updates you want to subscribe to. Do you want just critical &amp; security updates? Or do you want everything? This is where you can specify that.Step 28:Configure your sync schedule for updates here. The synchronization process involves downloading updates from Microsoft Update or another WSUS server. WSUS determines if any new updates have been made available since the last time you synchronized. If this is the first time you are synchronizing the WSUS server, all of the updates are made available for approval.I chose to automatically sync my server with Microsoft Update daily at 2 AM.Step 29:Select Begin initial synchronization to sync with Microsoft Update and click Next and then FinishStep 30:The Update Services console will now launch.This is going to be the place from where you can control everything.Right now, under the To Do section, you will not see much. Wait for the server to synchronize with Microsoft Update. Once it syncs, you will see information like how many updates are available, how many are approved, etc.Under the Overview section, you can see the Synchronization Status.Synchronization status is now 12%Step 31:Synchronization is finally complete. You can now see the number of updates that are available to you under the To Do section.This completes the installation and initial configuration of our WSUS server. However, this server is not going to be much use to you right now. It still isn’t pushing any updates to your workstations still.Lets fix that.Step 32:We will be using a GPO to register the workstations on our network with our newly created WSUS server.Fire up your Group Policy Management console. Right-click Group Policy Objects and create a new GPO.Give it an easy-to-identify name.After its created, right-click and choose Edit. We will now configure the GPO.Step 33:Expand Computer Configuration &gt; Policies &gt; Administrative Templates &gt; Windows Components &gt; Windows UpdateStep 34:Double-click Configure Automatic UpdatesSelect EnabledUnder Options, choose how would you want your workstations to update. In my case, I prefer the PCs to download the updates and schedule them to be installed at 3 AM daily.Once you are satisfied with the options, click OK to exit the screen.Step 35:Next, double-click Enable client-side targeting.Configuring this setting will enable the workstations on your network to register directly with your WSUS server (client-side registration).Select Enabled.In the Options area, type the group name for this computer (Your WSUS server can use this information to group computers into different groups. We will see how this is done further below).Step 36:Next, double-click on Specify intranet Microsoft update service location.This is where you will specify your WSUS server’s address.Select Enabled.In the Options area, specify your server name in the form of a URL as shown below.My WSUS server’s hostname is my-wsus-server. The default port number for WSUS on Windows Server 2012 R2 is 8530, so my complete server address is:http://my-wsus-server:8530Enter the same URL in both the text boxes and click OK.Step 37:Well, the last step is to link the GPO to an OU. Select an OU which has your test computer. Right-click it and select Link an Existing GPO.Choose your newly created GPO and click OK.Step 38:Let’s go back to our WSUS server and create a new computer group. By default, under All Computers, you’ll see a default group called Unassigned Computers. Any computer that doesn’t belong to a group will appear here.Right-click All Computers and select Add Computer Group…Enter the name of the group. I entered the same group name that I had specified in my GPO (Step 35).Click Add.Step 39:Now, we can either wait for the GPO to be automatically applied to our test computer or, if you are impatient like me, we can speed things up.Log into your test computer.Open up Command Prompt as Administrator and run 3 commands as shown below.	gpupdate /force	wuauclt.exe /detectnow	wuauclt.exe /reportnow Step 40:Go back to your WSUS server. Select All Computers group.Hit refresh.You will see that your test computer has appeared in the list.If you don’t see your test computer here, do the following:	Wait for about 5 minutes and hit Refresh again. Sometimes it takes a while for the PCs to show up even if you have run the above commands.	Double-check your GPO settings. Make sure you linked it to the correct OU. The OU should have your test computer account and not the user account since its a Computer Configuration policy.	Run the commands (specified in Step 39) again on your test computer. Make sure you run them from an elevated command prompt.	Reboot your test computer.Step 41:You will notice that even though you have specified the computer to be added to a group wsus-workstations in the GPO, the test computer still appears under Unassigned Computers.Well, that’s because by default, WSUS ignores the groups and places all discovered computers in the Unassigned Computers group. You can then manually move it to whichever group you want.You can change this setting. If you want the computers to automatically add themselves to the group specified in the GPO, do the following.In your Update Services console, select Options. Double-click on ComputersChoose the second option that says Use Group Policy or registry settings on computers.Now any computer that your GPO will apply to, will automatically appear in the group wsus-computers instead of Unassigned Computers.You can make different GPOs for machines that you want to be grouped differently.Step 42:Now, since we have added a test computer, lets see how we can push updates to it.In your WSUS console, expand the Updates tree and select All Updates. You will see updates which are needed and that are not yet approve.You will have to Approve them so that they can be pushed out to your test computer.Select the updates you want to approve using the Shift or Ctrl key.From the Actions sidebar on the right, select Approve… (you can also right-click the selected updates and do the same)In the window that pops up, right-click All Computers and select Approved for Install.You’ll notice that the updates haven’t been approved for the groups individually. Right-click All Computers again and select Apply to Children. This will approve updates for all the children groups under All Computers.Since you have just one test computer right now, we have approved it for all the computers. However, in a production environment you should first approve the updates to a test group (instead of all computers) to see if the updates cause any sorts of problems. Once you are certain the updates don’t break anything, you can push it to the critical machines.Select OKThe updates have been approved. Now during the scheduled time (3 AM in our case), these updates will be pushed to out test computer.That’s it! Our WSUS server is now set up.Hope this guide was useful to you. You can leave your feedback in the comments below.">
+
+
+
+
+
+  
+
+  
+
+
+
+  <meta property="og:image" content="http://localhost:4000/wp-content/uploads/2015/06/windows-server-update-services.jpg">
+
+
+
+  <meta property="og:type" content="article">
+  <meta property="article:published_time" content="2015-06-14T04:21:40-04:00">
+
+
+
+
+
+
+
+
+  <script type="application/ld+json">
+    {
+      "@context" : "http://schema.org",
+      "@type" : "Person",
+      "name" : "Wiseindy",
+      "url" : "http://localhost:4000",
+      "sameAs" : null
+    }
+  </script>
+
+
+
+
+
+
+<!-- end SEO -->
+
+
+<link href="http://localhost:4000/feed.xml" type="application/atom+xml" rel="alternate" title="Wiseindy Feed">
+
+<!-- http://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="http://localhost:4000/assets/css/main.css">
+
+<!--[if lte IE 9]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+<meta http-equiv="cleartype" content="on">
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use http://realfavicongenerator.net/ -->
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#666666">
+<meta name="theme-color" content="#ffffff">
+
+<!-- Adsense -->
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-2192084948183024",
+    enable_page_level_ads: true
+  });
+</script>
+<!-- !Adsense -->
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--post">
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+    <div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        <a class="site-title" href="http://localhost:4000/">Wiseindy</a>
+        <ul class="visible-links">
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/it">IT</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/guides">Guides</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/powershell">Powershell</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/networking">Networking</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/exchange">Exchange</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/doodles">Doodles</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/about">About</a></li>
+          
+        </ul>
+        <button><div class="navicon"></div></button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+    
+  <link rel="amphtml" href="http://localhost:4000/amp/it/how-to-set-up-wsus-on-windows-server-2012-r2-a-step-by-step-guide">
+
+
+
+  
+
+
+
+
+
+
+
+<div class="page__hero"
+  style=" "
+>
+  
+    <img src="http://localhost:4000/wp-content/uploads/2015/06/windows-server-update-services.jpg" alt="How to set up WSUS on Windows Server 2012 R2 &#8211; A Step-by-Step Guide" class="page__hero-image">
+  
+  
+</div>
+
+
+
+
+
+<div id="main" role="main">
+  
+
+  <article class="page" itemscope itemtype="http://schema.org/CreativeWork">
+    <meta itemprop="headline" content="How to set up WSUS on Windows Server 2012 R2 – A Step-by-Step Guide">
+    <meta itemprop="description" content="Windows Server Update Services (WSUS) is a free patch management tool by Microsoft. It allows sysadmins to centrally push Microsoft product updates to computers that are running Windows on their network.This guide will help you set up your very own WSUS server on Windows Server 2012 R2.Why WSUS?How do Windows computers usually update? In a non-WSUS environment (generally all home environments), each PC independently connects to Microsoft Update to get its patches and MS product updates.This may not be always preferred in a corporate environment. Instead of each workstation manually connecting to Microsoft Update, testing updates and then deploying updates using traditional methods, administrators can use WSUS to download updates centrally to an internal server. Once updates are authorised in WSUS, they’re also deployed internally and reporting tools keep administrators informed of patch progress. This is a very efficient way of working, allowing administrators full control of which updates are deployed to workstations.In Windows Server 2012 and 2012 R2, WSUS is integrated with the operating system as a server role. In previous versions of Windows Server (2003, 2008, 2008 R2), you had to separately install WSUS 3.0.Also, seems like Microsoft will be moving away from WSUS to an entirely new product called Windows Update for Business (WUB). You can read more about it here.Ok, so now, let’s see how we can set up WSUS on Windows Server 2012 R2What you need:	A machine with Windows Server 2012 R2 installed	Internet connection	20 minutes (not including download times)I started with a fresh install of Windows Server 2012 R2 on a VM and connected it to my domain.Step 1:On your Windows Server 2012 R2 machine, launch Server Manager as shown below.You can either launch it using the icon in the taskbar or you can click the Start button and just search for “server manager”.Step 2:Once Server Manager is open, select Add roles and features.Step 3:In the Add Roles and Features Wizard, click next on the Before You Begin page. You can optionally select to Skip this page by default for the future.Step 4:Select Role-based or feature-based installationStep 5:Select your server from the server pool. If you’re not using Hyper-V, you will see only one server, i.e., your soon-to-be WSUS server.Step 6:In the Server Roles list, scroll down and select Windows Server Update ServicesStep 7:A window will pop up showing you the features that are required for WSUS which will be enabled. Click Add FeaturesStep 8:You will notice that IIS has been automatically selected. Leave everything as default and click NextStep 9:On the Features screen, leave the default selections and click Next                   Step 10:On the Web Server Role (IIS) page, click NextStep 11:Leave all selections as default on the Role Services page and click NextStep 12:Click Next on this screenStep 13:On the Role Services page, make sure WID Database and WSUS Services are selected (They should be selected by default). Click NextStep 14:This page will allow you to set the destination directory for the downloaded updates. Tick the checkbox for Store updates in the following location.Enter the path here. It can either be a local or a remote path.Keep in mind that WSUS will take up considerable amount of storage as time goes on. It is not unusual to find update folders of sizes greater than 100 GB.Choose your destination accordingly.Step 15:On the Confirmation screen, check the Restart the destination server automatically if required option if you wish to do so, otherwise you can leave it unchecked.Click InstallStep 16:Sit back and grab a coffee. This will take about 5-10 minutes.Step 17:Once its installed, hit CloseStep 18:Search for WSUS or Windows Server Update Services and launch itStep 19:Since it’s the first time you’re opening it, it’ll take a while to set up. Wait for it to complete and then hit CloseStep 20:You will now see a wizard that will walk you through a series of steps to configure your installation.Before starting, make sure of the following:	Confirm whether the PCs on your network can communicate with this server.	Your WSUS server should be able to communicate with Microsoft Update (Make sure your firewall isn&#39;t blocking it)	If your environment uses a proxy, make sure you have the proxy server credentials before continuing.If all seems well, click NextStep 21:If you would like to join the Microsoft Update Improvement Program, check the box. Otherwise uncheck it. Click NextStep 22:If you want to synch updates directly from Microsoft Update (the most likely scenario in your case since you’re reading this guide), enable the first option and click Next.If you have already have a WSUS server in your environment and want your new WSUS to synch updates from that instead of Microsoft Update, enable the second option.	Enter the server name and port number (For WSUS on Windows Servere 2012 R2, the default port is 8530)	Enable/disable SSL based on your environment	Decide whether it is going to be a replica server or not and click NextStep 23:If you use a proxy server, enter the details here, otherwise leave the checkbox unchecked and click NextStep 24:Your server will now need to connect to Microsoft Update and find out information about all available updates.Click Start Connecting. This might take upto 20 minutes or more depending upon your connection.Once it’s done, hit NextStep 25:Choose which all languages do you need updates for and click Next. You can always modify this later.Step 26:The Choose Products screen will allow you to subscribe for updates for different Microsoft products.After selecting your products, click NextStep 27:Here you can choose what type of updates you want to subscribe to. Do you want just critical &amp; security updates? Or do you want everything? This is where you can specify that.Step 28:Configure your sync schedule for updates here. The synchronization process involves downloading updates from Microsoft Update or another WSUS server. WSUS determines if any new updates have been made available since the last time you synchronized. If this is the first time you are synchronizing the WSUS server, all of the updates are made available for approval.I chose to automatically sync my server with Microsoft Update daily at 2 AM.Step 29:Select Begin initial synchronization to sync with Microsoft Update and click Next and then FinishStep 30:The Update Services console will now launch.This is going to be the place from where you can control everything.Right now, under the To Do section, you will not see much. Wait for the server to synchronize with Microsoft Update. Once it syncs, you will see information like how many updates are available, how many are approved, etc.Under the Overview section, you can see the Synchronization Status.Synchronization status is now 12%Step 31:Synchronization is finally complete. You can now see the number of updates that are available to you under the To Do section.This completes the installation and initial configuration of our WSUS server. However, this server is not going to be much use to you right now. It still isn’t pushing any updates to your workstations still.Lets fix that.Step 32:We will be using a GPO to register the workstations on our network with our newly created WSUS server.Fire up your Group Policy Management console. Right-click Group Policy Objects and create a new GPO.Give it an easy-to-identify name.After its created, right-click and choose Edit. We will now configure the GPO.Step 33:Expand Computer Configuration &gt; Policies &gt; Administrative Templates &gt; Windows Components &gt; Windows UpdateStep 34:Double-click Configure Automatic UpdatesSelect EnabledUnder Options, choose how would you want your workstations to update. In my case, I prefer the PCs to download the updates and schedule them to be installed at 3 AM daily.Once you are satisfied with the options, click OK to exit the screen.Step 35:Next, double-click Enable client-side targeting.Configuring this setting will enable the workstations on your network to register directly with your WSUS server (client-side registration).Select Enabled.In the Options area, type the group name for this computer (Your WSUS server can use this information to group computers into different groups. We will see how this is done further below).Step 36:Next, double-click on Specify intranet Microsoft update service location.This is where you will specify your WSUS server’s address.Select Enabled.In the Options area, specify your server name in the form of a URL as shown below.My WSUS server’s hostname is my-wsus-server. The default port number for WSUS on Windows Server 2012 R2 is 8530, so my complete server address is:http://my-wsus-server:8530Enter the same URL in both the text boxes and click OK.Step 37:Well, the last step is to link the GPO to an OU. Select an OU which has your test computer. Right-click it and select Link an Existing GPO.Choose your newly created GPO and click OK.Step 38:Let’s go back to our WSUS server and create a new computer group. By default, under All Computers, you’ll see a default group called Unassigned Computers. Any computer that doesn’t belong to a group will appear here.Right-click All Computers and select Add Computer Group…Enter the name of the group. I entered the same group name that I had specified in my GPO (Step 35).Click Add.Step 39:Now, we can either wait for the GPO to be automatically applied to our test computer or, if you are impatient like me, we can speed things up.Log into your test computer.Open up Command Prompt as Administrator and run 3 commands as shown below.	gpupdate /force	wuauclt.exe /detectnow	wuauclt.exe /reportnow Step 40:Go back to your WSUS server. Select All Computers group.Hit refresh.You will see that your test computer has appeared in the list.If you don’t see your test computer here, do the following:	Wait for about 5 minutes and hit Refresh again. Sometimes it takes a while for the PCs to show up even if you have run the above commands.	Double-check your GPO settings. Make sure you linked it to the correct OU. The OU should have your test computer account and not the user account since its a Computer Configuration policy.	Run the commands (specified in Step 39) again on your test computer. Make sure you run them from an elevated command prompt.	Reboot your test computer.Step 41:You will notice that even though you have specified the computer to be added to a group wsus-workstations in the GPO, the test computer still appears under Unassigned Computers.Well, that’s because by default, WSUS ignores the groups and places all discovered computers in the Unassigned Computers group. You can then manually move it to whichever group you want.You can change this setting. If you want the computers to automatically add themselves to the group specified in the GPO, do the following.In your Update Services console, select Options. Double-click on ComputersChoose the second option that says Use Group Policy or registry settings on computers.Now any computer that your GPO will apply to, will automatically appear in the group wsus-computers instead of Unassigned Computers.You can make different GPOs for machines that you want to be grouped differently.Step 42:Now, since we have added a test computer, lets see how we can push updates to it.In your WSUS console, expand the Updates tree and select All Updates. You will see updates which are needed and that are not yet approve.You will have to Approve them so that they can be pushed out to your test computer.Select the updates you want to approve using the Shift or Ctrl key.From the Actions sidebar on the right, select Approve… (you can also right-click the selected updates and do the same)In the window that pops up, right-click All Computers and select Approved for Install.You’ll notice that the updates haven’t been approved for the groups individually. Right-click All Computers again and select Apply to Children. This will approve updates for all the children groups under All Computers.Since you have just one test computer right now, we have approved it for all the computers. However, in a production environment you should first approve the updates to a test group (instead of all computers) to see if the updates cause any sorts of problems. Once you are certain the updates don’t break anything, you can push it to the critical machines.Select OKThe updates have been approved. Now during the scheduled time (3 AM in our case), these updates will be pushed to out test computer.That’s it! Our WSUS server is now set up.Hope this guide was useful to you. You can leave your feedback in the comments below.">
+    <meta itemprop="datePublished" content="June 14, 2015">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 class="page__title" itemprop="headline">How to set up WSUS on Windows Server 2012 R2 – A Step-by-Step Guide
+</h1>
+          
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+		<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-format="fluid"
+     data-ad-layout="in-article"
+     data-ad-client="ca-pub-1094744891389501"
+     data-ad-slot="6411936673"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+        <p>Windows Server Update Services (WSUS) is a free patch management tool by Microsoft. It allows sysadmins to centrally push Microsoft product updates to computers that are running Windows on their network.</p>
+
+<p>This guide will help you set up your very own WSUS server on Windows Server 2012 R2.</p>
+
+<!--more-->
+<h3>Why WSUS?</h3>
+<p>How do Windows computers usually update? In a non-WSUS environment (generally all home environments), each PC independently connects to Microsoft Update to get its patches and MS product updates.</p>
+
+<p>This may not be always preferred in a corporate environment. Instead of each workstation manually connecting to Microsoft Update, testing updates and then deploying updates using traditional methods, administrators can use WSUS to download updates centrally to an internal server. Once updates are authorised in WSUS, they’re also deployed internally and reporting tools keep administrators informed of patch progress. This is a very efficient way of working, allowing administrators full control of which updates are deployed to workstations.</p>
+
+<p>In Windows Server 2012 and 2012 R2, WSUS is integrated with the operating system as a server role. In previous versions of Windows Server (2003, 2008, 2008 R2), you had to separately install WSUS 3.0.</p>
+<blockquote>Also, seems like Microsoft will be moving away from WSUS to an entirely new product called Windows Update for Business (WUB). <a target="_blank" href="http://blogs.windows.com/bloggingwindows/2015/05/04/announcing-windows-update-for-business/">You can read more about it here.</a></blockquote>
+<p>Ok, so now, let’s see how we can set up WSUS on Windows Server 2012 R2</p>
+<h3>What you need:</h3>
+<ol>
+	<li>A machine with Windows Server 2012 R2 installed</li>
+	<li>Internet connection</li>
+	<li>20 minutes (not including download times)</li>
+</ol>
+<p>I started with a fresh install of Windows Server 2012 R2 on a VM and connected it to my domain.</p>
+<h3>Step 1:</h3>
+<p>On your Windows Server 2012 R2 machine, launch <strong>Server Manager</strong> as shown below.</p>
+
+<p>You can either launch it using the icon in the taskbar or you can click the <strong>Start</strong> button and just search for “server manager”.</p>
+
+<p><a target="_blank" href="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_1.png"><img class="alignnone wp-image-382 size-full" src="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_1.png" alt="Click on the Server Manager icon on the taskbar to launch Server Manager" /></a></p>
+<h3>Step 2:</h3>
+<p>Once <strong>Server Manager</strong> is open, select <strong>Add roles and features</strong>.</p>
+
+<p><a target="_blank" href="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_2.png"><img class="alignnone wp-image-383 size-full" src="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_2.png" alt="Server Manager window" /></a></p>
+<h3>Step 3:</h3>
+<p>In the <strong>Add Roles and Features Wizard</strong>, click next on the <strong>Before You Begin</strong> page. You can optionally select to <strong>Skip</strong> <strong>this page by default</strong> for the future.</p>
+
+<p><a target="_blank" href="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_3.png"><img class="alignnone wp-image-542 size-full" src="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_3.png" alt="wsus_server_2012_wiseindy_3" /></a></p>
+<h3>Step 4:</h3>
+<p>Select <strong>Role-based or feature-based installation</strong></p>
+
+<p><a target="_blank" href="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_4.png"><img class="alignnone wp-image-543 size-full" src="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_4.png" alt="wsus_server_2012_wiseindy_4" /></a></p>
+<h3>Step 5:</h3>
+<p>Select your server from the server pool. If you’re not using Hyper-V, you will see only one server, i.e., your soon-to-be WSUS server.</p>
+
+<p><a target="_blank" href="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_5.png"><img class="alignnone wp-image-544 size-full" src="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_5.png" alt="wsus_server_2012_wiseindy_5" /></a></p>
+<h3>Step 6:</h3>
+<p>In the <strong>Server Roles</strong> list, scroll down and select <strong>Windows Server Update Services</strong></p>
+
+<p><a target="_blank" href="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_6.png"><img class="alignnone wp-image-545 size-full" src="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_6.png" alt="wsus_server_2012_wiseindy_6" /></a></p>
+<h3>Step 7:</h3>
+<p>A window will pop up showing you the features that are required for WSUS which will be enabled. Click <strong>Add Features</strong></p>
+
+<p><a target="_blank" href="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_7.png"><img class="alignnone wp-image-546 size-full" src="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_7.png" alt="wsus_server_2012_wiseindy_7" /></a></p>
+<h3>Step 8:</h3>
+<p>You will notice that <strong>IIS</strong> has been automatically selected. Leave everything as default and click <strong>Next</strong></p>
+
+<p><a target="_blank" href="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_8.png"><img class="alignnone wp-image-547 size-full" src="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_8.png" alt="wsus_server_2012_wiseindy_8" /></a></p>
+<h3>Step 9:</h3>
+<p>On the <strong>Features</strong> screen, leave the default selections and click <strong>Next</strong></p>
+
+<p><a target="_blank" href="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_9.png"><img class="alignnone wp-image-548 size-full" src="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_9.png" alt="wsus_server_2012_wiseindy_9" /></a></p>
+
+<div class="row">
+  <div class="col-12">
+    
+   <script async="" src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-format="fluid" data-ad-layout="in-article" data-ad-client="ca-pub-1094744891389501" data-ad-slot="6411936673"></ins>
+    <script>
+         (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+
+
+  </div>
+</div>
+
+<h3>Step 10:</h3>
+<p>On the <strong>Web Server Role (IIS)</strong> page, click <strong>Next</strong></p>
+
+<p><a target="_blank" href="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_10.png"><img class="alignnone wp-image-549 size-full" src="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_10.png" alt="wsus_server_2012_wiseindy_10" /></a></p>
+<h3>Step 11:</h3>
+<p>Leave all selections as default on the <strong>Role Services </strong>page and click <strong>Next</strong></p>
+
+<p><a target="_blank" href="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_11.png"><img class="alignnone wp-image-550 size-full" src="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_11.png" alt="wsus_server_2012_wiseindy_11" /></a></p>
+<h3>Step 12:</h3>
+<p>Click <strong>Next</strong> on this screen</p>
+
+<p><a target="_blank" href="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_12.png"><img class="alignnone wp-image-551 size-full" src="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_12.png" alt="wsus_server_2012_wiseindy_12" /></a></p>
+<h3>Step 13:</h3>
+<p>On the <strong>Role Services</strong> page, make sure <strong>WID Database</strong> and <strong>WSUS</strong> <strong>Services</strong> are selected (They should be selected by default). Click <strong>Next</strong></p>
+
+<p><a target="_blank" href="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_13.png"><img class="alignnone wp-image-552 size-full" src="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_13.png" alt="wsus_server_2012_wiseindy_13" /></a></p>
+<h3>Step 14:</h3>
+<p>This page will allow you to set the destination directory for the downloaded updates. Tick the <strong>checkbox</strong> for <strong>Store updates in the following location</strong>.</p>
+
+<p>Enter the path here. It can either be a local or a remote path.
+Keep in mind that WSUS will take up considerable amount of storage as time goes on. It is not unusual to find update folders of sizes greater than 100 GB.</p>
+
+<p>Choose your destination accordingly.</p>
+
+<p><a target="_blank" href="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_14.png"><img class="alignnone wp-image-553 size-full" src="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_14.png" alt="wsus_server_2012_wiseindy_14" /></a></p>
+<h3>Step 15:</h3>
+<p>On the <strong>Confirmation</strong> screen, check the <strong>Restart the destination server automatically if required</strong> option if you wish to do so, otherwise you can leave it unchecked.</p>
+
+<p>Click <strong>Install</strong></p>
+
+<p><a target="_blank" href="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_15.png"><img class="alignnone wp-image-554 size-full" src="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_15.png" alt="wsus_server_2012_wiseindy_15" /></a></p>
+<h3>Step 16:</h3>
+<p>Sit back and grab a coffee. This will take about 5-10 minutes.</p>
+
+<p><a target="_blank" href="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_16.png"><img class="alignnone wp-image-555 size-full" src="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_16.png" alt="wsus_server_2012_wiseindy_16" /></a></p>
+<h3>Step 17:</h3>
+<p>Once its installed, hit <b>Close</b></p>
+
+<p><a target="_blank" href="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_17.png"><img class="alignnone wp-image-556 size-full" src="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_17.png" alt="wsus_server_2012_wiseindy_17" /></a></p>
+<h3>Step 18:</h3>
+<p>Search for <strong>WSUS</strong> or <strong>Windows Server Update Services</strong> and launch it</p>
+
+<p><a target="_blank" href="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_18.png"><img class="alignnone wp-image-557 size-full" src="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_18.png" alt="wsus_server_2012_wiseindy_18" /></a></p>
+<h3>Step 19:</h3>
+<p>Since it’s the first time you’re opening it, it’ll take a while to set up. Wait for it to complete and then hit <strong>Close</strong></p>
+
+<p><a target="_blank" href="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_19.png"><img class="alignnone wp-image-558 size-full" src="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_19.png" alt="wsus_server_2012_wiseindy_19" /></a></p>
+
+<p><a target="_blank" href="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_20.png"><img class="alignnone wp-image-559 size-full" src="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_20.png" alt="wsus_server_2012_wiseindy_20" /></a></p>
+<h3>Step 20:</h3>
+<p>You will now see a wizard that will walk you through a series of steps to configure your installation.</p>
+
+<p>Before starting, make sure of the following:</p>
+<ul>
+	<li>Confirm whether the PCs on your network can communicate with this server.</li>
+	<li>Your WSUS server should be able to communicate with Microsoft Update (Make sure your firewall isn't blocking it)</li>
+	<li>If your environment uses a proxy, make sure you have the proxy server credentials before continuing.</li>
+</ul>
+<p>If all seems well, click <strong>Next</strong></p>
+
+<p><a target="_blank" href="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_21.png"><img class="alignnone wp-image-560 size-full" src="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_21.png" alt="wsus_server_2012_wiseindy_21" /></a></p>
+<h3>Step 21:</h3>
+<p>If you would like to join the <strong>Microsoft Update Improvement Program</strong>, check the box. Otherwise uncheck it. Click<strong> Next</strong></p>
+
+<p><a target="_blank" href="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_22.png"><img class="alignnone wp-image-561 size-full" src="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_22.png" alt="wsus_server_2012_wiseindy_22" /></a></p>
+<h3>Step 22:</h3>
+<p>If you want to synch updates directly from Microsoft Update (the most likely scenario in your case since you’re reading this guide), enable the first option and click <strong>Next</strong>.</p>
+
+<p>If you have already have a WSUS server in your environment and want your new WSUS to synch updates from that instead of Microsoft Update, enable the second option.</p>
+<ul>
+	<li>Enter the server name and port number (For WSUS on Windows Servere 2012 R2, the default port is 8530)</li>
+	<li>Enable/disable SSL based on your environment</li>
+	<li>Decide whether it is going to be a replica server or not and click <strong>Next</strong></li>
+</ul>
+<p><a target="_blank" href="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_23.png"><img class="alignnone wp-image-562 size-full" src="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_23.png" alt="wsus_server_2012_wiseindy_23" /></a></p>
+<h3>Step 23:</h3>
+<p>If you use a proxy server, enter the details here, otherwise leave the checkbox unchecked and click <strong>Next</strong></p>
+
+<p><a target="_blank" href="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_24.png"><img class="alignnone wp-image-563 size-full" src="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_24.png" alt="wsus_server_2012_wiseindy_24" /></a></p>
+<h3>Step 24:</h3>
+<p>Your server will now need to connect to Microsoft Update and find out information about all available updates.</p>
+
+<p>Click <strong>Start Connecting</strong>. This might take upto 20 minutes or more depending upon your connection.</p>
+
+<p>Once it’s done, hit <strong>Next</strong></p>
+
+<p><a target="_blank" href="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_25.png"><img class="alignnone wp-image-564 size-full" src="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_25.png" alt="wsus_server_2012_wiseindy_25" /></a></p>
+
+<p><a target="_blank" href="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_26.png"><img class="alignnone wp-image-565 size-full" src="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_26.png" alt="wsus_server_2012_wiseindy_26" /></a></p>
+<h3>Step 25:</h3>
+<p>Choose which all languages do you need updates for and click <strong>Next</strong>. You can always modify this later.</p>
+
+<p><a target="_blank" href="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_27.png"><img class="alignnone wp-image-566 size-full" src="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_27.png" alt="wsus_server_2012_wiseindy_27" /></a></p>
+<h3>Step 26:</h3>
+<p>The <strong>Choose Products</strong> screen will allow you to subscribe for updates for different Microsoft products.</p>
+
+<p>After selecting your products, click <strong>Next</strong></p>
+
+<p><a target="_blank" href="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_28.png"><img class="alignnone wp-image-567 size-full" src="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_28.png" alt="wsus_server_2012_wiseindy_28" /></a></p>
+
+<p><a target="_blank" href="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_29.png"><img class="alignnone wp-image-568 size-full" src="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_29.png" alt="wsus_server_2012_wiseindy_29" /></a></p>
+
+<p><a target="_blank" href="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_30.png"><img class="alignnone wp-image-569 size-full" src="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_30.png" alt="wsus_server_2012_wiseindy_30" /></a></p>
+<h3>Step 27:</h3>
+<p>Here you can choose what type of updates you want to subscribe to. Do you want just critical &amp; security updates? Or do you want everything? This is where you can specify that.</p>
+
+<p><a target="_blank" href="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_31.png"><img class="alignnone wp-image-570 size-full" src="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_31.png" alt="wsus_server_2012_wiseindy_31" /></a></p>
+<h3>Step 28:</h3>
+<p>Configure your sync schedule for updates here. The synchronization process involves downloading updates from Microsoft Update or another WSUS server. WSUS determines if any new updates have been made available since the last time you synchronized. If this is the first time you are synchronizing the WSUS server, all of the updates are made available for approval.</p>
+
+<p>I chose to automatically sync my server with Microsoft Update daily at 2 AM.</p>
+
+<p><a target="_blank" href="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_32.png"><img class="alignnone wp-image-571 size-full" src="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_32.png" alt="wsus_server_2012_wiseindy_32" /></a></p>
+<h3>Step 29:</h3>
+<p>Select <strong>Begin initial synchronization</strong> to sync with Microsoft Update and click <strong>Next</strong> and then <strong>Finish</strong></p>
+
+<p><a target="_blank" href="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_33.png"><img class="alignnone wp-image-572 size-full" src="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_33.png" alt="wsus_server_2012_wiseindy_33" /></a></p>
+
+<p><a target="_blank" href="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_34.png"><img class="alignnone wp-image-573 size-full" src="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_34.png" alt="wsus_server_2012_wiseindy_34" /></a></p>
+<h3>Step 30:</h3>
+<p>The <strong>Update Services</strong> console will now launch.</p>
+
+<p>This is going to be the place from where you can control everything.</p>
+
+<p>Right now, under the <strong>To Do</strong> section, you will not see much. Wait for the server to synchronize with Microsoft Update. Once it syncs, you will see information like how many updates are available, how many are approved, etc.</p>
+
+<p>Under the <strong>Overview</strong> section, you can see the <strong>Synchronization Status</strong>.</p>
+
+<p><a target="_blank" href="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_35.png"><img class="alignnone wp-image-574 size-full" src="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_35.png" alt="wsus_server_2012_wiseindy_35" /></a></p>
+
+<p>Synchronization status is now <strong>12%</strong></p>
+
+<p><a target="_blank" href="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_36.png"><img class="alignnone wp-image-575 size-full" src="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_36.png" alt="wsus_server_2012_wiseindy_36" /></a></p>
+<h3>Step 31:</h3>
+<p>Synchronization is finally complete. You can now see the number of updates that are available to you under the <strong>To Do</strong> section.</p>
+
+<p><a target="_blank" href="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_37.png"><img class="alignnone wp-image-576 size-full" src="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_37.png" alt="wsus_server_2012_wiseindy_37" /></a></p>
+
+<p>This completes the installation and initial configuration of our WSUS server. However, this server is not going to be much use to you right now. It still isn’t pushing any updates to your workstations still.</p>
+
+<p>Lets fix that.</p>
+<h3>Step 32:</h3>
+<p>We will be using a GPO to register the workstations on our network with our newly created WSUS server.</p>
+
+<p>Fire up your <strong>Group Policy Management</strong> console. Right-click <strong>Group Policy Objects</strong> and create a new GPO.</p>
+
+<p><a target="_blank" href="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_38.png"><img class="alignnone wp-image-577 size-full" src="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_38.png" alt="wsus_server_2012_wiseindy_38" /></a></p>
+
+<p>Give it an easy-to-identify name.</p>
+
+<p><a target="_blank" href="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_39.png"><img class="alignnone wp-image-578 size-full" src="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_39.png" alt="wsus_server_2012_wiseindy_39" /></a></p>
+
+<p>After its created, right-click and choose <strong>Edit</strong>. We will now configure the GPO.</p>
+
+<p><a target="_blank" href="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_40.png"><img class="alignnone wp-image-579 size-full" src="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_40.png" alt="wsus_server_2012_wiseindy_40" /></a></p>
+<h3>Step 33:</h3>
+<p>Expand <strong>Computer Configuration &gt; </strong><strong>Policies &gt; Administrative Templates &gt; Windows Components &gt; Windows Update</strong></p>
+
+<p><a target="_blank" href="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_41.png"><img class="alignnone wp-image-580 size-full" src="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_41.png" alt="wsus_server_2012_wiseindy_41" /></a></p>
+<h3>Step 34:</h3>
+<p>Double-click <strong>Configure Automatic Updates</strong></p>
+
+<p><a target="_blank" href="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_42.png"><img class="alignnone wp-image-581 size-full" src="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_42.png" alt="wsus_server_2012_wiseindy_42" /></a></p>
+
+<p>Select <strong>Enabled</strong></p>
+
+<p>Under <strong>Options</strong>, choose how would you want your workstations to update. In my case, I prefer the PCs to download the updates and schedule them to be installed at 3 AM daily.</p>
+
+<p>Once you are satisfied with the options, click <strong>OK</strong> to exit the screen.</p>
+
+<p><a target="_blank" href="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_43.png"><img class="alignnone wp-image-582 size-full" src="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_43.png" alt="wsus_server_2012_wiseindy_43" /></a></p>
+<h3>Step 35:</h3>
+<p>Next, double-click <strong>Enable client-side targeting</strong>.
+Configuring this setting will enable the workstations on your network to register directly with your WSUS server (client-side registration).</p>
+
+<p><a target="_blank" href="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_44.png"><img class="alignnone wp-image-583 size-full" src="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_44.png" alt="wsus_server_2012_wiseindy_44" /></a></p>
+
+<p>Select <strong>Enabled</strong>.
+In the <strong>Options</strong> area, type the group name for this computer (Your WSUS server can use this information to group computers into different groups. We will see how this is done further below).</p>
+
+<p><a target="_blank" href="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_45.png"><img class="alignnone wp-image-584 size-full" src="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_45.png" alt="wsus_server_2012_wiseindy_45" /></a></p>
+<h3>Step 36:</h3>
+<p>Next, double-click on <strong>Specify intranet Microsoft update service location</strong>.
+This is where you will specify your WSUS server’s address.</p>
+
+<p><a target="_blank" href="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_46.png"><img class="alignnone wp-image-585 size-full" src="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_46.png" alt="wsus_server_2012_wiseindy_46" /></a></p>
+
+<p>Select <strong>Enabled</strong>.
+In the <strong>Options</strong> area, specify your server name in the form of a URL as shown below.</p>
+
+<p>My WSUS server’s hostname is <strong>my-wsus-server</strong><strong>. </strong>The default port number for WSUS on Windows Server 2012 R2 is <strong>8530</strong>, so my complete server address is:
+<strong>http://my-wsus-server:8530</strong></p>
+
+<p>Enter the same URL in both the text boxes and click <strong>OK</strong>.</p>
+
+<p><a target="_blank" href="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_47.png"><img class="alignnone wp-image-586 size-full" src="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_47.png" alt="wsus_server_2012_wiseindy_47" /></a></p>
+<h3>Step 37:</h3>
+<p>Well, the last step is to link the GPO to an OU. Select an OU which has your test computer. Right-click it and select <strong>Link an Existing GPO</strong>.</p>
+
+<p><a target="_blank" href="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_48.png"><img class="alignnone wp-image-587 size-full" src="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_48.png" alt="wsus_server_2012_wiseindy_48" /></a></p>
+
+<p>Choose your newly created GPO and click <strong>OK</strong>.</p>
+
+<p><a target="_blank" href="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_49.png"><img class="alignnone size-full wp-image-588" src="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_49.png" alt="wsus_server_2012_wiseindy_49" /></a></p>
+<h3>Step 38:</h3>
+<p>Let’s go back to our WSUS server and create a new computer group. By default, under <strong>All Computers</strong>, you’ll see a default group called <strong>Unassigned Computers</strong>. Any computer that doesn’t belong to a group will appear here.</p>
+
+<p><a target="_blank" href="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_50.png"><img class="alignnone size-full wp-image-589" src="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_50.png" alt="wsus_server_2012_wiseindy_50" /></a></p>
+
+<p>Right-click <strong>All Computers</strong> and select <strong>Add Computer Group…</strong></p>
+
+<p><a target="_blank" href="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_51.png"><img class="alignnone size-full wp-image-590" src="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_51.png" alt="wsus_server_2012_wiseindy_51" /></a></p>
+
+<p>Enter the name of the group. I entered the same group name that I had specified in my GPO <strong>(Step 35)</strong>.</p>
+
+<p>Click <strong>Add</strong>.</p>
+
+<p><a target="_blank" href="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_52.png"><img class="alignnone size-full wp-image-591" src="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_52.png" alt="wsus_server_2012_wiseindy_52" /></a></p>
+<h3>Step 39:</h3>
+<p>Now, we can either wait for the GPO to be automatically applied to our test computer or, if you are impatient like me, we can speed things up.</p>
+
+<p>Log into your <strong>test computer</strong>.</p>
+
+<p>Open up <strong>Command Prompt</strong> as <strong>Administrator </strong>and run 3 commands as shown below.</p>
+<ul>
+	<li><code>gpupdate /force<code></code></code></li>
+	<li><code>wuauclt.exe /detectnow<code></code></code></li>
+	<li><code>wuauclt.exe /reportnow</code></li>
+</ul>
+<p><a target="_blank" href="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_53.png"><img class="alignnone size-full wp-image-592" src="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_53.png" alt="wsus_server_2012_wiseindy_53" /></a> <a target="_blank" href="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_54.png"><img class="alignnone size-full wp-image-593" src="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_54.png" alt="wsus_server_2012_wiseindy_54" /></a></p>
+<h3>Step 40:</h3>
+<p>Go back to your WSUS server. Select <strong>All Computers</strong> group.</p>
+
+<p>Hit refresh.</p>
+
+<p>You will see that your <strong>test computer</strong> has appeared in the list.</p>
+
+<p><a target="_blank" href="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_55.png"><img class="alignnone size-full wp-image-594" src="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_55.png" alt="wsus_server_2012_wiseindy_55" /></a></p>
+
+<p>If you don’t see your test computer here, do the following:</p>
+<ul>
+	<li>Wait for about 5 minutes and hit <strong>Refresh</strong> again. Sometimes it takes a while for the PCs to show up even if you have run the above commands.</li>
+	<li>Double-check your GPO settings. Make sure you linked it to the correct OU. The OU should have your <strong>test computer</strong> account and not the user account since its a <em>Computer</em> Configuration policy.</li>
+	<li>Run the commands (specified in Step 39) again on your <strong>test computer</strong>. Make sure you run them from an elevated command prompt.</li>
+	<li>Reboot your <strong>test </strong><strong>computer</strong>.</li>
+</ul>
+<h3>Step 41:</h3>
+<p>You will notice that even though you have specified the computer to be added to a group <strong>wsus-workstations</strong> in the GPO, the test computer still appears under <strong>Unassigned Computers</strong>.</p>
+
+<p><a target="_blank" href="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_56.png"><img class="alignnone size-full wp-image-595" src="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_56.png" alt="wsus_server_2012_wiseindy_56" /></a></p>
+
+<p><a target="_blank" href="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_57.png"><img class="alignnone size-full wp-image-596" src="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_57.png" alt="wsus_server_2012_wiseindy_57" /></a></p>
+
+<p>Well, that’s because by default, WSUS ignores the groups and places <strong>all</strong> discovered computers in the <strong>Unassigned Computers</strong> group. You can then manually move it to whichever group you want.</p>
+
+<p>You can change this setting. If you want the computers to automatically add themselves to the group specified in the GPO, do the following.</p>
+
+<p>In your <strong>Update Services</strong> console, select <strong>Options</strong>. Double-click on<strong> Computers</strong></p>
+
+<p><a target="_blank" href="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_58.png"><img class="alignnone size-full wp-image-597" src="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_58.png" alt="wsus_server_2012_wiseindy_58" /></a></p>
+
+<p>Choose the <strong>second</strong> option that says <strong>Use Group Policy or registry settings on computers.</strong></p>
+
+<p><a target="_blank" href="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_59.png"><img class="alignnone size-full wp-image-598" src="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_59.png" alt="wsus_server_2012_wiseindy_59" /></a></p>
+
+<p>Now any computer that your GPO will apply to, will automatically appear in the group <strong>wsus-computers</strong> instead of <strong>Unassigned Computers</strong>.</p>
+
+<p>You can make different GPOs for machines that you want to be grouped differently.</p>
+<h3>Step 42:</h3>
+<p>Now, since we have added a test computer, lets see how we can push updates to it.</p>
+
+<p>In your WSUS console, expand the <strong>Updates</strong> tree and select <strong>All Updates</strong>. You will see updates which are needed and that are not yet approve.</p>
+
+<p>You will have to <strong>Approve</strong> them so that they can be pushed out to your test computer.</p>
+
+<p>Select the updates you want to approve using the Shift or Ctrl key.</p>
+
+<p>From the <strong>Actions</strong> sidebar on the right, select <strong>Approve…</strong> (you can also right-click the selected updates and do the same)</p>
+
+<p><a target="_blank" href="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_63.png"><img class="alignnone size-full wp-image-602" src="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_63.png" alt="wsus_server_2012_wiseindy_63" /></a></p>
+
+<p>In the window that pops up, right-click <strong>All Computers</strong> and select <strong>Approved for Install</strong>.</p>
+
+<p><a target="_blank" href="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_64.png"><img class="alignnone size-full wp-image-603" src="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_64.png" alt="wsus_server_2012_wiseindy_64" /></a></p>
+
+<p>You’ll notice that the updates haven’t been approved for the groups individually. Right-click <strong>All Computers</strong> again and select <b>Apply to Children</b>. This will approve updates for all the children groups under <strong>All Computers</strong>.</p>
+
+<p>Since you have just one test computer right now, we have approved it for all the computers. However, in a production environment you should first approve the updates to a test group (instead of all computers) to see if the updates cause any sorts of problems. Once you are certain the updates don’t break anything, you can push it to the critical machines.</p>
+
+<p><a target="_blank" href="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_65.png"><img class="alignnone size-full wp-image-604" src="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_65.png" alt="wsus_server_2012_wiseindy_65" /></a></p>
+
+<p>Select<strong> OK</strong></p>
+
+<p><a target="_blank" href="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_66.png"><img class="alignnone size-full wp-image-605" src="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_66.png" alt="wsus_server_2012_wiseindy_66" /></a></p>
+
+<p>The updates have been approved. Now during the scheduled time (3 AM in our case), these updates will be pushed to out test computer.</p>
+
+<p><a target="_blank" href="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_67.png"><img class="alignnone size-full wp-image-606" src="https://inderjotsingh.com/wp-content/uploads/2015/06/wsus_server_2012_wiseindy_67.png" alt="wsus_server_2012_wiseindy_67" /></a></p>
+
+<p>That’s it! Our WSUS server is now set up.</p>
+
+<p>Hope this guide was useful to you. You can leave your feedback in the comments below.</p>
+
+		<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-format="fluid"
+     data-ad-layout="in-article"
+     data-ad-client="ca-pub-1094744891389501"
+     data-ad-slot="6411936673"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fa fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="http://localhost:4000/tags/#guide" class="page__taxonomy-item" rel="tag">guide</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#guides" class="page__taxonomy-item" rel="tag">Guides</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#server" class="page__taxonomy-item" rel="tag">server</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#windows-server-2012-r2" class="page__taxonomy-item" rel="tag">windows server 2012 r2</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#windows-server-update-services" class="page__taxonomy-item" rel="tag">windows server update services</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#windows-update-for-business" class="page__taxonomy-item" rel="tag">windows update for business</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#windows" class="page__taxonomy-item" rel="tag">windows</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#wsus" class="page__taxonomy-item" rel="tag">wsus</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#wub" class="page__taxonomy-item" rel="tag">wub</a>
+    
+    </span>
+  </p>
+
+
+
+
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fa fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="http://localhost:4000/categories/#it" class="page__taxonomy-item" rel="tag">IT</a>
+    
+    </span>
+  </p>
+
+
+        
+          <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Updated:</strong> <time datetime="2015-06-14T04:21:40-04:00">June 14, 2015</time></p>
+        
+      </footer>
+
+      
+
+      
+  <nav class="pagination">
+    
+      <a href="http://localhost:4000/it/update-group-policy-or-run-any-command-remotely-using-powershell/" class="pagination--pager" title="Update group policy (or run any command) remotely using Powershell
+">Previous</a>
+    
+    
+      <a href="http://localhost:4000/it/convert-a-physical-machine-to-a-virtual-machine-p2v-using-vmware-vcenter-converter-standalone-a-step-by-step-guide/" class="pagination--pager" title="Convert a physical machine to a virtual machine (P2V) using VMware vCenter Converter Standalone – A Step-by-Step Guide
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+      <div class="page__comments">
+  
+  
+    <h4 class="page__comments-title">Leave a Comment</h4>
+    <section id="disqus_thread"></section>
+  
+</div>
+
+    
+  </article>
+
+  
+  
+</div>
+
+
+    <div class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Follow:</strong></li>
+    
+    
+    
+    
+      <li><a href="http://github.com/wiseindy"><i class="fa fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+    
+    
+    <li><a href="http://localhost:4000/feed.xml"><i class="fa fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2019 Wiseindy. Powered by <a href="http://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+      </footer>
+    </div>
+
+    <script src="http://localhost:4000/assets/js/main.min.js"></script>
+
+
+
+
+  <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-41402704-6']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+
+
+
+
+  
+  <script type="text/javascript">
+  	/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+  	var disqus_shortname = 'wiseindy';
+
+  	/* * * DON'T EDIT BELOW THIS LINE * * */
+  	(function() {
+  		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  	})();
+
+  	/* * * DON'T EDIT BELOW THIS LINE * * */
+  	(function () {
+  		var s = document.createElement('script'); s.async = true;
+  		s.type = 'text/javascript';
+  		s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+  		(document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+  	}());
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+
+
+
+
+  </body>
+</html>

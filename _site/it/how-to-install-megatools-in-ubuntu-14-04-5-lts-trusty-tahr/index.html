@@ -1,0 +1,559 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.2.2 by Michael Rose
+  Copyright 2017 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE.txt
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin SEO -->
+
+
+
+
+
+
+
+
+
+<title>How to install megatools in Ubuntu 14.04.5 LTS (Trusty Tahr) - Wiseindy</title>
+
+
+
+
+<meta name="description" content="Megatools is a great collection of command line utilities that allow you to interact with your mega.nz account directly from the command line. You can directly download using the cli on your Ubuntu machine. They are a great set of tools, however, installing them does get confusing for a new Linux user. This guide will show you how to install it and set it up in no time.What you need: 	SSH or terminal access to an Ubuntu 14.04 server. 	An internet connection (duh).Step 1:First you need to find out what’s the latest version of megatools available.To find out the latest version, simply visit any one of the links below and see what’s the latest version number: 	https://megatools.megous.com/ 	https://github.com/megous/megatoolsAt the time of writing this article (9 October 2016), the latest version was 1.9.97. If it is different in your case, simply replace 1.9.97 with your version in all the commands below.Step 2:Open your Ubuntu terminal (or SSH to it) and type in the following commands one after the other.sudo apt-get updateRun this command to download the package lists from the repositories and “update” them to get information on the newest versions of packages and their dependencies.sudo apt-get install libtool libglib2.0-dev gobject-introspection libgmp3-dev nettle-dev asciidoc glib-networking openssl libcurl4-openssl-dev libssl-devThis installs all the dependencies that you may need to compile megatools from source.wget http://megatools.megous.com/builds/megatools-1.9.97.tar.gzwget is used to download the latest megatools. Replace 1.9.97 with the latest version is available.zcat megatools-1.9.97.tar.gz &gt; megatools-1.9.97.tartar -xf megatools-1.9.97.tarUse zcat to decompress the downloaded file and tar -xf to extract the contents to a folder.cd megatools-1.9.97/./configuremakesudo make installFinally, run the above commands to compile megatools and install it in your system.                   Step 3:If all went well, you should now have megatools installed on your system.To download from a mega.nz link, simply type megadl &#39;&lt;link&gt;&#39; and the download will start.Here’s an example:megadl &#39;https://mega.nz/#G!IK9KLpRS8J1h82Kpa0kWJkPwDh!2adB&#39;For syntax of other commands, typeman megatoolsThat’s it. You’re done!">
+
+
+
+
+<meta name="author" content="wiseindy">
+
+<meta property="og:locale" content="en">
+<meta property="og:site_name" content="Wiseindy">
+<meta property="og:title" content="How to install megatools in Ubuntu 14.04.5 LTS (Trusty Tahr)">
+
+
+  <link rel="canonical" href="http://localhost:4000/it/how-to-install-megatools-in-ubuntu-14-04-5-lts-trusty-tahr/">
+  <meta property="og:url" content="http://localhost:4000/it/how-to-install-megatools-in-ubuntu-14-04-5-lts-trusty-tahr/">
+
+
+
+  <meta property="og:description" content="Megatools is a great collection of command line utilities that allow you to interact with your mega.nz account directly from the command line. You can directly download using the cli on your Ubuntu machine. They are a great set of tools, however, installing them does get confusing for a new Linux user. This guide will show you how to install it and set it up in no time.What you need: 	SSH or terminal access to an Ubuntu 14.04 server. 	An internet connection (duh).Step 1:First you need to find out what’s the latest version of megatools available.To find out the latest version, simply visit any one of the links below and see what’s the latest version number: 	https://megatools.megous.com/ 	https://github.com/megous/megatoolsAt the time of writing this article (9 October 2016), the latest version was 1.9.97. If it is different in your case, simply replace 1.9.97 with your version in all the commands below.Step 2:Open your Ubuntu terminal (or SSH to it) and type in the following commands one after the other.sudo apt-get updateRun this command to download the package lists from the repositories and “update” them to get information on the newest versions of packages and their dependencies.sudo apt-get install libtool libglib2.0-dev gobject-introspection libgmp3-dev nettle-dev asciidoc glib-networking openssl libcurl4-openssl-dev libssl-devThis installs all the dependencies that you may need to compile megatools from source.wget http://megatools.megous.com/builds/megatools-1.9.97.tar.gzwget is used to download the latest megatools. Replace 1.9.97 with the latest version is available.zcat megatools-1.9.97.tar.gz &gt; megatools-1.9.97.tartar -xf megatools-1.9.97.tarUse zcat to decompress the downloaded file and tar -xf to extract the contents to a folder.cd megatools-1.9.97/./configuremakesudo make installFinally, run the above commands to compile megatools and install it in your system.                   Step 3:If all went well, you should now have megatools installed on your system.To download from a mega.nz link, simply type megadl &#39;&lt;link&gt;&#39; and the download will start.Here’s an example:megadl &#39;https://mega.nz/#G!IK9KLpRS8J1h82Kpa0kWJkPwDh!2adB&#39;For syntax of other commands, typeman megatoolsThat’s it. You’re done!">
+
+
+
+
+
+  
+
+  
+
+
+
+  <meta property="og:image" content="http://localhost:4000/wp-content/uploads/2016/10/how-to-install-megatools-in-ubuntu-14-04-5-lts-trusty-tahr.jpg">
+
+
+
+  <meta property="og:type" content="article">
+  <meta property="article:published_time" content="2016-10-09T01:43:44-04:00">
+
+
+
+
+
+
+
+
+  <script type="application/ld+json">
+    {
+      "@context" : "http://schema.org",
+      "@type" : "Person",
+      "name" : "Wiseindy",
+      "url" : "http://localhost:4000",
+      "sameAs" : null
+    }
+  </script>
+
+
+
+
+
+
+<!-- end SEO -->
+
+
+<link href="http://localhost:4000/feed.xml" type="application/atom+xml" rel="alternate" title="Wiseindy Feed">
+
+<!-- http://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="http://localhost:4000/assets/css/main.css">
+
+<!--[if lte IE 9]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+<meta http-equiv="cleartype" content="on">
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use http://realfavicongenerator.net/ -->
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#666666">
+<meta name="theme-color" content="#ffffff">
+
+<!-- Adsense -->
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-2192084948183024",
+    enable_page_level_ads: true
+  });
+</script>
+<!-- !Adsense -->
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--post">
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+    <div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        <a class="site-title" href="http://localhost:4000/">Wiseindy</a>
+        <ul class="visible-links">
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/it">IT</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/guides">Guides</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/powershell">Powershell</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/networking">Networking</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/exchange">Exchange</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/doodles">Doodles</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/about">About</a></li>
+          
+        </ul>
+        <button><div class="navicon"></div></button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+    
+  <link rel="amphtml" href="http://localhost:4000/amp/it/how-to-install-megatools-in-ubuntu-14-04-5-lts-trusty-tahr">
+
+
+
+  
+
+
+
+
+
+
+
+<div class="page__hero"
+  style=" "
+>
+  
+    <img src="http://localhost:4000/wp-content/uploads/2016/10/how-to-install-megatools-in-ubuntu-14-04-5-lts-trusty-tahr.jpg" alt="How to install megatools in Ubuntu 14.04.5 LTS (Trusty Tahr)" class="page__hero-image">
+  
+  
+</div>
+
+
+
+
+
+<div id="main" role="main">
+  
+
+  <article class="page" itemscope itemtype="http://schema.org/CreativeWork">
+    <meta itemprop="headline" content="How to install megatools in Ubuntu 14.04.5 LTS (Trusty Tahr)">
+    <meta itemprop="description" content="Megatools is a great collection of command line utilities that allow you to interact with your mega.nz account directly from the command line. You can directly download using the cli on your Ubuntu machine. They are a great set of tools, however, installing them does get confusing for a new Linux user. This guide will show you how to install it and set it up in no time.What you need: 	SSH or terminal access to an Ubuntu 14.04 server. 	An internet connection (duh).Step 1:First you need to find out what’s the latest version of megatools available.To find out the latest version, simply visit any one of the links below and see what’s the latest version number: 	https://megatools.megous.com/ 	https://github.com/megous/megatoolsAt the time of writing this article (9 October 2016), the latest version was 1.9.97. If it is different in your case, simply replace 1.9.97 with your version in all the commands below.Step 2:Open your Ubuntu terminal (or SSH to it) and type in the following commands one after the other.sudo apt-get updateRun this command to download the package lists from the repositories and “update” them to get information on the newest versions of packages and their dependencies.sudo apt-get install libtool libglib2.0-dev gobject-introspection libgmp3-dev nettle-dev asciidoc glib-networking openssl libcurl4-openssl-dev libssl-devThis installs all the dependencies that you may need to compile megatools from source.wget http://megatools.megous.com/builds/megatools-1.9.97.tar.gzwget is used to download the latest megatools. Replace 1.9.97 with the latest version is available.zcat megatools-1.9.97.tar.gz &gt; megatools-1.9.97.tartar -xf megatools-1.9.97.tarUse zcat to decompress the downloaded file and tar -xf to extract the contents to a folder.cd megatools-1.9.97/./configuremakesudo make installFinally, run the above commands to compile megatools and install it in your system.                   Step 3:If all went well, you should now have megatools installed on your system.To download from a mega.nz link, simply type megadl &#39;&lt;link&gt;&#39; and the download will start.Here’s an example:megadl &#39;https://mega.nz/#G!IK9KLpRS8J1h82Kpa0kWJkPwDh!2adB&#39;For syntax of other commands, typeman megatoolsThat’s it. You’re done!">
+    <meta itemprop="datePublished" content="October 09, 2016">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 class="page__title" itemprop="headline">How to install megatools in Ubuntu 14.04.5 LTS (Trusty Tahr)
+</h1>
+          
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+		<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-format="fluid"
+     data-ad-layout="in-article"
+     data-ad-client="ca-pub-1094744891389501"
+     data-ad-slot="6411936673"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+        <p>Megatools is a great collection of command line utilities that allow you to interact with your <a target="_blank" href="https://mega.nz">mega.nz</a> account directly from the command line. You can directly download using the cli on your Ubuntu machine. They are a great set of tools, however, installing them does get confusing for a new Linux user. This guide will show you how to install it and set it up in no time.</p>
+
+<!--more-->
+<h3>What you need:</h3>
+<ul>
+ 	<li>SSH or terminal access to an Ubuntu 14.04 server.</li>
+ 	<li>An internet connection (duh).</li>
+</ul>
+<h3>Step 1:</h3>
+<p>First you need to find out what’s the latest version of megatools available.</p>
+
+<p>To find out the latest version, simply visit any one of the links below and see what’s the latest version number:</p>
+<ul>
+ 	<li><a target="_blank" href="https://megatools.megous.com/">https://megatools.megous.com/</a></li>
+ 	<li><a target="_blank" href="https://github.com/megous/megatools">https://github.com/megous/megatools</a></li>
+</ul>
+<p>At the time of writing this article (9 October 2016), the latest version was <code>1.9.97</code>. If it is different in your case, simply replace <code>1.9.97</code> with your version in all the commands below.</p>
+<h3>Step 2:</h3>
+<p>Open your Ubuntu terminal (or SSH to it) and type in the following commands one after the other.</p>
+<div class="language-shell highlighter-rouge"><pre class="highlight"><code>sudo apt-get update
+</code></pre>
+</div>
+<p>Run this command to download the package lists from the repositories and “update” them to get information on the newest versions of packages and their dependencies.</p>
+<div class="language-shell highlighter-rouge"><pre class="highlight"><code>sudo apt-get install libtool libglib2.0-dev gobject-introspection libgmp3-dev nettle-dev asciidoc glib-networking openssl libcurl4-openssl-dev libssl-dev
+</code></pre>
+</div>
+<p>This installs all the dependencies that you may need to compile megatools from source.</p>
+<div class="language-shell highlighter-rouge"><pre class="highlight"><code>wget http://megatools.megous.com/builds/megatools-1.9.97.tar.gz
+</code></pre>
+</div>
+<p><code>wget</code> is used to download the latest megatools. Replace <code>1.9.97</code> with the latest version is available.</p>
+<div class="language-shell highlighter-rouge"><pre class="highlight"><code>zcat megatools-1.9.97.tar.gz &gt; megatools-1.9.97.tar
+tar -xf megatools-1.9.97.tar
+</code></pre>
+</div>
+<p>Use <code>zcat</code> to decompress the downloaded file and <code>tar -xf</code> to extract the contents to a folder.</p>
+<div class="language-shell highlighter-rouge"><pre class="highlight"><code><span class="nb">cd </span>megatools-1.9.97/
+./configure
+make
+sudo make install
+</code></pre>
+</div>
+<p>Finally, run the above commands to compile megatools and install it in your system.</p>
+
+<div class="row">
+  <div class="col-12">
+    
+   <script async="" src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-format="fluid" data-ad-layout="in-article" data-ad-client="ca-pub-1094744891389501" data-ad-slot="6411936673"></ins>
+    <script>
+         (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+
+
+  </div>
+</div>
+
+<h3>Step 3:</h3>
+<p>If all went well, you should now have megatools installed on your system.</p>
+
+<p>To download from a <a target="_blank" href="https://mega.nz">mega.nz</a> link, simply type <code>megadl '&lt;link&gt;'</code> and the download will start.</p>
+
+<p>Here’s an example:</p>
+<div class="language-shell highlighter-rouge"><pre class="highlight"><code>megadl <span class="s1">'https://mega.nz/#G!IK9KLpRS8J1h82Kpa0kWJkPwDh!2adB'</span>
+</code></pre>
+</div>
+<p>For syntax of other commands, type</p>
+<div class="language-shell highlighter-rouge"><pre class="highlight"><code>man megatools
+</code></pre>
+</div>
+<p>That’s it. You’re done!</p>
+
+		<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-format="fluid"
+     data-ad-layout="in-article"
+     data-ad-client="ca-pub-1094744891389501"
+     data-ad-slot="6411936673"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fa fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="http://localhost:4000/tags/#14-04" class="page__taxonomy-item" rel="tag">14.04</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#download" class="page__taxonomy-item" rel="tag">download</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#guide" class="page__taxonomy-item" rel="tag">guide</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#guides" class="page__taxonomy-item" rel="tag">Guides</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#linux" class="page__taxonomy-item" rel="tag">linux</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#mega" class="page__taxonomy-item" rel="tag">mega</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#mega-nz" class="page__taxonomy-item" rel="tag">mega.nz</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#megacopy" class="page__taxonomy-item" rel="tag">megacopy</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#megadf" class="page__taxonomy-item" rel="tag">megadf</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#megadl" class="page__taxonomy-item" rel="tag">megadl</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#megafs" class="page__taxonomy-item" rel="tag">megafs</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#megaget" class="page__taxonomy-item" rel="tag">megaget</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#megals" class="page__taxonomy-item" rel="tag">megals</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#megamkdir" class="page__taxonomy-item" rel="tag">megamkdir</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#megaput" class="page__taxonomy-item" rel="tag">megaput</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#megareg" class="page__taxonomy-item" rel="tag">megareg</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#megarm" class="page__taxonomy-item" rel="tag">megarm</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#megastream" class="page__taxonomy-item" rel="tag">megastream</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#megatools" class="page__taxonomy-item" rel="tag">megatools</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#ubuntu-14-04" class="page__taxonomy-item" rel="tag">ubuntu 14.04</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#ubuntu" class="page__taxonomy-item" rel="tag">ubuntu</a>
+    
+    </span>
+  </p>
+
+
+
+
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fa fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="http://localhost:4000/categories/#it" class="page__taxonomy-item" rel="tag">IT</a>
+    
+    </span>
+  </p>
+
+
+        
+          <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Updated:</strong> <time datetime="2016-10-09T01:43:44-04:00">October 09, 2016</time></p>
+        
+      </footer>
+
+      
+
+      
+  <nav class="pagination">
+    
+      <a href="http://localhost:4000/it/how-to-install-or-renew-ssl-certificate-in-exchange-2010/" class="pagination--pager" title="How to install or renew SSL certificate in Exchange 2010
+">Previous</a>
+    
+    
+      <a href="http://localhost:4000/it/enabling-linux-bash-shell-in-windows-10/" class="pagination--pager" title="Enabling Linux Bash Shell in Windows 10
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+      <div class="page__comments">
+  
+  
+    <h4 class="page__comments-title">Leave a Comment</h4>
+    <section id="disqus_thread"></section>
+  
+</div>
+
+    
+  </article>
+
+  
+  
+</div>
+
+
+    <div class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Follow:</strong></li>
+    
+    
+    
+    
+      <li><a href="http://github.com/wiseindy"><i class="fa fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+    
+    
+    <li><a href="http://localhost:4000/feed.xml"><i class="fa fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2019 Wiseindy. Powered by <a href="http://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+      </footer>
+    </div>
+
+    <script src="http://localhost:4000/assets/js/main.min.js"></script>
+
+
+
+
+  <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-41402704-6']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+
+
+
+
+  
+  <script type="text/javascript">
+  	/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+  	var disqus_shortname = 'wiseindy';
+
+  	/* * * DON'T EDIT BELOW THIS LINE * * */
+  	(function() {
+  		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  	})();
+
+  	/* * * DON'T EDIT BELOW THIS LINE * * */
+  	(function () {
+  		var s = document.createElement('script'); s.async = true;
+  		s.type = 'text/javascript';
+  		s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+  		(document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+  	}());
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+
+
+
+
+  </body>
+</html>

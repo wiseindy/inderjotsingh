@@ -1,0 +1,550 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.2.2 by Michael Rose
+  Copyright 2017 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE.txt
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin SEO -->
+
+
+
+
+
+
+
+
+
+<title>How to Fix Outlook PDF Previews and Explorer thumbnails on 64-bit Windows - Wiseindy</title>
+
+
+
+
+<meta name="description" content="“This file cannot be previewed because of an error with the following previewer: PDF Preview Handler for Vista”.You might’ve seen this pretty common error in Outlook when you cannot preview PDF files in the preview pane. This happens on 64-bit Windows.Well, it’s a pretty easy fix.The manual way to fix this errorStep 1:Click the Start button, type regedit.exe and open it.Step 2:Once open, navigate to HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Classes\CLSID\{DC6EFB56-9CFA-464D-8880-44885D7DC193}Step 3:Double-click AppID in the right column and copy paste this in the Value Data field: {534A1E02-D58F-44f0-B58B-36CBED287C7C}Click OK and close regedit. That’s it!                   The automatic way to fix this errorStep 1:Download the Adobe Reader preview handler x64 fixer by Leo Davidson, from this link: http://www.pretentiousname.com/adobe_pdf_x64_fix/#downlYou could download either with installer or without. I choose to do the one without the installer.Step 2:Extract the downloaded files. You’ll see two folders. Open the one that says “Fix for x64 Adobe Reader preview handler”.Run the preview handler fix utility and click Apply Fix.That’s it!(header image source: automart.co.za)">
+
+
+
+
+<meta name="author" content="wiseindy">
+
+<meta property="og:locale" content="en">
+<meta property="og:site_name" content="Wiseindy">
+<meta property="og:title" content="How to Fix Outlook PDF Previews and Explorer thumbnails on 64-bit Windows">
+
+
+  <link rel="canonical" href="http://localhost:4000/it/how-to-fix-outlook-pdf-previews-and-explorer-thumbnails-on-64-bit-windows/">
+  <meta property="og:url" content="http://localhost:4000/it/how-to-fix-outlook-pdf-previews-and-explorer-thumbnails-on-64-bit-windows/">
+
+
+
+  <meta property="og:description" content="“This file cannot be previewed because of an error with the following previewer: PDF Preview Handler for Vista”.You might’ve seen this pretty common error in Outlook when you cannot preview PDF files in the preview pane. This happens on 64-bit Windows.Well, it’s a pretty easy fix.The manual way to fix this errorStep 1:Click the Start button, type regedit.exe and open it.Step 2:Once open, navigate to HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Classes\CLSID\{DC6EFB56-9CFA-464D-8880-44885D7DC193}Step 3:Double-click AppID in the right column and copy paste this in the Value Data field: {534A1E02-D58F-44f0-B58B-36CBED287C7C}Click OK and close regedit. That’s it!                   The automatic way to fix this errorStep 1:Download the Adobe Reader preview handler x64 fixer by Leo Davidson, from this link: http://www.pretentiousname.com/adobe_pdf_x64_fix/#downlYou could download either with installer or without. I choose to do the one without the installer.Step 2:Extract the downloaded files. You’ll see two folders. Open the one that says “Fix for x64 Adobe Reader preview handler”.Run the preview handler fix utility and click Apply Fix.That’s it!(header image source: automart.co.za)">
+
+
+
+
+
+  
+
+  
+
+
+
+  <meta property="og:image" content="http://localhost:4000/wp-content/uploads/2016/02/how-to-fix-outlook-pdf-previews-and-explorer-thumbnails-on-64-bit-windows.jpg">
+
+
+
+  <meta property="og:type" content="article">
+  <meta property="article:published_time" content="2016-02-06T22:47:20-05:00">
+
+
+
+
+
+
+
+
+  <script type="application/ld+json">
+    {
+      "@context" : "http://schema.org",
+      "@type" : "Person",
+      "name" : "Wiseindy",
+      "url" : "http://localhost:4000",
+      "sameAs" : null
+    }
+  </script>
+
+
+
+
+
+
+<!-- end SEO -->
+
+
+<link href="http://localhost:4000/feed.xml" type="application/atom+xml" rel="alternate" title="Wiseindy Feed">
+
+<!-- http://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="http://localhost:4000/assets/css/main.css">
+
+<!--[if lte IE 9]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+<meta http-equiv="cleartype" content="on">
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use http://realfavicongenerator.net/ -->
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#666666">
+<meta name="theme-color" content="#ffffff">
+
+<!-- Adsense -->
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-2192084948183024",
+    enable_page_level_ads: true
+  });
+</script>
+<!-- !Adsense -->
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--post">
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+    <div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        <a class="site-title" href="http://localhost:4000/">Wiseindy</a>
+        <ul class="visible-links">
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/it">IT</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/guides">Guides</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/powershell">Powershell</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/networking">Networking</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/exchange">Exchange</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/doodles">Doodles</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/about">About</a></li>
+          
+        </ul>
+        <button><div class="navicon"></div></button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+    
+  <link rel="amphtml" href="http://localhost:4000/amp/it/how-to-fix-outlook-pdf-previews-and-explorer-thumbnails-on-64-bit-windows">
+
+
+
+  
+
+
+
+
+
+
+
+<div class="page__hero"
+  style=" "
+>
+  
+    <img src="http://localhost:4000/wp-content/uploads/2016/02/how-to-fix-outlook-pdf-previews-and-explorer-thumbnails-on-64-bit-windows.jpg" alt="How to Fix Outlook PDF Previews and Explorer thumbnails on 64-bit Windows" class="page__hero-image">
+  
+  
+</div>
+
+
+
+
+
+<div id="main" role="main">
+  
+
+  <article class="page" itemscope itemtype="http://schema.org/CreativeWork">
+    <meta itemprop="headline" content="How to Fix Outlook PDF Previews and Explorer thumbnails on 64-bit Windows">
+    <meta itemprop="description" content="“This file cannot be previewed because of an error with the following previewer: PDF Preview Handler for Vista”.You might’ve seen this pretty common error in Outlook when you cannot preview PDF files in the preview pane. This happens on 64-bit Windows.Well, it’s a pretty easy fix.The manual way to fix this errorStep 1:Click the Start button, type regedit.exe and open it.Step 2:Once open, navigate to HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Classes\CLSID\{DC6EFB56-9CFA-464D-8880-44885D7DC193}Step 3:Double-click AppID in the right column and copy paste this in the Value Data field: {534A1E02-D58F-44f0-B58B-36CBED287C7C}Click OK and close regedit. That’s it!                   The automatic way to fix this errorStep 1:Download the Adobe Reader preview handler x64 fixer by Leo Davidson, from this link: http://www.pretentiousname.com/adobe_pdf_x64_fix/#downlYou could download either with installer or without. I choose to do the one without the installer.Step 2:Extract the downloaded files. You’ll see two folders. Open the one that says “Fix for x64 Adobe Reader preview handler”.Run the preview handler fix utility and click Apply Fix.That’s it!(header image source: automart.co.za)">
+    <meta itemprop="datePublished" content="February 06, 2016">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 class="page__title" itemprop="headline">How to Fix Outlook PDF Previews and Explorer thumbnails on 64-bit Windows
+</h1>
+          
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+		<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-format="fluid"
+     data-ad-layout="in-article"
+     data-ad-client="ca-pub-1094744891389501"
+     data-ad-slot="6411936673"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+        <p>“This file cannot be previewed because of an error with the following previewer: PDF Preview Handler for Vista”.</p>
+
+<p>You might’ve seen this pretty common error in Outlook when you cannot preview PDF files in the preview pane. This happens on 64-bit Windows.</p>
+
+<p>Well, it’s a pretty easy fix.</p>
+
+<!--more-->
+
+<p><a target="_blank" href="https://inderjotsingh.com/wp-content/uploads/2016/02/how-to-fix-outlook-pdf-previews-and-explorer-thumbnails-on-64-bit-windows_02.png" rel="attachment wp-att-1159"><img class="alignnone size-full wp-image-1159" src="https://inderjotsingh.com/wp-content/uploads/2016/02/how-to-fix-outlook-pdf-previews-and-explorer-thumbnails-on-64-bit-windows_02.png" alt="how-to-fix-outlook-pdf-previews-and-explorer-thumbnails-on-64-bit-windows_02" /></a></p>
+<h2>The manual way to fix this error</h2>
+<h3>Step 1:</h3>
+<p>Click the <strong>Start</strong> button, type <strong>regedit.exe</strong> and open it.</p>
+
+<p><a target="_blank" href="https://inderjotsingh.com/wp-content/uploads/2016/02/how-to-fix-outlook-pdf-previews-and-explorer-thumbnails-on-64-bit-windows_01.png" rel="attachment wp-att-1158"><img class="alignnone size-full wp-image-1158" src="https://inderjotsingh.com/wp-content/uploads/2016/02/how-to-fix-outlook-pdf-previews-and-explorer-thumbnails-on-64-bit-windows_01.png" alt="how-to-fix-outlook-pdf-previews-and-explorer-thumbnails-on-64-bit-windows_01" /></a></p>
+<h3>Step 2:</h3>
+<p>Once open, navigate to <code>HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Classes\
+CLSID\{DC6EFB56-9CFA-464D-8880-44885D7DC193}</code></p>
+
+<p><a target="_blank" href="https://inderjotsingh.com/wp-content/uploads/2016/02/how-to-fix-outlook-pdf-previews-and-explorer-thumbnails-on-64-bit-windows_03.png" rel="attachment wp-att-1160"><img class="alignnone size-full wp-image-1160" src="https://inderjotsingh.com/wp-content/uploads/2016/02/how-to-fix-outlook-pdf-previews-and-explorer-thumbnails-on-64-bit-windows_03.png" alt="how-to-fix-outlook-pdf-previews-and-explorer-thumbnails-on-64-bit-windows_03" /></a></p>
+<h3>Step 3:</h3>
+<p>Double-click <strong>AppID</strong> in the right column and copy paste this in the Value Data field: <code>{534A1E02-D58F-44f0-B58B-36CBED287C7C}</code></p>
+
+<p><a target="_blank" href="https://inderjotsingh.com/wp-content/uploads/2016/02/how-to-fix-outlook-pdf-previews-and-explorer-thumbnails-on-64-bit-windows_04.png" rel="attachment wp-att-1161"><img class="alignnone size-full wp-image-1161" src="https://inderjotsingh.com/wp-content/uploads/2016/02/how-to-fix-outlook-pdf-previews-and-explorer-thumbnails-on-64-bit-windows_04.png" alt="how-to-fix-outlook-pdf-previews-and-explorer-thumbnails-on-64-bit-windows_04" /></a></p>
+
+<p>Click <strong>OK</strong> and close regedit. That’s it!</p>
+
+<div class="row">
+  <div class="col-12">
+    
+   <script async="" src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-format="fluid" data-ad-layout="in-article" data-ad-client="ca-pub-1094744891389501" data-ad-slot="6411936673"></ins>
+    <script>
+         (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+
+
+  </div>
+</div>
+
+<h2>The automatic way to fix this error</h2>
+<h3>Step 1:</h3>
+<p>Download the Adobe Reader preview handler x64 fixer by <a target="_blank" href="http://www.pretentiousname.com/">Leo Davidson</a>, from this link: <a target="_blank" href="http://www.pretentiousname.com/adobe_pdf_x64_fix/#downl">http://www.pretentiousname.com/adobe_pdf_x64_fix/#downl</a></p>
+
+<p>You could download either with installer or without. I choose to do the one without the installer.</p>
+
+<p><a target="_blank" href="https://inderjotsingh.com/wp-content/uploads/2016/02/how-to-fix-outlook-pdf-previews-and-explorer-thumbnails-on-64-bit-windows_05.png" rel="attachment wp-att-1162"><img class="alignnone size-full wp-image-1162" src="https://inderjotsingh.com/wp-content/uploads/2016/02/how-to-fix-outlook-pdf-previews-and-explorer-thumbnails-on-64-bit-windows_05.png" alt="how-to-fix-outlook-pdf-previews-and-explorer-thumbnails-on-64-bit-windows_05" /></a></p>
+<h3>Step 2:</h3>
+<p>Extract the downloaded files. You’ll see two folders. Open the one that says <strong>“Fix for x64 Adobe Reader preview handler”</strong>.</p>
+
+<p><a target="_blank" href="https://inderjotsingh.com/wp-content/uploads/2016/02/how-to-fix-outlook-pdf-previews-and-explorer-thumbnails-on-64-bit-windows_06.png" rel="attachment wp-att-1163"><img class="alignnone size-full wp-image-1163" src="https://inderjotsingh.com/wp-content/uploads/2016/02/how-to-fix-outlook-pdf-previews-and-explorer-thumbnails-on-64-bit-windows_06.png" alt="how-to-fix-outlook-pdf-previews-and-explorer-thumbnails-on-64-bit-windows_06" /></a></p>
+
+<p>Run the preview handler fix utility and click <strong>Apply Fix</strong>.</p>
+
+<p><a target="_blank" href="https://inderjotsingh.com/wp-content/uploads/2016/02/how-to-fix-outlook-pdf-previews-and-explorer-thumbnails-on-64-bit-windows_07.png" rel="attachment wp-att-1164"><img class="alignnone size-full wp-image-1164" src="https://inderjotsingh.com/wp-content/uploads/2016/02/how-to-fix-outlook-pdf-previews-and-explorer-thumbnails-on-64-bit-windows_07.png" alt="how-to-fix-outlook-pdf-previews-and-explorer-thumbnails-on-64-bit-windows_07" /></a></p>
+
+<p>That’s it!</p>
+
+<p>(header image source: <a target="_blank" href="http://blog.automart.co.za/wp-content/uploads/2015/01/trying_to_figure_out_car_trouble.jpg">automart.co.za</a>)</p>
+
+		<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-format="fluid"
+     data-ad-layout="in-article"
+     data-ad-client="ca-pub-1094744891389501"
+     data-ad-slot="6411936673"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fa fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="http://localhost:4000/tags/#64-bit" class="page__taxonomy-item" rel="tag">64 bit</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#64" class="page__taxonomy-item" rel="tag">64</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#acrobat" class="page__taxonomy-item" rel="tag">acrobat</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#adobe-acrobat-reader" class="page__taxonomy-item" rel="tag">adobe acrobat reader</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#adobe-acrobat" class="page__taxonomy-item" rel="tag">adobe acrobat</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#adobe-pdf-preview-handler-for-vista" class="page__taxonomy-item" rel="tag">adobe pdf preview handler for vista</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#adobe-reader" class="page__taxonomy-item" rel="tag">adobe reader</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#adobe" class="page__taxonomy-item" rel="tag">adobe</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#guides" class="page__taxonomy-item" rel="tag">Guides</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#microsoft-outlook" class="page__taxonomy-item" rel="tag">microsoft outlook</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#outlook" class="page__taxonomy-item" rel="tag">outlook</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#pdf-handler" class="page__taxonomy-item" rel="tag">pdf handler</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#pdf-previewer" class="page__taxonomy-item" rel="tag">pdf previewer</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#pdf" class="page__taxonomy-item" rel="tag">pdf</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#reader" class="page__taxonomy-item" rel="tag">reader</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#regedit" class="page__taxonomy-item" rel="tag">regedit</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#vista" class="page__taxonomy-item" rel="tag">vista</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#windows-10" class="page__taxonomy-item" rel="tag">windows 10</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#windows-7" class="page__taxonomy-item" rel="tag">windows 7</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#windows-8" class="page__taxonomy-item" rel="tag">windows 8</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#windows-8-1" class="page__taxonomy-item" rel="tag">windows 8.1</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#x64" class="page__taxonomy-item" rel="tag">x64</a>
+    
+    </span>
+  </p>
+
+
+
+
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fa fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="http://localhost:4000/categories/#it" class="page__taxonomy-item" rel="tag">IT</a>
+    
+    </span>
+  </p>
+
+
+        
+          <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Updated:</strong> <time datetime="2016-02-06T22:47:20-05:00">February 06, 2016</time></p>
+        
+      </footer>
+
+      
+
+      
+  <nav class="pagination">
+    
+      <a href="http://localhost:4000/it/how-to-change-primary-domain-of-free-or-paid-google-apps-account/" class="pagination--pager" title="How to change primary domain of free or paid Google Apps account.
+">Previous</a>
+    
+    
+      <a href="http://localhost:4000/it/how-to-install-or-renew-ssl-certificate-in-exchange-2010/" class="pagination--pager" title="How to install or renew SSL certificate in Exchange 2010
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+      <div class="page__comments">
+  
+  
+    <h4 class="page__comments-title">Leave a Comment</h4>
+    <section id="disqus_thread"></section>
+  
+</div>
+
+    
+  </article>
+
+  
+  
+</div>
+
+
+    <div class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Follow:</strong></li>
+    
+    
+    
+    
+      <li><a href="http://github.com/wiseindy"><i class="fa fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+    
+    
+    <li><a href="http://localhost:4000/feed.xml"><i class="fa fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2019 Wiseindy. Powered by <a href="http://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+      </footer>
+    </div>
+
+    <script src="http://localhost:4000/assets/js/main.min.js"></script>
+
+
+
+
+  <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-41402704-6']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+
+
+
+
+  
+  <script type="text/javascript">
+  	/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+  	var disqus_shortname = 'wiseindy';
+
+  	/* * * DON'T EDIT BELOW THIS LINE * * */
+  	(function() {
+  		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  	})();
+
+  	/* * * DON'T EDIT BELOW THIS LINE * * */
+  	(function () {
+  		var s = document.createElement('script'); s.async = true;
+  		s.type = 'text/javascript';
+  		s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+  		(document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+  	}());
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+
+
+
+
+  </body>
+</html>
