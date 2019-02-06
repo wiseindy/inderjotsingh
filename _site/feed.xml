@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.4.3">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2019-02-05T17:35:24-05:00</updated><id>http://localhost:4000/</id><title type="html">Wiseindy</title><subtitle>Sysadmin by day, developer by night.</subtitle><author><name>Wiseindy</name><email>wiseindy (at) live (dot) com</email><uri>https://inderjotsingh.com</uri></author><entry><title type="html">How to install OpenVPN server on Ubuntu 14.04 - A Step-by-Step Guide</title><link href="http://localhost:4000/it/install-openvpn-ubuntu-1404/" rel="alternate" type="text/html" title="How to install OpenVPN server on Ubuntu 14.04 - A Step-by-Step Guide" /><published>2017-04-27T08:00:00-04:00</published><updated>2017-04-27T08:00:00-04:00</updated><id>http://localhost:4000/it/install-openvpn-ubuntu-1404</id><content type="html" xml:base="http://localhost:4000/it/install-openvpn-ubuntu-1404/">&lt;p&gt;This is a detailed &amp;amp; step-by-step guide that will show you how to install and configure OpenVPN on Ubuntu 14.04. You can use OpenVPN to access the Internet safely and securely while on the move. To learn more about OpenVPN, you can check out the &lt;a href=&quot;https://en.wikipedia.org/wiki/OpenVPN&quot;&gt;Wikipedia link&lt;/a&gt; or read about it on the &lt;a href=&quot;https://openvpn.net/&quot;&gt;official site&lt;/a&gt;&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2019-02-06T12:20:56-05:00</updated><id>http://localhost:4000/</id><title type="html">Wiseindy</title><subtitle>Sysadmin by day, developer by night.</subtitle><author><name>Wiseindy</name><email>wiseindy (at) live (dot) com</email><uri>https://inderjotsingh.com</uri></author><entry><title type="html">How to install OpenVPN server on Ubuntu 14.04 - A Step-by-Step Guide</title><link href="http://localhost:4000/it/install-openvpn-ubuntu-1404/" rel="alternate" type="text/html" title="How to install OpenVPN server on Ubuntu 14.04 - A Step-by-Step Guide" /><published>2017-04-27T08:00:00-04:00</published><updated>2017-04-27T08:00:00-04:00</updated><id>http://localhost:4000/it/install-openvpn-ubuntu-1404</id><content type="html" xml:base="http://localhost:4000/it/install-openvpn-ubuntu-1404/">&lt;p&gt;This is a detailed &amp;amp; step-by-step guide that will show you how to install and configure OpenVPN on Ubuntu 14.04. You can use OpenVPN to access the Internet safely and securely while on the move. To learn more about OpenVPN, you can check out the &lt;a href=&quot;https://en.wikipedia.org/wiki/OpenVPN&quot;&gt;Wikipedia link&lt;/a&gt; or read about it on the &lt;a href=&quot;https://openvpn.net/&quot;&gt;official site&lt;/a&gt;&lt;/p&gt;
 
 &lt;!--more--&gt;
 &lt;h2 id=&quot;what-you-need&quot;&gt;What you need:&lt;/h2&gt;
@@ -27,26 +27,23 @@ Don’t worry if the titles look intimidating. If you follow the instructions, i
 
 &lt;p&gt;First, update your package lists and then install the &lt;code class=&quot;highlighter-rouge&quot;&gt;openvpn&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;easy-rsa&lt;/code&gt; package.&lt;/p&gt;
 
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sudo apt-get update
-sudo apt-get install openvpn easy-rsa
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;apt-get update
+&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;apt-get &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;openvpn easy-rsa
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;h3 id=&quot;step-12&quot;&gt;Step 1.2:&lt;/h3&gt;
 
 &lt;p&gt;From now onwards, all the steps below have to be run as &lt;code class=&quot;highlighter-rouge&quot;&gt;root&lt;/code&gt;. So, go ahead and login as root.&lt;/p&gt;
 
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;su
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;su
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;h3 id=&quot;step-13&quot;&gt;Step 1.3:&lt;/h3&gt;
 
 &lt;p&gt;Lets extract the sample VPN server configuration file to this location: &lt;code class=&quot;highlighter-rouge&quot;&gt;/etc/openvpn&lt;/code&gt;&lt;/p&gt;
 
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;gunzip -c /usr/share/doc/openvpn/examples/sample-config-files/server.conf.gz &amp;gt; /etc/openvpn/server.conf
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;gunzip&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-c&lt;/span&gt; /usr/share/doc/openvpn/examples/sample-config-files/server.conf.gz &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; /etc/openvpn/server.conf
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;&lt;em&gt;Note: &lt;code class=&quot;highlighter-rouge&quot;&gt;gunzip&lt;/code&gt; is a utility that uncompresses a &lt;code class=&quot;highlighter-rouge&quot;&gt;gzip&lt;/code&gt; file. &lt;code class=&quot;highlighter-rouge&quot;&gt;gz&lt;/code&gt; or &lt;code class=&quot;highlighter-rouge&quot;&gt;.Z&lt;/code&gt; is the extension for &lt;code class=&quot;highlighter-rouge&quot;&gt;gzip&lt;/code&gt; files.&lt;/em&gt;&lt;/p&gt;
 
@@ -56,9 +53,8 @@ sudo apt-get install openvpn easy-rsa
 
 &lt;p&gt;I prefer &lt;code class=&quot;highlighter-rouge&quot;&gt;vim&lt;/code&gt; to open files on ubuntu. If you prefer &lt;code class=&quot;highlighter-rouge&quot;&gt;nano&lt;/code&gt; instead, you can use that too.&lt;/p&gt;
 
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;vi /etc/openvpn/server.conf
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;vi /etc/openvpn/server.conf
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;h3 id=&quot;step-15&quot;&gt;Step 1.5:&lt;/h3&gt;
 
@@ -66,14 +62,13 @@ sudo apt-get install openvpn easy-rsa
 
 &lt;p&gt;Search for a section that looks like this&lt;/p&gt;
 
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# Diffie hellman parameters.&lt;/span&gt;
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# Diffie hellman parameters.&lt;/span&gt;
 &lt;span class=&quot;c&quot;&gt;# Generate your own with:&lt;/span&gt;
 &lt;span class=&quot;c&quot;&gt;#   openssl dhparam -out dh1024.pem 1024&lt;/span&gt;
 &lt;span class=&quot;c&quot;&gt;# Substitute 2048 for 1024 if you are using&lt;/span&gt;
 &lt;span class=&quot;c&quot;&gt;# 2048 bit keys.&lt;/span&gt;
 dh dh1024.pem
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;Change &lt;code class=&quot;highlighter-rouge&quot;&gt;dh1024.pem&lt;/code&gt; to &lt;code class=&quot;highlighter-rouge&quot;&gt;dh2048.pem&lt;/code&gt;. This doubles the RSA key length when we generate the server and client keys later in the guide.&lt;/p&gt;
 
@@ -83,7 +78,7 @@ dh dh1024.pem
 
 &lt;p&gt;Before:&lt;/p&gt;
 
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# If enabled, this directive will configure&lt;/span&gt;
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# If enabled, this directive will configure&lt;/span&gt;
 &lt;span class=&quot;c&quot;&gt;# all clients to redirect their default&lt;/span&gt;
 &lt;span class=&quot;c&quot;&gt;# network gateway through the VPN, causing&lt;/span&gt;
 &lt;span class=&quot;c&quot;&gt;# all IP traffic such as web browsing and&lt;/span&gt;
@@ -91,13 +86,12 @@ dh dh1024.pem
 &lt;span class=&quot;c&quot;&gt;# (The OpenVPN server machine may need to NAT&lt;/span&gt;
 &lt;span class=&quot;c&quot;&gt;# or bridge the TUN/TAP interface to the internet&lt;/span&gt;
 &lt;span class=&quot;c&quot;&gt;# in order for this to work properly).&lt;/span&gt;
-;push &lt;span class=&quot;s2&quot;&gt;&quot;redirect-gateway def1 bypass-dhcp&quot;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;push &lt;span class=&quot;s2&quot;&gt;&quot;redirect-gateway def1 bypass-dhcp&quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;After:&lt;/p&gt;
 
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# If enabled, this directive will configure&lt;/span&gt;
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# If enabled, this directive will configure&lt;/span&gt;
 &lt;span class=&quot;c&quot;&gt;# all clients to redirect their default&lt;/span&gt;
 &lt;span class=&quot;c&quot;&gt;# network gateway through the VPN, causing&lt;/span&gt;
 &lt;span class=&quot;c&quot;&gt;# all IP traffic such as web browsing and&lt;/span&gt;
@@ -106,8 +100,7 @@ dh dh1024.pem
 &lt;span class=&quot;c&quot;&gt;# or bridge the TUN/TAP interface to the internet&lt;/span&gt;
 &lt;span class=&quot;c&quot;&gt;# in order for this to work properly).&lt;/span&gt;
 push &lt;span class=&quot;s2&quot;&gt;&quot;redirect-gateway def1 bypass-dhcp&quot;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;This makes sure that the OpenVPN server will pass the client device’s web traffic to its destination.&lt;/p&gt;
 
@@ -117,20 +110,19 @@ push &lt;span class=&quot;s2&quot;&gt;&quot;redirect-gateway def1 bypass-dhcp&qu
 
 &lt;p&gt;Before:&lt;/p&gt;
 
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# Certain Windows-specific network settings&lt;/span&gt;
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# Certain Windows-specific network settings&lt;/span&gt;
 &lt;span class=&quot;c&quot;&gt;# can be pushed to clients, such as DNS&lt;/span&gt;
 &lt;span class=&quot;c&quot;&gt;# or WINS server addresses.  CAVEAT:&lt;/span&gt;
 &lt;span class=&quot;c&quot;&gt;# http://openvpn.net/faq.html#dhcpcaveats&lt;/span&gt;
 &lt;span class=&quot;c&quot;&gt;# The addresses below refer to the public&lt;/span&gt;
 &lt;span class=&quot;c&quot;&gt;# DNS servers provided by opendns.com.&lt;/span&gt;
-;push &lt;span class=&quot;s2&quot;&gt;&quot;dhcp-option DNS 208.67.222.222&quot;&lt;/span&gt;
-;push &lt;span class=&quot;s2&quot;&gt;&quot;dhcp-option DNS 208.67.220.220&quot;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;push &lt;span class=&quot;s2&quot;&gt;&quot;dhcp-option DNS 208.67.222.222&quot;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;push &lt;span class=&quot;s2&quot;&gt;&quot;dhcp-option DNS 208.67.220.220&quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;After:&lt;/p&gt;
 
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# Certain Windows-specific network settings&lt;/span&gt;
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# Certain Windows-specific network settings&lt;/span&gt;
 &lt;span class=&quot;c&quot;&gt;# can be pushed to clients, such as DNS&lt;/span&gt;
 &lt;span class=&quot;c&quot;&gt;# or WINS server addresses.  CAVEAT:&lt;/span&gt;
 &lt;span class=&quot;c&quot;&gt;# http://openvpn.net/faq.html#dhcpcaveats&lt;/span&gt;
@@ -138,8 +130,7 @@ push &lt;span class=&quot;s2&quot;&gt;&quot;redirect-gateway def1 bypass-dhcp&qu
 &lt;span class=&quot;c&quot;&gt;# DNS servers provided by opendns.com.&lt;/span&gt;
 push &lt;span class=&quot;s2&quot;&gt;&quot;dhcp-option DNS 208.67.222.222&quot;&lt;/span&gt;
 push &lt;span class=&quot;s2&quot;&gt;&quot;dhcp-option DNS 208.67.220.220&quot;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;The two IP addresses above belong to OpenDNS and will be used to lookup DNS request where possible. You can use any DNS service of your choice. Here we have used OpenDNS, and hence their IP addresses are listed in the file.&lt;/p&gt;
 
@@ -149,21 +140,19 @@ push &lt;span class=&quot;s2&quot;&gt;&quot;dhcp-option DNS 208.67.220.220&quot;
 
 &lt;p&gt;Before:&lt;/p&gt;
 
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# You can uncomment this out on&lt;/span&gt;
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# You can uncomment this out on&lt;/span&gt;
 &lt;span class=&quot;c&quot;&gt;# non-Windows systems.&lt;/span&gt;
-;user nobody
-;group nogroup
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;user nobody
+&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;group nogroup
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;After:&lt;/p&gt;
 
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# You can uncomment this out on&lt;/span&gt;
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# You can uncomment this out on&lt;/span&gt;
 &lt;span class=&quot;c&quot;&gt;# non-Windows systems.&lt;/span&gt;
 user nobody
 group nogroup
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;Save and close the file.&lt;/p&gt;
 
@@ -173,31 +162,27 @@ group nogroup
 
 &lt;p&gt;We need to now enable an option that allows the server to forward traffic from client devices out to the Internet. If this is not done, the client traffic will stop at the server. To enable packet forwarding, run this command.&lt;/p&gt;
 
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;echo &lt;/span&gt;1 &amp;gt; /proc/sys/net/ipv4/ip_forward
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;echo &lt;/span&gt;1 &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; /proc/sys/net/ipv4/ip_forward
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;This setting is not yet permanent and will not survive a reboot. To make it permanent, we need to edit the &lt;code class=&quot;highlighter-rouge&quot;&gt;sysctl.conf&lt;/code&gt; file.&lt;/p&gt;
 
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;vi /etc/sysctl.conf
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;vi /etc/sysctl.conf
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;In this file, find and uncomment the following line. To uncomment, remove the &lt;code class=&quot;highlighter-rouge&quot;&gt;#&lt;/code&gt; in front of the line.&lt;/p&gt;
 
 &lt;p&gt;Before:&lt;/p&gt;
 
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# Uncomment the next line to enable packet forwarding for IPv4&lt;/span&gt;
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# Uncomment the next line to enable packet forwarding for IPv4&lt;/span&gt;
 &lt;span class=&quot;c&quot;&gt;#net.ipv4.ip_forward=1&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;After:&lt;/p&gt;
 
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# Uncomment the next line to enable packet forwarding for IPv4&lt;/span&gt;
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# Uncomment the next line to enable packet forwarding for IPv4&lt;/span&gt;
 net.ipv4.ip_forward&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;1
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;Save the file and exit.&lt;/p&gt;
 
@@ -209,29 +194,25 @@ net.ipv4.ip_forward&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;1
 
 &lt;p&gt;Still as root, enter the following command:&lt;/p&gt;
 
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ufw allow 1194/udp
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ufw allow 1194/udp
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;Open the firewall’s (ufw) primary configuration file. We habe to set the firewall forwarding policy.&lt;/p&gt;
 
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;vi /etc/default/ufw
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;vi /etc/default/ufw
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;Search for the string &lt;code class=&quot;highlighter-rouge&quot;&gt;DEFAULT_FORWARD_POLICY=&quot;DROP&quot;&lt;/code&gt; in this file. Change the &lt;code class=&quot;highlighter-rouge&quot;&gt;DROP&lt;/code&gt; to &lt;code class=&quot;highlighter-rouge&quot;&gt;ACCEPT&lt;/code&gt;.&lt;/p&gt;
 
 &lt;p&gt;Before:&lt;/p&gt;
 
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;DEFAULT_FORWARD_POLICY&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;DROP&quot;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;DEFAULT_FORWARD_POLICY&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;DROP&quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;After:&lt;/p&gt;
 
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;DEFAULT_FORWARD_POLICY&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;ACCEPT&quot;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;DEFAULT_FORWARD_POLICY&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;ACCEPT&quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;Save the file and exit.&lt;/p&gt;
 
@@ -243,9 +224,8 @@ net.ipv4.ip_forward&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;1
 
 &lt;p&gt;Open this file&lt;/p&gt;
 
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;vi /etc/ufw/before.rules
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;vi /etc/ufw/before.rules
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;We will be adding rules for NAT (network address translation) and IP masquerading of connected devices.&lt;/p&gt;
 
@@ -253,7 +233,7 @@ net.ipv4.ip_forward&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;1
 
 &lt;p&gt;Before:&lt;/p&gt;
 
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;#&lt;/span&gt;
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;#&lt;/span&gt;
 &lt;span class=&quot;c&quot;&gt;# rules.before&lt;/span&gt;
 &lt;span class=&quot;c&quot;&gt;#&lt;/span&gt;
 &lt;span class=&quot;c&quot;&gt;# Rules that should be run before the ufw command line added rules. Custom&lt;/span&gt;
@@ -265,12 +245,11 @@ net.ipv4.ip_forward&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;1
 
 &lt;span class=&quot;c&quot;&gt;# Don't delete these required lines, otherwise there will be errors&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;*&lt;/span&gt;filter
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;After:&lt;/p&gt;
 
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;#&lt;/span&gt;
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;#&lt;/span&gt;
 &lt;span class=&quot;c&quot;&gt;# rules.before&lt;/span&gt;
 &lt;span class=&quot;c&quot;&gt;#&lt;/span&gt;
 &lt;span class=&quot;c&quot;&gt;# Rules that should be run before the ufw command line added rules. Custom&lt;/span&gt;
@@ -286,21 +265,19 @@ net.ipv4.ip_forward&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;1
 &lt;span class=&quot;k&quot;&gt;*&lt;/span&gt;nat
 :POSTROUTING ACCEPT &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;0:0] 
 &lt;span class=&quot;c&quot;&gt;# Allow traffic from OpenVPN client to eth0&lt;/span&gt;
--A POSTROUTING -s 10.8.0.0/8 -o eth0 -j MASQUERADE
+&lt;span class=&quot;nt&quot;&gt;-A&lt;/span&gt; POSTROUTING &lt;span class=&quot;nt&quot;&gt;-s&lt;/span&gt; 10.8.0.0/8 &lt;span class=&quot;nt&quot;&gt;-o&lt;/span&gt; eth0 &lt;span class=&quot;nt&quot;&gt;-j&lt;/span&gt; MASQUERADE
 COMMIT
 &lt;span class=&quot;c&quot;&gt;# END OPENVPN RULES&lt;/span&gt;
 &lt;span class=&quot;c&quot;&gt;#################################&lt;/span&gt;
 
 &lt;span class=&quot;c&quot;&gt;# Don't delete these required lines, otherwise there will be errors&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;*&lt;/span&gt;filter
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;Once you’ve added the section, enable the firewall (ufw).&lt;/p&gt;
 
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ufw &lt;span class=&quot;nb&quot;&gt;enable&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ufw &lt;span class=&quot;nb&quot;&gt;enable&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;div class=&quot;row&quot;&gt;
   &lt;div class=&quot;col-12&quot;&gt;
@@ -329,17 +306,15 @@ COMMIT
 
 &lt;p&gt;Copy the Easy-RSA generation scripts to &lt;code class=&quot;highlighter-rouge&quot;&gt;/etc/openvpn&lt;/code&gt;&lt;/p&gt;
 
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;cp -r /usr/share/easy-rsa/ /etc/openvpn
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;cp&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-r&lt;/span&gt; /usr/share/easy-rsa/ /etc/openvpn
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;h3 id=&quot;step-22&quot;&gt;Step 2.2:&lt;/h3&gt;
 
 &lt;p&gt;Now, create a directory to store our keys.&lt;/p&gt;
 
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;mkdir /etc/openvpn/easy-rsa/keys
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;mkdir&lt;/span&gt; /etc/openvpn/easy-rsa/keys
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;h3 id=&quot;step-23&quot;&gt;Step 2.3:&lt;/h3&gt;
 
@@ -347,20 +322,18 @@ COMMIT
 
 &lt;p&gt;You can put in any values you like. Here is an example.&lt;/p&gt;
 
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;KEY_COUNTRY&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;CA&quot;&lt;/span&gt;
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;KEY_COUNTRY&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;CA&quot;&lt;/span&gt;
 &lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;KEY_PROVINCE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;ON&quot;&lt;/span&gt;
 &lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;KEY_CITY&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Toronto&quot;&lt;/span&gt;
 &lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;KEY_ORG&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Wiseindy&quot;&lt;/span&gt;
 &lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;KEY_EMAIL&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;wiseindy@example.com&quot;&lt;/span&gt;
 &lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;KEY_OU&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;WiseOU&quot;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;There is one more line to edit in this file before you close it. We need to set the default filename for the server key and certificate. In this tutorial we’ve used the name &lt;code class=&quot;highlighter-rouge&quot;&gt;server&lt;/code&gt; for simplicity. If you’re using a different name, please make sure you replace &lt;code class=&quot;highlighter-rouge&quot;&gt;server&lt;/code&gt; with your custom name in the commands.&lt;/p&gt;
 
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;KEY_NAME&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;server&quot;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;KEY_NAME&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;server&quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;Save and close the file.&lt;/p&gt;
 
@@ -368,33 +341,29 @@ COMMIT
 
 &lt;p&gt;The next step is to generate the Diffie-Hellman parameters.&lt;/p&gt;
 
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;openssl dhparam -out /etc/openvpn/dh2048.pem 2048
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;openssl dhparam &lt;span class=&quot;nt&quot;&gt;-out&lt;/span&gt; /etc/openvpn/dh2048.pem 2048
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;h3 id=&quot;step-25&quot;&gt;Step 2.5:&lt;/h3&gt;
 
 &lt;p&gt;Now, navigate to the &lt;code class=&quot;highlighter-rouge&quot;&gt;easy-rsa&lt;/code&gt; directory.&lt;/p&gt;
 
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;cd&lt;/span&gt; /etc/openvpn/easy-rsa
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;cd&lt;/span&gt; /etc/openvpn/easy-rsa
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;h3 id=&quot;step-26&quot;&gt;Step 2.6:&lt;/h3&gt;
 
 &lt;p&gt;Once you’re in the &lt;code class=&quot;highlighter-rouge&quot;&gt;easy-rsa&lt;/code&gt; directory, run the following command to initialize the PKI (Public Key Infrastructure).&lt;/p&gt;
 
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;. ./vars
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;.&lt;/span&gt; ./vars
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;Note the &lt;code class=&quot;highlighter-rouge&quot;&gt;.&lt;/code&gt; (dot) and ` ` (space) in front of &lt;code class=&quot;highlighter-rouge&quot;&gt;./vars&lt;/code&gt;.&lt;/p&gt;
 
 &lt;p&gt;The above command will output the following:&lt;/p&gt;
 
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;NOTE: If you run ./clean-all, I will be doing a rm -rf on /etc/openvpn/easy-rsa/keys
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;NOTE: If you run ./clean-all, I will be doing a &lt;span class=&quot;nb&quot;&gt;rm&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-rf&lt;/span&gt; on /etc/openvpn/easy-rsa/keys
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;You can ignore this warning message since we haven’t yet generated anything.&lt;/p&gt;
 
@@ -402,17 +371,15 @@ COMMIT
 
 &lt;p&gt;Let’s clear the working directory of any example keys and start fresh.&lt;/p&gt;
 
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;./clean-all
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;./clean-all
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;h3 id=&quot;step-28&quot;&gt;Step 2.8:&lt;/h3&gt;
 
 &lt;p&gt;We are all set to create our certificate authority now. When you run the following command, it will ask you to confirm the values you had entered in the &lt;code class=&quot;highlighter-rouge&quot;&gt;vars&lt;/code&gt; file in step 2.6. Hit enter to confirm the values.&lt;/p&gt;
 
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;./build-ca
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;./build-ca
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;h4 id=&quot;generate-a-certificate-and-key-for-the-server&quot;&gt;Generate a Certificate and Key for the Server&lt;/h4&gt;
 
@@ -420,36 +387,32 @@ COMMIT
 
 &lt;p&gt;Well, we now have a certificate authority (CA) set up. Let’s build our server key now.&lt;/p&gt;
 
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;./build-key-server server
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;./build-key-server server
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;&lt;em&gt;Note: Note that I’ve used the name &lt;strong&gt;server&lt;/strong&gt; in the above command. This is because I’ve set &lt;code class=&quot;highlighter-rouge&quot;&gt;export KEY_NAME=&quot;server&quot;&lt;/code&gt; in the &lt;code class=&quot;highlighter-rouge&quot;&gt;vars&lt;/code&gt; file (step 2.6). If you’ve used a different name, make sure you modify the command accordingly&lt;/em&gt;&lt;/p&gt;
 
 &lt;p&gt;When you run this command, you’ll see a similar output as the previous step. You can hit enter to confirm them. However, this time you will see two additional prompts.&lt;/p&gt;
 
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Please enter the following &lt;span class=&quot;s1&quot;&gt;'extra'&lt;/span&gt; attributes
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Please enter the following &lt;span class=&quot;s1&quot;&gt;'extra'&lt;/span&gt; attributes
 to be sent with your certificate request
 A challenge password &lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt;:
 An optional company name &lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt;:
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;Both of the should be left blank. Hit Enter to continue.&lt;/p&gt;
 
 &lt;p&gt;When it prompts you to sign the certificate and commit, type &lt;code class=&quot;highlighter-rouge&quot;&gt;y&lt;/code&gt; for both the prompts and hit enter.&lt;/p&gt;
 
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Sign the certificate? &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;y/n]  y
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Sign the certificate? &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;y/n]  y
 1 out of 1 certificate requests certified, commit? &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;y/n]  y
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;Now you should see the following output. This means that all is good so far.&lt;/p&gt;
 
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Write out database with 1 new entries
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Write out database with 1 new entries
 Data Base Updated
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;h3 id=&quot;step-210&quot;&gt;Step 2.10&lt;/h3&gt;
 
@@ -457,17 +420,15 @@ Data Base Updated
 
 &lt;p&gt;Well, we’ve now generated the server CA, keys and certificate. Let’s copy these over to the correct location &lt;code class=&quot;highlighter-rouge&quot;&gt;/etc/openvpn/&lt;/code&gt;.&lt;/p&gt;
 
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;cp /etc/openvpn/easy-rsa/keys/&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;server.crt,server.key,ca.crt&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; /etc/openvpn
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;cp&lt;/span&gt; /etc/openvpn/easy-rsa/keys/&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;server.crt,server.key,ca.crt&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; /etc/openvpn
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;h3 id=&quot;step-211&quot;&gt;Step 2.11&lt;/h3&gt;
 
 &lt;p&gt;Well, guess what? Our OpenVPN server is ready now. Let’s start it.&lt;/p&gt;
 
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;service openvpn start
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;service openvpn start
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;h1 id=&quot;part-3&quot;&gt;Part 3&lt;/h1&gt;
 
@@ -481,9 +442,8 @@ Data Base Updated
 
 &lt;p&gt;You should still be root and still working from this directory &lt;code class=&quot;highlighter-rouge&quot;&gt;/etc/openvpn/easy-rsa&lt;/code&gt;.&lt;/p&gt;
 
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;./build-key myphone
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;./build-key myphone
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;Like in the previous steps, you’ll be asked to confirm the Distinguised Name variables. Hit enter to accept the defaults.&lt;/p&gt;
 
@@ -491,9 +451,8 @@ Data Base Updated
 
 &lt;p&gt;Now copy the sample client configuration file to the &lt;code class=&quot;highlighter-rouge&quot;&gt;easy-rsa/keys&lt;/code&gt; directory. This file will be used as a template. We will be editing this template file for each of our devices.&lt;/p&gt;
 
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;cp /usr/share/doc/openvpn/examples/sample-config-files/client.conf /etc/openvpn/easy-rsa/keys/myphone.ovpn
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;cp&lt;/span&gt; /usr/share/doc/openvpn/examples/sample-config-files/client.conf /etc/openvpn/easy-rsa/keys/myphone.ovpn
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;You can repeat this section (steps 3.1 and 3.2) for each client device. Just make sure you use a different name for each of your devices (in this case we’ve used &lt;code class=&quot;highlighter-rouge&quot;&gt;myphone&lt;/code&gt;)&lt;/p&gt;
 
@@ -507,12 +466,11 @@ Data Base Updated
 
 &lt;p&gt;From the &lt;code class=&quot;highlighter-rouge&quot;&gt;/etc/openvpn/easy-rsa&lt;/code&gt; directory, copy the following files to your computer (the one you’re reading this article on). We will be editing these in a text editor (Notepad, TextEdit, etc.).&lt;/p&gt;
 
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;myphone.crt
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;myphone.crt
 myphone.key
 myphone.ovpn
 ca.crt
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;h3 id=&quot;step-42&quot;&gt;Step 4.2&lt;/h3&gt;
 
@@ -522,21 +480,19 @@ ca.crt
 
 &lt;p&gt;Before:&lt;/p&gt;
 
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# The hostname/IP and port of the server.&lt;/span&gt;
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# The hostname/IP and port of the server.&lt;/span&gt;
 &lt;span class=&quot;c&quot;&gt;# You can have multiple remote entries&lt;/span&gt;
 &lt;span class=&quot;c&quot;&gt;# to load balance between the servers.&lt;/span&gt;
 remote my-server-1 1194
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;After:&lt;/p&gt;
 
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# The hostname/IP and port of the server.&lt;/span&gt;
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# The hostname/IP and port of the server.&lt;/span&gt;
 &lt;span class=&quot;c&quot;&gt;# You can have multiple remote entries&lt;/span&gt;
 &lt;span class=&quot;c&quot;&gt;# to load balance between the servers.&lt;/span&gt;
 remote 142.189.11.1 1194
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;h3 id=&quot;step-43&quot;&gt;Step 4.3&lt;/h3&gt;
 
@@ -544,19 +500,17 @@ remote 142.189.11.1 1194
 
 &lt;p&gt;Before:&lt;/p&gt;
 
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# Downgrade privileges after initialization (non-Windows only)&lt;/span&gt;
-;user nobody
-;group nogroup
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# Downgrade privileges after initialization (non-Windows only)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;user nobody
+&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;group nogroup
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;After:&lt;/p&gt;
 
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# Downgrade privileges after initialization (non-Windows only)&lt;/span&gt;
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# Downgrade privileges after initialization (non-Windows only)&lt;/span&gt;
 user nobody
 group nogroup
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;h3 id=&quot;step-44&quot;&gt;Step 4.4:&lt;/h3&gt;
 
@@ -564,32 +518,29 @@ group nogroup
 
 &lt;p&gt;Before:&lt;/p&gt;
 
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# SSL/TLS parms.&lt;/span&gt;
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# SSL/TLS parms.&lt;/span&gt;
 &lt;span class=&quot;c&quot;&gt;# . . .&lt;/span&gt;
 ca ca.crt
 cert client.crt
 key client.key
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;After:&lt;/p&gt;
 
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# SSL/TLS parms.&lt;/span&gt;
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# SSL/TLS parms.&lt;/span&gt;
 &lt;span class=&quot;c&quot;&gt;# . . .&lt;/span&gt;
 &lt;span class=&quot;c&quot;&gt;#ca ca.crt&lt;/span&gt;
 &lt;span class=&quot;c&quot;&gt;#cert client.crt&lt;/span&gt;
 &lt;span class=&quot;c&quot;&gt;#key client.key&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;h3 id=&quot;step-45&quot;&gt;Step 4.5:&lt;/h3&gt;
 
 &lt;p&gt;At the end of the file, add this text to block outside DNS&lt;/p&gt;
 
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# Prevent DNS leak&lt;/span&gt;
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# Prevent DNS leak&lt;/span&gt;
 block-outside-dns
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;h3 id=&quot;step-46&quot;&gt;Step 4.6:&lt;/h3&gt;
 
@@ -599,7 +550,7 @@ block-outside-dns
 
 &lt;p&gt;This is how we will be doing it.&lt;/p&gt;
 
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;lt;ca&amp;gt;
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;lt;ca&amp;gt;
   &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;insert ca.crt here&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
 &amp;lt;/ca&amp;gt;
 
@@ -610,32 +561,30 @@ block-outside-dns
 &amp;lt;key&amp;gt;
   &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;insert myphone.key here&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
 &amp;lt;/key&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;Once you’re done copy-pasting the content, the end of your &lt;code class=&quot;highlighter-rouge&quot;&gt;.ovpn&lt;/code&gt; file should look like this:&lt;/p&gt;
 
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;lt;ca&amp;gt;
------BEGIN CERTIFICATE-----
-. . .
------END CERTIFICATE-----
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;lt;ca&amp;gt;
+&lt;span class=&quot;nt&quot;&gt;-----BEGIN&lt;/span&gt; CERTIFICATE-----
+&lt;span class=&quot;nb&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;.&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;-----END&lt;/span&gt; CERTIFICATE-----
 &amp;lt;/ca&amp;gt;
   
 &amp;lt;cert&amp;gt;
 Certificate:
-. . .
------END CERTIFICATE-----
-. . .
------END CERTIFICATE-----
+&lt;span class=&quot;nb&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;.&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;-----END&lt;/span&gt; CERTIFICATE-----
+&lt;span class=&quot;nb&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;.&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;-----END&lt;/span&gt; CERTIFICATE-----
 &amp;lt;/cert&amp;gt;
   
 &amp;lt;key&amp;gt;
------BEGIN PRIVATE KEY-----
-. . .
------END PRIVATE KEY-----
+&lt;span class=&quot;nt&quot;&gt;-----BEGIN&lt;/span&gt; PRIVATE KEY-----
+&lt;span class=&quot;nb&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;.&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;-----END&lt;/span&gt; PRIVATE KEY-----
 &amp;lt;/key&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;Save the changes and close the file.&lt;/p&gt;
 
@@ -655,10 +604,9 @@ After installation, paste your &lt;code class=&quot;highlighter-rouge&quot;&gt;m
 &lt;p&gt;For macOS, install &lt;a href=&quot;https://tunnelblick.net/downloads.html&quot;&gt;Tunnelblick&lt;/a&gt; and import your &lt;code class=&quot;highlighter-rouge&quot;&gt;.ovpn&lt;/code&gt; profile.
 &lt;strong&gt;Note:&lt;/strong&gt; If you get an error and Tunnelblick is unable to connect, remove the following text from your &lt;code class=&quot;highlighter-rouge&quot;&gt;.ovpn&lt;/code&gt; profile.&lt;/p&gt;
 
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# Prevent DNS leak&lt;/span&gt;
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# Prevent DNS leak&lt;/span&gt;
 block-outside-dns
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;h4 id=&quot;android&quot;&gt;Android&lt;/h4&gt;
 &lt;p&gt;For Android, download the &lt;a href=&quot;https://play.google.com/store/apps/details?id=net.openvpn.openvpn&amp;amp;hl=en&quot;&gt;OpenVPN Connect app from the Google Play Store&lt;/a&gt;. Import your &lt;code class=&quot;highlighter-rouge&quot;&gt;.ovpn&lt;/code&gt; profile and you’re all set!&lt;/p&gt;
@@ -693,16 +641,14 @@ block-outside-dns
 
 &lt;p&gt;We will now install &lt;strong&gt;ruby2.3&lt;/strong&gt;. To do so, we have to first add the brightbox repository. When asked whether you want to confirm adding the repository, hit ENTER to proceed.&lt;/p&gt;
 
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sudo apt-add-repository ppa:brightbox/ruby-ng
-sudo apt-get update
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;apt-add-repository ppa:brightbox/ruby-ng
+&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;apt-get update
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;Install &lt;strong&gt;ruby2.3&lt;/strong&gt;&lt;/p&gt;
 
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sudo apt-get install ruby2.3 ruby2.3-dev
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;apt-get &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;ruby2.3 ruby2.3-dev
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;Now you should have &lt;strong&gt;Ruby&lt;/strong&gt; and &lt;strong&gt;RubyGems&lt;/strong&gt; installed which are the prerequisite for installing Jekyll.&lt;/p&gt;
 
@@ -723,17 +669,15 @@ sudo apt-get update
 
 &lt;p&gt;Install &lt;a href=&quot;https://gcc.gnu.org/install/&quot;&gt;GCC&lt;/a&gt; and &lt;a href=&quot;https://www.gnu.org/software/make/&quot;&gt;Make&lt;/a&gt;&lt;/p&gt;
 
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sudo apt-get install gcc make -y
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;apt-get &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;gcc make &lt;span class=&quot;nt&quot;&gt;-y&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;h2 id=&quot;step-4&quot;&gt;Step 4:&lt;/h2&gt;
 
 &lt;p&gt;Install Jekyll and Bundler gems&lt;/p&gt;
 
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sudo gem install jekyll
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;gem &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;jekyll
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;Guess what? That’s it. You have Jekyll 3.4.3 installed.&lt;/p&gt;
 
@@ -741,26 +685,23 @@ sudo apt-get update
 
 &lt;p&gt;Here are some commands from &lt;a href=&quot;https://jekyllrb.com/docs/quickstart/&quot;&gt;jekyllrb.com&lt;/a&gt; that should get you up and running with a new blog.&lt;/p&gt;
 
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# Create a new Jekyll site at ./wiseblog&lt;/span&gt;
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# Create a new Jekyll site at ./wiseblog&lt;/span&gt;
 jekyll new wiseblog
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;To build this site:&lt;/p&gt;
 
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# Change into your new directory&lt;/span&gt;
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# Change into your new directory&lt;/span&gt;
 &lt;span class=&quot;nb&quot;&gt;cd &lt;/span&gt;wiseblog
 
 &lt;span class=&quot;c&quot;&gt;# Build the site and preview it&lt;/span&gt;
 bundle &lt;span class=&quot;nb&quot;&gt;exec &lt;/span&gt;jekyll serve
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;&lt;strong&gt;Note:&lt;/strong&gt; If you’re running Windows, you may get an error when you try to run &lt;code class=&quot;highlighter-rouge&quot;&gt;bundle exec jekyll serve&lt;/code&gt;. In this case, simply run it with the &lt;code class=&quot;highlighter-rouge&quot;&gt;--force_polling&lt;/code&gt; option as follows:&lt;/p&gt;
 
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;bundle &lt;span class=&quot;nb&quot;&gt;exec &lt;/span&gt;jekyll serve --force_polling
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;bundle &lt;span class=&quot;nb&quot;&gt;exec &lt;/span&gt;jekyll serve &lt;span class=&quot;nt&quot;&gt;--force_polling&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;Now you can preview your website on &lt;code class=&quot;highlighter-rouge&quot;&gt;http://localhost:4000&lt;/code&gt;&lt;/p&gt;
 
@@ -772,11 +713,10 @@ bundle &lt;span class=&quot;nb&quot;&gt;exec &lt;/span&gt;jekyll serve
 
 &lt;p&gt;Below are the installation instructions on &lt;a href=&quot;http://www.nokogiri.org/tutorials/installing_nokogiri.html&quot;&gt;nokogiri.org&lt;/a&gt;:&lt;/p&gt;
 
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sudo apt-get install build-essential patch
-sudo apt-get install ruby-dev zlib1g-dev liblzma-dev
-sudo gem install nokogiri
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;apt-get &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;build-essential patch
+&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;apt-get &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;ruby-dev zlib1g-dev liblzma-dev
+&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;gem &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;nokogiri
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;(header image source: &lt;a href=&quot;https://jekyllrb.com&quot;&gt;jekyllrb.com&lt;/a&gt;)&lt;/p&gt;</content><author><name>wiseindy</name></author><category term="jekyll" /><category term="jekyllrb" /><category term="ruby" /><category term="ruby2.3" /><category term="ubuntu 16.04" /><category term="ubuntu 14.04" /><category term="ubuntu" /><category term="guide" /><category term="linux" /><category term="ubuntu" /><category term="static" /><category term="static site generator" /><category term="Guides" /><summary type="html">This guide will show you step by step how to install Jekyll 3.4.3 on a machine running Ubuntu or Windows 10. Jekyll’s official guide is good, but it’s very basic and doesn’t explain how to install Ruby, RubyGems and other dependencies. What you need: An Ubuntu 16.04 or Windows 10 system. This guide should also work for older Ubuntu 14.04 And as always, an internet connection Step 1: Skip to step 2 if you’re installing Jekyll on Ubuntu. To install Jekyll on Windows 10, we need to first enable Windows Subsystem on Linux. Here is a detailed guide that will show you how to do this step-by-step. Step 2: We will now install ruby2.3. To do so, we have to first add the brightbox repository. When asked whether you want to confirm adding the repository, hit ENTER to proceed. sudo apt-add-repository ppa:brightbox/ruby-ng sudo apt-get update Install ruby2.3 sudo apt-get install ruby2.3 ruby2.3-dev Now you should have Ruby and RubyGems installed which are the prerequisite for installing Jekyll. Step 3: Install GCC and Make sudo apt-get install gcc make -y Step 4: Install Jekyll and Bundler gems sudo gem install jekyll Guess what? That’s it. You have Jekyll 3.4.3 installed. Further information: Here are some commands from jekyllrb.com that should get you up and running with a new blog. # Create a new Jekyll site at ./wiseblog jekyll new wiseblog To build this site: # Change into your new directory cd wiseblog # Build the site and preview it bundle exec jekyll serve Note: If you’re running Windows, you may get an error when you try to run bundle exec jekyll serve. In this case, simply run it with the --force_polling option as follows: bundle exec jekyll serve --force_polling Now you can preview your website on http://localhost:4000 Notes: (You can skip this part. This is only for my reference and for anyone who faces a similar issue) I had to install Nokogiri for my site and was having issues. This is how I solved it. Below are the installation instructions on nokogiri.org: sudo apt-get install build-essential patch sudo apt-get install ruby-dev zlib1g-dev liblzma-dev sudo gem install nokogiri (header image source: jekyllrb.com)</summary></entry><entry><title type="html">How to fix error 0x80004005 - Cannot enable developer mode in Windows 10</title><link href="http://localhost:4000/it/windows-10-developer-mode-fix-error-0x80004005/" rel="alternate" type="text/html" title="How to fix error 0x80004005 - Cannot enable developer mode in Windows 10" /><published>2017-04-26T06:00:00-04:00</published><updated>2017-04-26T06:00:00-04:00</updated><id>http://localhost:4000/it/windows-10-developer-mode-fix-error-0x80004005</id><content type="html" xml:base="http://localhost:4000/it/windows-10-developer-mode-fix-error-0x80004005/">&lt;p&gt;“Developer mode package failed to install. Error code 0x80004005”. A few people, including me, faced issues when trying to enable developer mode in Windows 10. This guide will show you how to fix it.&lt;/p&gt;
 
@@ -919,29 +859,24 @@ Here you’ll see your &lt;strong&gt;OS Build&lt;/strong&gt; number. This should
 &lt;p&gt;At the time of writing this article (9 October 2016), the latest version was &lt;code&gt;1.9.97&lt;/code&gt;. If it is different in your case, simply replace &lt;code&gt;1.9.97&lt;/code&gt; with your version in all the commands below.&lt;/p&gt;
 &lt;h3&gt;Step 2:&lt;/h3&gt;
 &lt;p&gt;Open your Ubuntu terminal (or SSH to it) and type in the following commands one after the other.&lt;/p&gt;
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sudo apt-get update
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;apt-get update
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;p&gt;Run this command to download the package lists from the repositories and “update” them to get information on the newest versions of packages and their dependencies.&lt;/p&gt;
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sudo apt-get install libtool libglib2.0-dev gobject-introspection libgmp3-dev nettle-dev asciidoc glib-networking openssl libcurl4-openssl-dev libssl-dev
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;apt-get &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;libtool libglib2.0-dev gobject-introspection libgmp3-dev nettle-dev asciidoc glib-networking openssl libcurl4-openssl-dev libssl-dev
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;p&gt;This installs all the dependencies that you may need to compile megatools from source.&lt;/p&gt;
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;wget http://megatools.megous.com/builds/megatools-1.9.97.tar.gz
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;wget http://megatools.megous.com/builds/megatools-1.9.97.tar.gz
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;p&gt;&lt;code&gt;wget&lt;/code&gt; is used to download the latest megatools. Replace &lt;code&gt;1.9.97&lt;/code&gt; with the latest version is available.&lt;/p&gt;
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;zcat megatools-1.9.97.tar.gz &amp;gt; megatools-1.9.97.tar
-tar -xf megatools-1.9.97.tar
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;zcat megatools-1.9.97.tar.gz &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; megatools-1.9.97.tar
+&lt;span class=&quot;nb&quot;&gt;tar&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-xf&lt;/span&gt; megatools-1.9.97.tar
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;p&gt;Use &lt;code&gt;zcat&lt;/code&gt; to decompress the downloaded file and &lt;code&gt;tar -xf&lt;/code&gt; to extract the contents to a folder.&lt;/p&gt;
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;cd &lt;/span&gt;megatools-1.9.97/
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;cd &lt;/span&gt;megatools-1.9.97/
 ./configure
 make
-sudo make install
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;make &lt;span class=&quot;nb&quot;&gt;install&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;p&gt;Finally, run the above commands to compile megatools and install it in your system.&lt;/p&gt;
 
 &lt;div class=&quot;row&quot;&gt;
@@ -963,13 +898,11 @@ sudo make install
 &lt;p&gt;To download from a &lt;a target=&quot;_blank&quot; href=&quot;https://mega.nz&quot;&gt;mega.nz&lt;/a&gt; link, simply type &lt;code&gt;megadl '&amp;lt;link&amp;gt;'&lt;/code&gt; and the download will start.&lt;/p&gt;
 
 &lt;p&gt;Here’s an example:&lt;/p&gt;
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;megadl &lt;span class=&quot;s1&quot;&gt;'https://mega.nz/#G!IK9KLpRS8J1h82Kpa0kWJkPwDh!2adB'&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;megadl &lt;span class=&quot;s1&quot;&gt;'https://mega.nz/#G!IK9KLpRS8J1h82Kpa0kWJkPwDh!2adB'&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;p&gt;For syntax of other commands, type&lt;/p&gt;
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;man megatools
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;man megatools
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;p&gt;That’s it. You’re done!&lt;/p&gt;</content><author><name>wiseindy</name></author><category term="14.04" /><category term="download" /><category term="guide" /><category term="linux" /><category term="mega" /><category term="mega.nz" /><category term="megacopy" /><category term="megadf" /><category term="megadl" /><category term="megafs" /><category term="megaget" /><category term="megals" /><category term="megamkdir" /><category term="megaput" /><category term="megareg" /><category term="megarm" /><category term="megastream" /><category term="megatools" /><category term="ubuntu" /><category term="ubuntu 14.04" /><category term="Guides" /><summary type="html">Megatools is a great collection of command line utilities that allow you to interact with your mega.nz account directly from the command line. You can directly download using the cli on your Ubuntu machine. They are a great set of tools, however, installing them does get confusing for a new Linux user. This guide will show you how to install it and set it up in no time. What you need: SSH or terminal access to an Ubuntu 14.04 server. An internet connection (duh). Step 1: First you need to find out what’s the latest version of megatools available. To find out the latest version, simply visit any one of the links below and see what’s the latest version number: https://megatools.megous.com/ https://github.com/megous/megatools At the time of writing this article (9 October 2016), the latest version was 1.9.97. If it is different in your case, simply replace 1.9.97 with your version in all the commands below. Step 2: Open your Ubuntu terminal (or SSH to it) and type in the following commands one after the other. sudo apt-get update Run this command to download the package lists from the repositories and “update” them to get information on the newest versions of packages and their dependencies. sudo apt-get install libtool libglib2.0-dev gobject-introspection libgmp3-dev nettle-dev asciidoc glib-networking openssl libcurl4-openssl-dev libssl-dev This installs all the dependencies that you may need to compile megatools from source. wget http://megatools.megous.com/builds/megatools-1.9.97.tar.gz wget is used to download the latest megatools. Replace 1.9.97 with the latest version is available. zcat megatools-1.9.97.tar.gz &amp;gt; megatools-1.9.97.tar tar -xf megatools-1.9.97.tar Use zcat to decompress the downloaded file and tar -xf to extract the contents to a folder. cd megatools-1.9.97/ ./configure make sudo make install Finally, run the above commands to compile megatools and install it in your system. Step 3: If all went well, you should now have megatools installed on your system. To download from a mega.nz link, simply type megadl '&amp;lt;link&amp;gt;' and the download will start. Here’s an example: megadl 'https://mega.nz/#G!IK9KLpRS8J1h82Kpa0kWJkPwDh!2adB' For syntax of other commands, type man megatools That’s it. You’re done!</summary></entry><entry><title type="html">How to install or renew SSL certificate in Exchange 2010</title><link href="http://localhost:4000/it/how-to-install-or-renew-ssl-certificate-in-exchange-2010/" rel="alternate" type="text/html" title="How to install or renew SSL certificate in Exchange 2010" /><published>2016-08-01T04:00:08-04:00</published><updated>2016-08-01T04:00:08-04:00</updated><id>http://localhost:4000/it/how-to-install-or-renew-ssl-certificate-in-exchange-2010</id><content type="html" xml:base="http://localhost:4000/it/how-to-install-or-renew-ssl-certificate-in-exchange-2010/">&lt;p&gt;You will need to create and assign a new SSL certificate if you’re putting up a new Exchange server into production or renewing it for an existing server. The steps are fairly straightforward, however it may seem daunting and completely foreign for new users who aren’t familiar with certificates.&lt;/p&gt;
 
 &lt;!--more--&gt;

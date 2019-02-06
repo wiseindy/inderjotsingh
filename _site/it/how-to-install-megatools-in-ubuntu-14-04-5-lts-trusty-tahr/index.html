@@ -255,29 +255,24 @@
 <p>At the time of writing this article (9 October 2016), the latest version was <code>1.9.97</code>. If it is different in your case, simply replace <code>1.9.97</code> with your version in all the commands below.</p>
 <h3>Step 2:</h3>
 <p>Open your Ubuntu terminal (or SSH to it) and type in the following commands one after the other.</p>
-<div class="language-shell highlighter-rouge"><pre class="highlight"><code>sudo apt-get update
-</code></pre>
-</div>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt-get update
+</code></pre></div></div>
 <p>Run this command to download the package lists from the repositories and “update” them to get information on the newest versions of packages and their dependencies.</p>
-<div class="language-shell highlighter-rouge"><pre class="highlight"><code>sudo apt-get install libtool libglib2.0-dev gobject-introspection libgmp3-dev nettle-dev asciidoc glib-networking openssl libcurl4-openssl-dev libssl-dev
-</code></pre>
-</div>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt-get <span class="nb">install </span>libtool libglib2.0-dev gobject-introspection libgmp3-dev nettle-dev asciidoc glib-networking openssl libcurl4-openssl-dev libssl-dev
+</code></pre></div></div>
 <p>This installs all the dependencies that you may need to compile megatools from source.</p>
-<div class="language-shell highlighter-rouge"><pre class="highlight"><code>wget http://megatools.megous.com/builds/megatools-1.9.97.tar.gz
-</code></pre>
-</div>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>wget http://megatools.megous.com/builds/megatools-1.9.97.tar.gz
+</code></pre></div></div>
 <p><code>wget</code> is used to download the latest megatools. Replace <code>1.9.97</code> with the latest version is available.</p>
-<div class="language-shell highlighter-rouge"><pre class="highlight"><code>zcat megatools-1.9.97.tar.gz &gt; megatools-1.9.97.tar
-tar -xf megatools-1.9.97.tar
-</code></pre>
-</div>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>zcat megatools-1.9.97.tar.gz <span class="o">&gt;</span> megatools-1.9.97.tar
+<span class="nb">tar</span> <span class="nt">-xf</span> megatools-1.9.97.tar
+</code></pre></div></div>
 <p>Use <code>zcat</code> to decompress the downloaded file and <code>tar -xf</code> to extract the contents to a folder.</p>
-<div class="language-shell highlighter-rouge"><pre class="highlight"><code><span class="nb">cd </span>megatools-1.9.97/
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd </span>megatools-1.9.97/
 ./configure
 make
-sudo make install
-</code></pre>
-</div>
+<span class="nb">sudo </span>make <span class="nb">install</span>
+</code></pre></div></div>
 <p>Finally, run the above commands to compile megatools and install it in your system.</p>
 
 <div class="row">
@@ -299,13 +294,11 @@ sudo make install
 <p>To download from a <a target="_blank" href="https://mega.nz">mega.nz</a> link, simply type <code>megadl '&lt;link&gt;'</code> and the download will start.</p>
 
 <p>Here’s an example:</p>
-<div class="language-shell highlighter-rouge"><pre class="highlight"><code>megadl <span class="s1">'https://mega.nz/#G!IK9KLpRS8J1h82Kpa0kWJkPwDh!2adB'</span>
-</code></pre>
-</div>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>megadl <span class="s1">'https://mega.nz/#G!IK9KLpRS8J1h82Kpa0kWJkPwDh!2adB'</span>
+</code></pre></div></div>
 <p>For syntax of other commands, type</p>
-<div class="language-shell highlighter-rouge"><pre class="highlight"><code>man megatools
-</code></pre>
-</div>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>man megatools
+</code></pre></div></div>
 <p>That’s it. You’re done!</p>
 
 		<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>

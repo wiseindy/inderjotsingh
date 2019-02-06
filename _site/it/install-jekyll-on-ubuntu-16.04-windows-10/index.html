@@ -257,16 +257,14 @@
 
 <p>We will now install <strong>ruby2.3</strong>. To do so, we have to first add the brightbox repository. When asked whether you want to confirm adding the repository, hit ENTER to proceed.</p>
 
-<div class="language-shell highlighter-rouge"><pre class="highlight"><code>sudo apt-add-repository ppa:brightbox/ruby-ng
-sudo apt-get update
-</code></pre>
-</div>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt-add-repository ppa:brightbox/ruby-ng
+<span class="nb">sudo </span>apt-get update
+</code></pre></div></div>
 
 <p>Install <strong>ruby2.3</strong></p>
 
-<div class="language-shell highlighter-rouge"><pre class="highlight"><code>sudo apt-get install ruby2.3 ruby2.3-dev
-</code></pre>
-</div>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt-get <span class="nb">install </span>ruby2.3 ruby2.3-dev
+</code></pre></div></div>
 
 <p>Now you should have <strong>Ruby</strong> and <strong>RubyGems</strong> installed which are the prerequisite for installing Jekyll.</p>
 
@@ -287,17 +285,15 @@ sudo apt-get update
 
 <p>Install <a href="https://gcc.gnu.org/install/">GCC</a> and <a href="https://www.gnu.org/software/make/">Make</a></p>
 
-<div class="language-shell highlighter-rouge"><pre class="highlight"><code>sudo apt-get install gcc make -y
-</code></pre>
-</div>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt-get <span class="nb">install </span>gcc make <span class="nt">-y</span>
+</code></pre></div></div>
 
 <h2 id="step-4">Step 4:</h2>
 
 <p>Install Jekyll and Bundler gems</p>
 
-<div class="language-shell highlighter-rouge"><pre class="highlight"><code>sudo gem install jekyll
-</code></pre>
-</div>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>gem <span class="nb">install </span>jekyll
+</code></pre></div></div>
 
 <p>Guess what? That’s it. You have Jekyll 3.4.3 installed.</p>
 
@@ -305,26 +301,23 @@ sudo apt-get update
 
 <p>Here are some commands from <a href="https://jekyllrb.com/docs/quickstart/">jekyllrb.com</a> that should get you up and running with a new blog.</p>
 
-<div class="language-shell highlighter-rouge"><pre class="highlight"><code><span class="c"># Create a new Jekyll site at ./wiseblog</span>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Create a new Jekyll site at ./wiseblog</span>
 jekyll new wiseblog
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>To build this site:</p>
 
-<div class="language-shell highlighter-rouge"><pre class="highlight"><code><span class="c"># Change into your new directory</span>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Change into your new directory</span>
 <span class="nb">cd </span>wiseblog
 
 <span class="c"># Build the site and preview it</span>
 bundle <span class="nb">exec </span>jekyll serve
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p><strong>Note:</strong> If you’re running Windows, you may get an error when you try to run <code class="highlighter-rouge">bundle exec jekyll serve</code>. In this case, simply run it with the <code class="highlighter-rouge">--force_polling</code> option as follows:</p>
 
-<div class="language-shell highlighter-rouge"><pre class="highlight"><code>bundle <span class="nb">exec </span>jekyll serve --force_polling
-</code></pre>
-</div>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>bundle <span class="nb">exec </span>jekyll serve <span class="nt">--force_polling</span>
+</code></pre></div></div>
 
 <p>Now you can preview your website on <code class="highlighter-rouge">http://localhost:4000</code></p>
 
@@ -336,11 +329,10 @@ bundle <span class="nb">exec </span>jekyll serve
 
 <p>Below are the installation instructions on <a href="http://www.nokogiri.org/tutorials/installing_nokogiri.html">nokogiri.org</a>:</p>
 
-<div class="language-shell highlighter-rouge"><pre class="highlight"><code>sudo apt-get install build-essential patch
-sudo apt-get install ruby-dev zlib1g-dev liblzma-dev
-sudo gem install nokogiri
-</code></pre>
-</div>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt-get <span class="nb">install </span>build-essential patch
+<span class="nb">sudo </span>apt-get <span class="nb">install </span>ruby-dev zlib1g-dev liblzma-dev
+<span class="nb">sudo </span>gem <span class="nb">install </span>nokogiri
+</code></pre></div></div>
 
 <p>(header image source: <a href="https://jekyllrb.com">jekyllrb.com</a>)</p>
 
